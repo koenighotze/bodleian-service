@@ -14,7 +14,7 @@
     <name>Service for book and other media catalog</name>
     <properties>
         <java.version>11</java.version>
-        <kotlin.version>1.6.10</kotlin.version>
+        <kotlin.version>1.6.20</kotlin.version>
     </properties>
     <dependencies>
         <dependency>
