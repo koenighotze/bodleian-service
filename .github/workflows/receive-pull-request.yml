@@ -1,0 +1,41 @@
+name: Receive pull request
+
+on:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+
+  qa:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+
+  security-scan:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+
+  mark-pr:
+    needs:
+      - lint
+      - qa
+      - security-scan
+    runs-on: ubuntu-20.04
+    permissions:
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-ecosystem/action-add-labels@v1.1.3
+        with:
+          labels: |
+            linted
+            qaed
+            secure
+            ready-for-review
+          github_token: ${{ secrets.GH_TOKEN_FOR_LABELING }}
+          number: ${{ github.event.number }}

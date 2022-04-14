@@ -1,0 +1,51 @@
+name: Deploy tagged version
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      image-name:
+        required: true
+        description: "The name of the image that should be deployed, e.g., eu.gcr.io/<projectid>/koenighotze/bodleian:v0.0.25"
+
+env:
+  CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  CLOUDSDK_CORE_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+
+permissions:
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checking out
+        uses: actions/checkout@v2
+      - name: Authenticating
+        uses: google-github-actions/auth@v0.6.0
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
+          # token_format: "access_token"
+      - name: Setting up GCP environment
+        uses: google-github-actions/setup-gcloud@v0.6.0
+      # - run: gcloud auth print-identity-token
+      - name: Containerizing
+        id: containerizing
+        run: ./scripts/containerize.sh
+      - name: Deploying to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v0.9.0
+        with:
+          image: "${{ github.event.inputs.image-name || steps.containerizing.outputs.image-name }}"
+          service: ${{ secrets.CLOUD_RUN_SERVICE }}
+          region: ${{ secrets.CLOUD_RUN_REGION }}
+          timeout: 30 # allow enough time to startup container
+      - name: Check if service is up
+        run: |
+          gcloud run services describe "${{ secrets.CLOUD_RUN_SERVICE }}" --region "${{ secrets.CLOUD_RUN_REGION }}"
+          curl -H "Authorization: Bearer $(gcloud auth print-identity-token)" "${{ steps.deploy.outputs.url }}/actuator/health"
