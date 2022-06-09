@@ -27,10 +27,12 @@ func main() {
 	router.GET("/books", getBooks)
 	router.GET("/books/:id", getBookById)
 	router.POST("/books", addBook)
-	router.Run("localhost:8080")
+	router.DELETE("/books/:id", deleteBook)
+	router.Run()
 }
 
 func getBooks(c *gin.Context) {
+	fmt.Println("Books:", books)
 	c.IndentedJSON(http.StatusOK, books)
 }
 
@@ -44,7 +46,7 @@ func getBookById(c *gin.Context) {
 		}
 	}
 
-	c.IndentedJSON(http.StatusNotFound, nil)
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
 }
 
 func addBook(c *gin.Context) {
@@ -60,4 +62,27 @@ func addBook(c *gin.Context) {
 	}
 	books = append(books, newBook)
 	c.IndentedJSON(http.StatusCreated, newBook)
+}
+
+func deleteBook(c *gin.Context) {
+	id := c.Param("id")
+
+	var newBooks []book
+	deleted := false
+	for i, book := range books {
+		if book.ID == id {
+			fmt.Println("Removing item number", i)
+			deleted = true
+			c.Status(http.StatusOK)
+			continue
+		}
+		fmt.Println("Adding id ", books[i].ID, "to new books")
+		newBooks = append(newBooks, books[i])
+	}
+	books = newBooks
+
+	if !deleted {
+		c.Status(http.StatusNotFound)
+	}
+
 }
