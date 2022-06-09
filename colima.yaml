@@ -1,0 +1,58 @@
+arch: x86_64
+images:
+    - location: https://github.com/abiosoft/alpine-lima/releases/download/colima-v0.3.4-1/alpine-lima-clm-3.14.3-aarch64.iso
+      arch: aarch64
+      digest: sha512:363baa91e4087dfd04ec5eebadcb29b9aef45c2663642f951105b3989e93143ce45f94ba9101c01c5db46c3fc6b601340b39baad29b1a48bb4f735790048daaa
+    - location: https://github.com/abiosoft/alpine-lima/releases/download/colima-v0.3.4-1/alpine-lima-clm-3.14.3-x86_64.iso
+      arch: x86_64
+      digest: sha512:cd7ad0ef76088ea3d9f428e70fcddcbbcc72999568aaee0de953052299a01df251454fa5db3a0fdcfa70896bd152bc5d92f9ad81d682f3ec44cfbd2149ae3856
+cpus: 2
+memory: 2GiB
+disk: 60GiB
+mounts:
+    - location: "~"
+      writable: true
+    - location: /tmp/colima
+      writable: true
+ssh:
+    localPort: 0
+    loadDotSSHPubKeys: false
+    forwardAgent: false
+containerd:
+    system: false
+    user: false
+firmware:
+    legacyBIOS: false
+hostResolver:
+    enabled: true
+    hosts:
+        host.docker.internal: host.lima.internal
+portForwards:
+    - guestPortRange:
+        - 0
+        - 0
+      guestSocket: /var/run/docker.sock
+      hostPortRange:
+        - 0
+        - 0
+      hostSocket: /Users/dschmitz/.colima/docker.sock
+      proto: tcp
+    - guestIPMustBeZero: true
+      guestIP: 0.0.0.0
+      guestPortRange:
+        - 1
+        - 65535
+      hostIP: 0.0.0.0
+      hostPortRange:
+        - 1
+        - 65535
+      proto: tcp
+    - guestIP: 127.0.0.1
+      guestPortRange:
+        - 1
+        - 65535
+      hostIP: 127.0.0.1
+      hostPortRange:
+        - 1
+        - 65535
+      proto: tcp
