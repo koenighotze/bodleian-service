@@ -11,16 +11,17 @@ env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
 
 jobs:
-  test:
+  qa:
     runs-on: ubuntu-20.04
-
     steps:
       - name: Checking out
         uses: actions/checkout@v3
-      - name: Testing
-        run: |
-          mvn -B test
-          mvn jacoco:report
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: "^1.14.0"
+      - name: Install dependencies
+        run: go version
       # - name: Uploading coverage
       #   uses: codacy/codacy-coverage-reporter-action@v1
       #   with:
@@ -33,7 +34,7 @@ jobs:
 
   build-container:
     needs:
-      - test
+      - qa
 
     permissions:
       id-token: write
@@ -51,19 +52,19 @@ jobs:
           token_format: "access_token"
       - name: Setting up GCP environment
         uses: google-github-actions/setup-gcloud@v0.6.0
-      - name: Containerizing
-        id: containerizing
-        run: ./scripts/containerize.sh
-      - name: Deploying to Cloud Run
-        id: deploy
-        uses: google-github-actions/deploy-cloudrun@v0.10.0
-        with:
-          image: ${{steps.containerizing.outputs.image-name }}
-          service: ${{ secrets.CLOUD_RUN_SERVICE }}
-          region: ${{ secrets.CLOUD_RUN_REGION }}
-          timeout: 30 # allow enough time to startup container
-          no_traffic: true
-          tag: main-latest
-      - name: Check if service is up
-        run: |
-          curl -H "Authorization: Bearer $(gcloud auth print-identity-token)" "${{ steps.deploy.outputs.url }}/actuator/health"
+      # - name: Containerizing
+      #   id: containerizing
+      #   run: ./scripts/containerize.sh
+      # - name: Deploying to Cloud Run
+      #   id: deploy
+      #   uses: google-github-actions/deploy-cloudrun@v0.10.0
+      #   with:
+      #     image: ${{steps.containerizing.outputs.image-name }}
+      #     service: ${{ secrets.CLOUD_RUN_SERVICE }}
+      #     region: ${{ secrets.CLOUD_RUN_REGION }}
+      #     timeout: 30 # allow enough time to startup container
+      #     no_traffic: true
+      #     tag: main-latest
+      # - name: Check if service is up
+      #   run: |
+      #     curl -H "Authorization: Bearer $(gcloud auth print-identity-token)" "${{ steps.deploy.outputs.url }}/actuator/health"

@@ -1,88 +1,27 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
-
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
-type book struct {
-	ID      string
-	Title   string
-	Authors []string
-	Isbn    string
+type fooHandler struct {
+	Message string
 }
 
-var books = []book{
-	{
-		Title:   "foo",
-		Authors: []string{"a", "b"},
-		Isbn:    "",
-		ID:      "123"}}
+func (f *fooHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte(f.Message))
+}
 
 func main() {
-	router := gin.Default()
-	router.GET("/books", getBooks)
-	router.GET("/books/:id", getBookById)
-	router.POST("/books", addBook)
-	router.DELETE("/books/:id", deleteBook)
-	router.Run()
-}
-
-func getBooks(c *gin.Context) {
-	fmt.Println("Books:", books)
-	c.IndentedJSON(http.StatusOK, books)
-}
-
-func getBookById(c *gin.Context) {
-	id := c.Param("id")
-	fmt.Println("Searching for", id)
-	for _, book := range books {
-		if book.ID == id {
-			c.IndentedJSON(http.StatusOK, book)
-			return
-		}
+	http.Handle("/foo", &fooHandler{Message: "hello World"})
+	bar := func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("bar"))
 	}
+	http.HandleFunc("/bar", bar)
 
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
-}
-
-func addBook(c *gin.Context) {
-	var newBook book
-
-	if err := c.BindJSON(&newBook); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, nil)
-		return
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		log.Fatal(err)
 	}
-
-	if newBook.ID == "" {
-		newBook.ID = uuid.NewString()
-	}
-	books = append(books, newBook)
-	c.IndentedJSON(http.StatusCreated, newBook)
-}
-
-func deleteBook(c *gin.Context) {
-	id := c.Param("id")
-
-	var newBooks []book
-	deleted := false
-	for i, book := range books {
-		if book.ID == id {
-			fmt.Println("Removing item number", i)
-			deleted = true
-			c.Status(http.StatusOK)
-			continue
-		}
-		fmt.Println("Adding id ", books[i].ID, "to new books")
-		newBooks = append(newBooks, books[i])
-	}
-	books = newBooks
-
-	if !deleted {
-		c.Status(http.StatusNotFound)
-	}
-
 }
