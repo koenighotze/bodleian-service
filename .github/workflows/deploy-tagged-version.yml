@@ -26,7 +26,7 @@ jobs:
       - name: Checking out
         uses: actions/checkout@v2
       - name: Authenticating
-        uses: google-github-actions/auth@v0.6.0
+        uses: google-github-actions/auth@v0.8.0
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
@@ -39,7 +39,7 @@ jobs:
         run: ./scripts/containerize.sh
       - name: Deploying to Cloud Run
         id: deploy
-        uses: google-github-actions/deploy-cloudrun@v0.9.0
+        uses: google-github-actions/deploy-cloudrun@v0.10.0
         with:
           image: "${{ github.event.inputs.image-name || steps.containerizing.outputs.image-name }}"
           service: ${{ secrets.CLOUD_RUN_SERVICE }}
