@@ -37,5 +37,5 @@ jobs:
             qaed
             secure
             ready-for-review
-          github_token: ${{ secrets.GH_TOKEN_FOR_LABELING }}
+          token: ${{ secrets.GH_TOKEN_FOR_LABELING }}
           number: ${{ github.event.number }}
