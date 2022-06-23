@@ -13,7 +13,7 @@ on:
 env:
   CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  CLOUDSDK_CORE_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+  # CLOUDSDK_CORE_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
 
 permissions:
   id-token: write
@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - name: Checking out
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Authenticating
         uses: google-github-actions/auth@v0.6.0
         with:
