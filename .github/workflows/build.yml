@@ -53,3 +53,11 @@ jobs:
       - name: Containerizing
         id: containerizing
         run: ./scripts/containerize.sh
+      - name: Deploying to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v0.10.0
+        with:
+          image: ${{ steps.containerizing.outputs.image-name }}
+          service: ${{ secrets.CLOUD_RUN_SERVICE }}
+          region: ${{ secrets.CLOUD_RUN_REGION }}
+          timeout: 30 # allow enough time to startup container
+          no_traffic: true
