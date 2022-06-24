@@ -62,3 +62,6 @@ jobs:
           timeout: 30 # allow enough time to startup container
           no_traffic: true
           tag: main-latest
+      - name: Check if service is up
+        run: |
+          curl -H "Authorization: Bearer $(gcloud auth print-identity-token)" "${{ steps.deploy.outputs.url }}/actuator/health"
