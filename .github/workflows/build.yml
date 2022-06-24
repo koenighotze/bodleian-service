@@ -61,3 +61,4 @@ jobs:
           region: ${{ secrets.CLOUD_RUN_REGION }}
           timeout: 30 # allow enough time to startup container
           no_traffic: true
+          tag: main-latest

@@ -42,6 +42,7 @@ jobs:
           service: ${{ secrets.CLOUD_RUN_SERVICE }}
           region: ${{ secrets.CLOUD_RUN_REGION }}
           timeout: 30 # allow enough time to startup container
+          tag: production
       - name: Check if service is up
         run: |
           gcloud run services describe "${{ secrets.CLOUD_RUN_SERVICE }}" --region "${{ secrets.CLOUD_RUN_REGION }}"
