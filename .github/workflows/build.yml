@@ -40,9 +40,6 @@ jobs:
 
     runs-on: ubuntu-20.04
 
-    outputs:
-      image-name: ${{ steps.containerizing.outputs.image-name }}
-
     steps:
       - name: Checking out
         uses: actions/checkout@v3
