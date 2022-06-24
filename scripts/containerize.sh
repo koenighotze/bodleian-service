@@ -30,16 +30,14 @@ if [[ -n "${GIT_TAG:=}" ]]; then
 fi
 
 mvn -B -q clean compile
+# shellcheck disable=SC2086
+mvn -B -q jib:build $JIB_OPTIONS
 
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
   # shellcheck disable=SC2086
-  mvn -B -q jib:build $JIB_OPTIONS
   echo "::set-output name=image-name::$CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GIT_TAG"
 else
-  echo "Not running on tag, only building a tar and not pushing"
-
-  # shellcheck disable=SC2086
-  mvn -B -q jib:buildTar $JIB_OPTIONS
+  echo "::set-output name=image-name::$IMAGE_NAME"
 fi
 
 echo "::endgroup::"
