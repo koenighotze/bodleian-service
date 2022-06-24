@@ -40,11 +40,15 @@ jobs:
 
     runs-on: ubuntu-20.04
 
+    outputs:
+      image-name: ${{ steps.containerizing.outputs.image-name }}
+
     steps:
       - name: Checking out
         uses: actions/checkout@v3
       - name: Authenticating
         uses: google-github-actions/auth@v0.8.0
+        # This could be an extra service account, only able to build
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
@@ -53,10 +57,29 @@ jobs:
       - name: Containerizing
         id: containerizing
         run: ./scripts/containerize.sh
+
+  deploy:
+    needs:
+      - build-container
+
+    permissions:
+      id-token: write
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Authenticating
+        uses: google-github-actions/auth@v0.8.0
+        # This could be an extra service account, only able to deploy
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
+      - name: Setting up GCP environment
+        uses: google-github-actions/setup-gcloud@v0.6.0
       - name: Deploying to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v0.10.0
         with:
-          image: ${{ steps.containerizing.outputs.image-name }}
+          image: ${{needs.build-container.outputs.image-name }}
           service: ${{ secrets.CLOUD_RUN_SERVICE }}
           region: ${{ secrets.CLOUD_RUN_REGION }}
           timeout: 30 # allow enough time to startup container
