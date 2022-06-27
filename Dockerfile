@@ -33,7 +33,7 @@ WORKDIR /
 COPY --from=build /bodleian-service /usr/local/bin/bodleian-service
 
 EXPOSE 8080
-
+ENV USER=bodleian
 USER "${USER}":"${USER}"
 
 ENTRYPOINT ["/usr/local/bin/bodleian-service"]
