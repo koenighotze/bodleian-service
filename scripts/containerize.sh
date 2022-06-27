@@ -6,6 +6,7 @@ set -Eeuo pipefail
 : "${GITHUB_REF?'Expected env var GITHUB_REF not set'}"
 : "${CONTAINER_REGISTRY?'Expected env var CONTAINER_REGISTRY not set'}"
 : "${CONTAINER_PORTS:=8080}"
+: "${OUTPUT_MODE:=load}"
 
 IMAGE_NAME="$CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA"
 gcloud auth configure-docker "$(echo $CONTAINER_REGISTRY | cut -d/ -f1)"
@@ -21,17 +22,14 @@ if [[ -n "${GIT_TAG:=}" ]]; then
     DOCKER_BUILD_OPTIONS="--tag=$GIT_TAG"
 fi
 
+CONTINUE HERE
+WARNING: No output specified for docker-container driver. Build result will only remain in the build cache. To push result image into registry use --push or to load image into docker use --load
 # shellcheck disable=SC2086
-docker buildx build --tag "$IMAGE_NAME" $DOCKER_BUILD_OPTIONS \
+docker buildx build --${OUTPUT_MODE} \
+  --tag "$IMAGE_NAME" $DOCKER_BUILD_OPTIONS \
   --label "org.opencontainers.image.revision=${GITHUB_SHA}" \
   --label "org.opencontainers.image.created=${NOW}" \
   .
-
-# docker buildx build --tag "$IMAGE_NAME" .
-#   # --label "org.opencontainers.image.revision=${GITHUB_SHA}" \
-#   # --label "org.opencontainers.image.created=${NOW}" \
-#   # # shellcheck disable=SC2086
-#   # $DOCKER_BUILD_OPTIONS \
 
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
   # shellcheck disable=SC2086

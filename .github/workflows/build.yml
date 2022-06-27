@@ -59,7 +59,9 @@ jobs:
         run: ./scripts/containerize.sh
       # scan image
       - name: Pushing image
-        run: docker push "${{steps.containerizing.outputs.image-name }}"
+        run: ./scripts/containerize.sh
+        env:
+          OUTPUT_MODE: push
 
       # - name: Deploying to Cloud Run
       #   id: deploy
