@@ -57,22 +57,21 @@ jobs:
       - name: Containerizing
         id: containerizing
         run: ./scripts/containerize.sh
-      # scan image
+      # TODO scan image
       - name: Pushing image
         run: ./scripts/containerize.sh
         env:
           OUTPUT_MODE: push
-
-      # - name: Deploying to Cloud Run
-      #   id: deploy
-      #   uses: google-github-actions/deploy-cloudrun@v0.10.0
-      #   with:
-      #     image: ${{steps.containerizing.outputs.image-name }}
-      #     service: ${{ secrets.CLOUD_RUN_SERVICE }}
-      #     region: ${{ secrets.CLOUD_RUN_REGION }}
-      #     timeout: 30 # allow enough time to startup container
-      #     no_traffic: true
-      #     tag: main-latest
-      # - name: Check if service is up
-      #   run: |
-      #     curl -H "Authorization: Bearer $(gcloud auth print-identity-token)" "${{ steps.deploy.outputs.url }}/actuator/health"
+      - name: Deploying to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v0.10.0
+        with:
+          image: ${{steps.containerizing.outputs.image-name }}
+          service: ${{ secrets.CLOUD_RUN_SERVICE }}
+          region: ${{ secrets.CLOUD_RUN_REGION }}
+          timeout: 30 # allow enough time to startup container
+          no_traffic: true
+          tag: main-latest
+      - name: Check if service is up
+        run: |
+          curl -H "Authorization: Bearer $(gcloud auth print-identity-token)" "${{ steps.deploy.outputs.url }}/actuator/health"
