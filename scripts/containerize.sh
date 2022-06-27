@@ -21,19 +21,17 @@ if [[ -n "${GIT_TAG:=}" ]]; then
     DOCKER_BUILD_OPTIONS="--tag=$GIT_TAG"
 fi
 
-echo docker build --tag "$IMAGE_NAME" \
+# shellcheck disable=SC2086
+echo docker build --tag "$IMAGE_NAME" $DOCKER_BUILD_OPTIONS \
   --label "org.opencontainers.image.revision=${GITHUB_SHA}" \
   --label "org.opencontainers.image.created=${NOW}" \
-  # shellcheck disable=SC2086
-  $DOCKER_BUILD_OPTIONS \
   .
 
-docker build --tag "$IMAGE_NAME" \
+docker build --tag "$IMAGE_NAME" .
   # --label "org.opencontainers.image.revision=${GITHUB_SHA}" \
   # --label "org.opencontainers.image.created=${NOW}" \
   # # shellcheck disable=SC2086
   # $DOCKER_BUILD_OPTIONS \
-  .
 
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
   # shellcheck disable=SC2086
