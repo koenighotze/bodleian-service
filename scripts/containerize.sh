@@ -22,8 +22,6 @@ if [[ -n "${GIT_TAG:=}" ]]; then
     DOCKER_BUILD_OPTIONS="--tag=$GIT_TAG"
 fi
 
-CONTINUE HERE
-WARNING: No output specified for docker-container driver. Build result will only remain in the build cache. To push result image into registry use --push or to load image into docker use --load
 # shellcheck disable=SC2086
 docker buildx build --${OUTPUT_MODE} \
   --tag "$IMAGE_NAME" $DOCKER_BUILD_OPTIONS \
