@@ -25,8 +25,12 @@ jobs:
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: bodleian-backend-cicd@bodleian-398addce.iam.gserviceaccount.com
-          token_format: "id_token"
+          token_format: id_token
           id_token_audience: https://backend-83496-btesdmljxq-ey.a.run.app
+      - run: |
+          gcloud info
+          gcloud auth list
+      - run: gcloud auth print-access-token
       - name: Setting up GCP environment
         uses: google-github-actions/setup-gcloud@v0.6.0
       - run: gcloud auth print-identity-token
