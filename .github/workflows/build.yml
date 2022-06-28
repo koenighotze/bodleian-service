@@ -42,11 +42,12 @@ jobs:
         run: go mod download
       - name: Testing
         run: go test -coverprofile=coverage.out
+      - run: ls
       - name: Uploading coverage
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
           api-token: ${{ secrets.CODACY_API_TOKEN }}
-          coverage-reports: ./coverage.out
+          coverage-reports: coverage.out
         env:
           CODACY_PROJECT_NAME: "bodleian-service"
           CODACY_ORGANIZATION_PROVIDER: "gh"
