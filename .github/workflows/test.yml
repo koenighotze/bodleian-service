@@ -26,8 +26,8 @@ jobs:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
           # token_format: "access_token"
-          # token_format: "id_token"
-          # id_token_audience: ${{ steps.deploy.outputs.url }}
+          token_format: "id_token"
+          id_token_audience: https://google.com
       - name: Setting up GCP environment
         uses: google-github-actions/setup-gcloud@v0.6.0
       - run: gcloud auth print-identity-token
