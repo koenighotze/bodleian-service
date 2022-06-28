@@ -32,10 +32,8 @@ docker buildx build --${OUTPUT_MODE} \
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
   # shellcheck disable=SC2086
   echo "::set-output name=image-name::$CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GIT_TAG"
-  echo "::set-output name=pure-image-name::$GITHUB_REPOSITORY:$GIT_TAG"
 else
   echo "::set-output name=image-name::$IMAGE_NAME"
-  echo "::set-output name=pure-image-name::$GITHUB_REPOSITORY:$GIT_TAG"
 fi
 
 echo "::endgroup::"
