@@ -11,25 +11,19 @@ env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
 
 jobs:
-  qa:
+  security-can:
     runs-on: ubuntu-20.04
     steps:
       - name: Checking out
         uses: actions/checkout@v3
-      - name: Setup Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: "^1.14.0"
-      - name: Install dependencies
-        run: go mod download
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/golang@0.3.0
         # continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        # not sure about codeQl.
-        # with:
-        #   args: --sarif-file-output=snyk.sarif
+      # not sure about codeQl.
+      # with:
+      #   args: --sarif-file-output=snyk.sarif
       # - name: Upload result to GitHub Code Scanning
       #   uses: github/codeql-action/upload-sarif@v2
       #   with:
@@ -42,6 +36,18 @@ jobs:
           format: "table"
           exit-code: "1"
           severity: "CRITICAL"
+
+  qa:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checking out
+        uses: actions/checkout@v3
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: "^1.14.0"
+      - name: Install dependencies
+        run: go mod download
       # - name: Uploading coverage
       #   uses: codacy/codacy-coverage-reporter-action@v1
       #   with:
@@ -77,15 +83,15 @@ jobs:
       - name: Containerizing
         id: containerizing
         run: ./scripts/containerize.sh
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.5.0
-        with:
-          image-ref: ${{steps.containerizing.outputs.image-name }}
-          format: "table"
-          exit-code: "1"
-          ignore-unfixed: true
-          vuln-type: "os,library"
-          severity: "CRITICAL,HIGH"
+      # - name: Run Trivy vulnerability scanner
+      #   uses: aquasecurity/trivy-action@0.5.0
+      #   with:
+      #     image-ref: ${{steps.containerizing.outputs.image-name }}
+      #     format: "table"
+      #     exit-code: "1"
+      #     ignore-unfixed: true
+      #     vuln-type: "os,library"
+      #     severity: "CRITICAL,HIGH"
       - name: Pushing image
         id: push
         run: ./scripts/containerize.sh

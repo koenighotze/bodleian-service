@@ -2,17 +2,17 @@
 
 FROM golang:1.18-buster AS build
 
-ENV USER=bodleian
-ENV _UID=10001
-RUN addgroup --gid "10001" "bodleian"
-RUN adduser \
-    --disabled-password \
-    --gecos "" \
-    --home "$(pwd)" \
-    --ingroup "${USER}" \
-    --no-create-home \
-    --uid "${_UID}" \
-    "${USER}"
+# ENV USER=bodleian
+# ENV _UID=10001
+# RUN addgroup --gid "10001" "bodleian"
+# RUN adduser \
+#     --disabled-password \
+#     --gecos "" \
+#     --home "$(pwd)" \
+#     --ingroup "${USER}" \
+#     --no-create-home \
+#     --uid "${_UID}" \
+#     "${USER}"
 
 WORKDIR /app
 
@@ -24,16 +24,17 @@ COPY *.go ./
 
 RUN go build -o /bodleian-service
 
-FROM scratch
-COPY --from=build /etc/passwd /etc/passwd
-COPY --from=build /etc/group /etc/group
+FROM debian:buster
+# COPY --from=build /etc/passwd /etc/passwd
+# COPY --from=build /etc/group /etc/group
 
 WORKDIR /
 
 COPY --from=build /bodleian-service /usr/local/bin/bodleian-service
 
 EXPOSE 8080
-ENV USER=bodleian
-USER "${USER}":"${USER}"
+# ENV USER=bodleian
+# USER "${USER}":"${USER}"
 
+RUN ls /usr/local/bin/
 ENTRYPOINT ["/usr/local/bin/bodleian-service"]
