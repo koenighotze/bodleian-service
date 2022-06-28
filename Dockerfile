@@ -24,7 +24,7 @@ COPY *.go ./
 
 RUN go build -o /bodleian-service
 
-FROM debian:buster
+FROM scratch
 # COPY --from=build /etc/passwd /etc/passwd
 # COPY --from=build /etc/group /etc/group
 
