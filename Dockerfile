@@ -22,7 +22,7 @@ RUN go mod download
 
 COPY *.go ./
 
-RUN go build -o /bodleian-service
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /bodleian-service
 
 FROM scratch
 # COPY --from=build /etc/passwd /etc/passwd
@@ -36,5 +36,4 @@ EXPOSE 8080
 # ENV USER=bodleian
 # USER "${USER}":"${USER}"
 
-# RUN ls /usr/local/bin/
 ENTRYPOINT ["/usr/local/bin/bodleian-service"]
