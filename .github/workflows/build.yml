@@ -85,4 +85,4 @@ jobs:
           tag: main-latest
       - name: Check if service is up
         run: |
-          curl -H "Authorization: Bearer $(gcloud auth print-identity-token)" "${{ steps.deploy.outputs.url }}/books/123"
+          curl -H "Authorization: Bearer $(gcloud auth print-identity-token)" "${{ steps.deploy.outputs.url }}/health"

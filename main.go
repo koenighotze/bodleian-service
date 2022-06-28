@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -15,6 +16,11 @@ type book struct {
 	Isbn    string
 }
 
+type healthReport struct {
+	StartTime time.Time
+}
+
+var health healthReport
 var books = []book{
 	{
 		Title:   "foo",
@@ -24,11 +30,20 @@ var books = []book{
 
 func main() {
 	router := gin.Default()
+	router.GET("/health", getHealth)
 	router.GET("/books", getBooks)
 	router.GET("/books/:id", getBookByID)
 	router.POST("/books", addBook)
 	router.DELETE("/books/:id", deleteBook)
 	router.Run()
+}
+
+func init() {
+	health = healthReport{StartTime: time.Now()}
+}
+
+func getHealth(c *gin.Context) {
+	c.IndentedJSON(http.StatusOK, health)
 }
 
 func getBooks(c *gin.Context) {
