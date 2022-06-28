@@ -22,6 +22,8 @@ RUN go mod download
 
 COPY *.go ./
 
+# See https://gist.github.com/asukakenji/f15ba7e588ac42795f421b48b8aede63
+# See https://github.com/docker/labs/issues/215
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /bodleian-service
 
 FROM scratch

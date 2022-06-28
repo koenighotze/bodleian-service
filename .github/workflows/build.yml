@@ -11,23 +11,15 @@ env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
 
 jobs:
-  security-can:
+  security-scan-code:
     runs-on: ubuntu-20.04
     steps:
       - name: Checking out
         uses: actions/checkout@v3
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/golang@0.3.0
-        # continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      # not sure about codeQl.
-      # with:
-      #   args: --sarif-file-output=snyk.sarif
-      # - name: Upload result to GitHub Code Scanning
-      #   uses: github/codeql-action/upload-sarif@v2
-      #   with:
-      #     sarif_file: snyk.sarif
       - name: Run Trivy vulnerability scanner in repo mode
         uses: aquasecurity/trivy-action@0.5.0
         with:
@@ -37,7 +29,7 @@ jobs:
           exit-code: "1"
           severity: "CRITICAL"
 
-  qa:
+  test:
     runs-on: ubuntu-20.04
     steps:
       - name: Checking out
@@ -48,24 +40,30 @@ jobs:
           go-version: "^1.14.0"
       - name: Install dependencies
         run: go mod download
-      # - name: Uploading coverage
-      #   uses: codacy/codacy-coverage-reporter-action@v1
-      #   with:
-      #     api-token: ${{ secrets.CODACY_API_TOKEN }}
-      #     coverage-reports: ./target/site/jacoco/jacoco.xml
-      #   env:
-      #     CODACY_PROJECT_NAME: "bodleian-service-tmp"
-      #     CODACY_ORGANIZATION_PROVIDER: "gh"
-      #     CODACY_USERNAME: "${{ github.repository_owner }}"
+      - name: Testing
+        run: go test -coverprofile=coverage.out
+      - name: Uploading coverage
+        uses: codacy/codacy-coverage-reporter-action@v1
+        with:
+          api-token: ${{ secrets.CODACY_API_TOKEN }}
+          coverage-reports: ./coverage.out
+        env:
+          CODACY_PROJECT_NAME: "bodleian-service"
+          CODACY_ORGANIZATION_PROVIDER: "gh"
+          CODACY_USERNAME: "${{ github.repository_owner }}"
 
   build-container:
     needs:
-      - qa
+      - test
+      - security-scan-code
 
     permissions:
       id-token: write
 
     runs-on: ubuntu-20.04
+
+    outputs:
+      pure-image-name: ${{ steps.containerizing.outputs.pure-image-name }}
 
     steps:
       - name: Checking out
@@ -83,25 +81,46 @@ jobs:
       - name: Containerizing
         id: containerizing
         run: ./scripts/containerize.sh
-      # - name: Run Trivy vulnerability scanner
-      #   uses: aquasecurity/trivy-action@0.5.0
-      #   with:
-      #     image-ref: ${{steps.containerizing.outputs.image-name }}
-      #     format: "table"
-      #     exit-code: "1"
-      #     ignore-unfixed: true
-      #     vuln-type: "os,library"
-      #     severity: "CRITICAL,HIGH"
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.5.0
+        with:
+          image-ref: ${{steps.containerizing.outputs.image-name }}
+          format: "table"
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: "os,library"
+          severity: "CRITICAL,HIGH"
       - name: Pushing image
         id: push
         run: ./scripts/containerize.sh
         env:
           OUTPUT_MODE: push
+
+  deploy-main:
+    needs:
+      - build-container
+
+    permissions:
+      id-token: write
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checking out
+        uses: actions/checkout@v3
+      - name: Authenticating
+        uses: google-github-actions/auth@v0.8.0
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
+          token_format: "access_token"
+      - name: Setting up GCP environment
+        uses: google-github-actions/setup-gcloud@v0.6.0
       - name: Deploying to Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0.10.0
         with:
-          image: ${{steps.push.outputs.image-name }}
+          image: ${{needs.build-container.outputs.image-name }}
           service: ${{ secrets.CLOUD_RUN_SERVICE }}
           region: ${{ secrets.CLOUD_RUN_REGION }}
           timeout: 30 # allow enough time to startup container
