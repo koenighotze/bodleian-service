@@ -36,5 +36,5 @@ EXPOSE 8080
 # ENV USER=bodleian
 # USER "${USER}":"${USER}"
 
-RUN ls /usr/local/bin/
+# RUN ls /usr/local/bin/
 ENTRYPOINT ["/usr/local/bin/bodleian-service"]
