@@ -30,4 +30,4 @@ jobs:
           # id_token_audience: ${{ steps.deploy.outputs.url }}
       - name: Setting up GCP environment
         uses: google-github-actions/setup-gcloud@v0.6.0
-      - name: gcloud auth print-identity-token
+      - run: gcloud auth print-identity-token
