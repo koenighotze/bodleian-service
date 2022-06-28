@@ -18,7 +18,14 @@ permissions:
   id-token: write
 
 jobs:
-  deploy:
+  build-and-deploy-container:
+    needs:
+      - test
+      - security-scan-code
+
+    permissions:
+      id-token: write
+
     runs-on: ubuntu-20.04
 
     steps:
@@ -29,10 +36,25 @@ jobs:
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
+          token_format: "access_token"
       - name: Setting up GCP environment
         uses: google-github-actions/setup-gcloud@v0.6.0
+      - name: Setting up Docker Buildx
+        uses: docker/setup-buildx-action@v2
       - name: Containerizing
         id: containerizing
+        run: ./scripts/containerize.sh
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.5.0
+        with:
+          image-ref: ${{ steps.containerizing.outputs.image-name }}
+          format: "table"
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: "os,library"
+          severity: "CRITICAL,HIGH"
+      - name: Pushing image
+        id: push
         run: ./scripts/containerize.sh
         env:
           OUTPUT_MODE: push
@@ -40,10 +62,12 @@ jobs:
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0.10.0
         with:
-          image: "${{ github.event.inputs.image-name || steps.containerizing.outputs.image-name }}"
+          image: ${{ steps.push.outputs.image-name }}
           service: ${{ secrets.CLOUD_RUN_SERVICE }}
           region: ${{ secrets.CLOUD_RUN_REGION }}
           timeout: 30 # allow enough time to startup container
+          no_traffic: true
+          tag: main-latest
       - name: Check if service is up
         run: |
-          curl -H "Authorization: Bearer $(gcloud auth print-identity-token)" "${{ steps.deploy.outputs.url }}/actuator/health"
+          curl -H "Authorization: Bearer $(gcloud auth print-identity-token)" "${{ steps.deploy.outputs.url }}/health"
