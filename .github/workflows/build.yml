@@ -70,7 +70,7 @@ jobs:
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
-          token_format: "id_token"
+          token_format: "access_token"
       - name: Setting up GCP environment
         uses: google-github-actions/setup-gcloud@v0.6.0
       - name: Setting up Docker Buildx
@@ -102,6 +102,13 @@ jobs:
           timeout: 30 # allow enough time to startup container
           no_traffic: true
           tag: main-latest
+      - name: Authenticating for check
+        uses: google-github-actions/auth@v0.8.0
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
+          token_format: "id_token"
+          id_token_audience: ${{ steps.deploy.outputs.url }}
       - name: Check if service is up
         run: |
           curl -H "Authorization: Bearer $(gcloud auth print-identity-token)" "${{ steps.deploy.outputs.url }}/health"
