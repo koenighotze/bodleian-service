@@ -114,4 +114,4 @@ jobs:
           id_token_audience: ${{ steps.deploy.outputs.url }}
       - name: Check if service is up
         run: |
-          curl -H "Authorization: Bearer ${{ steps.auth.outputs.id_token }}" "${{ steps.deploy.outputs.url }}/health"
+          curl -H "Authorization: Bearer ${{ steps.auth.outputs.id_token }}" "${{ steps.deploy.outputs.url }}"
