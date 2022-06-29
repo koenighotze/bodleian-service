@@ -130,7 +130,7 @@ jobs:
           gcloud info
           gcloud auth list
       - run: gcloud config list account --format "value(core.account)"
-      - id: "invoke-service" # https://backend-83496-btesdmljxq-ey.a.run.app \
+      - name: Debugg
         run: |- # allow debugging
           curl ${{ steps.deploy.outputs.url }}/health \
           --header "Authorization: Bearer ${{ steps.auth.outputs.id_token }}"
