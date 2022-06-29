@@ -122,7 +122,8 @@ jobs:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }} #bodleian-backend-cicd@bodleian-398addce.iam.gserviceaccount.com
           token_format: id_token
-          id_token_audience: https://backend-83496-btesdmljxq-ey.a.run.app
+          #id_token_audience: https://backend-83496-btesdmljxq-ey.a.run.app
+          id_token_audience: ${{ steps.deploy.outputs.url }}
           id_token_include_email: true
       - name: Setting up GCP environment
         uses: google-github-actions/setup-gcloud@v0.6.0
@@ -131,10 +132,10 @@ jobs:
           gcloud auth list
       - run: gcloud config list account --format "value(core.account)"
       - name: Debugg
-        run: |- # allow debugging
+        run: |-
           curl ${{ steps.deploy.outputs.url }}/health \
           --header "Authorization: Bearer ${{ steps.auth.outputs.id_token }}"
-      - id: "invoke-service" # https://backend-83496-btesdmljxq-ey.a.run.app \
+      - id: "invoke-service"
         run: |-
           curl ${{ steps.deploy.outputs.url }}/health --fail \
           --header "Authorization: Bearer ${{ steps.auth.outputs.id_token }}"
