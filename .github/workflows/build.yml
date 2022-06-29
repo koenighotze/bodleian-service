@@ -104,12 +104,14 @@ jobs:
           no_traffic: true
           tag: main-latest
       - name: Authenticating for check
+        id: auth
         uses: google-github-actions/auth@v0.8.0
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
-          token_format: "id_token"
+          token_format: id_token
+          id_token_include_email: true
           id_token_audience: ${{ steps.deploy.outputs.url }}
       - name: Check if service is up
         run: |
-          curl -H "Authorization: Bearer $(gcloud auth print-identity-token)" "${{ steps.deploy.outputs.url }}/health"
+          curl -H "Authorization: Bearer ${{ steps.auth.outputs.id_token }}" "${{ steps.deploy.outputs.url }}/health"
