@@ -130,7 +130,7 @@ jobs:
           gcloud info
           gcloud auth list
       - run: gcloud config list account --format "value(core.account)"
-      - id: "invoke-service"
+      - id: "invoke-service" # https://backend-83496-btesdmljxq-ey.a.run.app \
         run: |-
-          curl https://backend-83496-btesdmljxq-ey.a.run.app \
+          curl ${{ steps.deploy.outputs.url }} --fail \
           --header "Authorization: Bearer ${{ steps.auth.outputs.id_token }}"
