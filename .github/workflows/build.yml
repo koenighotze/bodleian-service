@@ -76,18 +76,18 @@ jobs:
         uses: google-github-actions/setup-gcloud@v0.6.0
       - name: Setting up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      - name: Containerizing
-        id: containerizing
-        run: ./scripts/containerize.sh
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.5.1
-        with:
-          image-ref: ${{ steps.containerizing.outputs.image-name }}
-          format: "table"
-          exit-code: "1"
-          ignore-unfixed: true
-          vuln-type: "os,library"
-          severity: "CRITICAL,HIGH"
+      # - name: Containerizing
+      #   id: containerizing
+      #   run: ./scripts/containerize.sh
+      # - name: Run Trivy vulnerability scanner
+      #   uses: aquasecurity/trivy-action@0.5.1
+      #   with:
+      #     image-ref: ${{ steps.containerizing.outputs.image-name }}
+      #     format: "table"
+      #     exit-code: "1"
+      #     ignore-unfixed: true
+      #     vuln-type: "os,library"
+      #     severity: "CRITICAL,HIGH"
       - name: Pushing image
         id: push
         run: ./scripts/containerize.sh
@@ -118,8 +118,9 @@ jobs:
       - run: |
           gcloud auth list
       - run: gcloud config list account --format "value(core.account)"
-      - name: Debugg
-        run: |-
+      - name: Debug
+        run: |
+          echo "Testing if ${{ steps.push.outputs.image-name }} is up at ${{ steps.deploy.outputs.url }}"
           curl ${{ steps.deploy.outputs.url }}/health \
             --header "Authorization: Bearer ${{ steps.auth.outputs.id_token }}"
       # curl https://backend-83496-btesdmljxq-ey.a.run.app/actuator/health \
