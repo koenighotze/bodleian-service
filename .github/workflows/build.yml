@@ -13,49 +13,50 @@ env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
 
 jobs:
-  # security-scan-code:
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #     - name: Checking out
-  #       uses: actions/checkout@v3
-  #     - name: Run Snyk to check for vulnerabilities
-  #       uses: snyk/actions/golang@0.3.0
-  #       env:
-  #         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-  #     - name: Run Trivy vulnerability scanner in repo mode
-  #       uses: aquasecurity/trivy-action@0.5.1
-  #       with:
-  #         scan-type: "fs"
-  #         ignore-unfixed: false
-  #         format: "table"
-  #         exit-code: "1"
-  #         severity: "CRITICAL"
+  security-scan-code:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checking out
+        uses: actions/checkout@v3
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/golang@0.3.0
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Run Trivy vulnerability scanner in repo mode
+        uses: aquasecurity/trivy-action@0.5.1
+        with:
+          scan-type: "fs"
+          ignore-unfixed: false
+          format: "table"
+          exit-code: "1"
+          severity: "CRITICAL"
 
-  # test:
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #     - name: Checking out
-  #       uses: actions/checkout@v3
-  #     - name: Setup Go
-  #       uses: actions/setup-go@v3
-  #       with:
-  #         go-version: "^1.14.0"
-  #     - name: Install dependencies
-  #       run: go mod download
-  #     - name: Testing
-  #       run: go test -coverprofile=coverage.out
-  #     - run: |
-  #         bash <(curl -Ls https://coverage.codacy.com/get.sh) report --force-coverage-parser go -r coverage.out
-  #       env:
-  #         CODACY_PROJECT_NAME: bodleian-service
-  #         CODACY_ORGANIZATION_PROVIDER: gh
-  #         CODACY_USERNAME: ${{ github.repository_owner }}
-  #         CODACY_API_TOKEN: ${{ secrets.CODACY_API_TOKEN }}
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checking out
+        uses: actions/checkout@v3
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: "^1.14.0"
+      - name: Install dependencies
+        run: go mod download
+      - name: Testing
+        run: go test -coverprofile=coverage.out
+      - name: Uploading coverage
+        run: |
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) report --force-coverage-parser go -r coverage.out
+        env:
+          CODACY_PROJECT_NAME: bodleian-service
+          CODACY_ORGANIZATION_PROVIDER: gh
+          CODACY_USERNAME: ${{ github.repository_owner }}
+          CODACY_API_TOKEN: ${{ secrets.CODACY_API_TOKEN }}
 
   build-and-deploy-container:
-    # needs:
-    #   - test
-    #   - security-scan-code
+    needs:
+      - test
+      - security-scan-code
 
     permissions:
       id-token: write
@@ -76,18 +77,18 @@ jobs:
         uses: google-github-actions/setup-gcloud@v0.6.0
       - name: Setting up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      # - name: Containerizing
-      #   id: containerizing
-      #   run: ./scripts/containerize.sh
-      # - name: Run Trivy vulnerability scanner
-      #   uses: aquasecurity/trivy-action@0.5.1
-      #   with:
-      #     image-ref: ${{ steps.containerizing.outputs.image-name }}
-      #     format: "table"
-      #     exit-code: "1"
-      #     ignore-unfixed: true
-      #     vuln-type: "os,library"
-      #     severity: "CRITICAL,HIGH"
+      - name: Containerizing
+        id: containerizing
+        run: ./scripts/containerize.sh
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.5.1
+        with:
+          image-ref: ${{ steps.containerizing.outputs.image-name }}
+          format: "table"
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: "os,library"
+          severity: "CRITICAL,HIGH"
       - name: Pushing image
         id: push
         run: ./scripts/containerize.sh
@@ -110,21 +111,12 @@ jobs:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
           token_format: id_token
-          # id_token_audience: https://backend-83496-btesdmljxq-ey.a.run.app
           id_token_audience: ${{ steps.deploy.outputs.url }}
           id_token_include_email: true
           create_credentials_file: false
           export_environment_variables: false
-      # - name: Setting up GCP environment
-      #   uses: google-github-actions/setup-gcloud@v0.6.0
       - name: Testing if service is up
         run: |
           echo "Testing if ${{ steps.push.outputs.image-name }} is up at ${{ steps.deploy.outputs.url }}"
           curl ${{ steps.deploy.outputs.url }}/health \
             --header "Authorization: Bearer ${{ steps.auth.outputs.id_token }}"
-      # curl https://backend-83496-btesdmljxq-ey.a.run.app/actuator/health \
-      #      --header "Authorization: Bearer ${{ steps.auth.outputs.id_token }}"
-      # - id: "invoke-service"
-      #   run: |-
-      #     curl ${{ steps.deploy.outputs.url }}/health --fail \
-      #     --header "Authorization: Bearer ${{ steps.auth.outputs.id_token }}"
