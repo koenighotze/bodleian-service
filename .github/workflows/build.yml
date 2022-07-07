@@ -63,6 +63,9 @@ jobs:
 
     runs-on: ubuntu-20.04
 
+    outputs:
+      target-url: ${{ steps.deploy.outputs.url }}
+
     steps:
       - name: Checking out
         uses: actions/checkout@v3
