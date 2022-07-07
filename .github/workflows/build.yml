@@ -63,18 +63,21 @@ jobs:
 
     runs-on: ubuntu-20.04
 
-    outputs:
-      target-url: ${{ steps.deploy.outputs.url }}
-
     steps:
       - name: Checking out
         uses: actions/checkout@v3
       - name: Authenticating
         uses: google-github-actions/auth@v0.8.0
         with:
+          # workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          # service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
+          # token_format: "access_token"
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
-          token_format: "access_token"
+          token_format: id_token
+          # id_token_audience: https://backend-83496-btesdmljxq-ey.a.run.app
+          id_token_audience: ${{ steps.deploy.outputs.url }}
+          id_token_include_email: true
       - name: Setting up GCP environment
         uses: google-github-actions/setup-gcloud@v0.6.0
       - name: Setting up Docker Buildx
@@ -106,18 +109,18 @@ jobs:
           timeout: 30 # allow enough time to startup container
           no_traffic: true
           tag: main-latest
-      - name: Authenticating
-        id: auth
-        uses: google-github-actions/auth@v0.7.3
-        with:
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
-          token_format: id_token
-          # id_token_audience: https://backend-83496-btesdmljxq-ey.a.run.app
-          id_token_audience: ${{ steps.deploy.outputs.url }}
-          id_token_include_email: true
-      - name: Setting up GCP environment
-        uses: google-github-actions/setup-gcloud@v0.6.0
+      # - name: Authenticating
+      #   id: auth
+      #   uses: google-github-actions/auth@v0.7.3
+      #   with:
+      #     workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+      #     service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
+      #     token_format: id_token
+      #     # id_token_audience: https://backend-83496-btesdmljxq-ey.a.run.app
+      #     id_token_audience: ${{ steps.deploy.outputs.url }}
+      #     id_token_include_email: true
+      # - name: Setting up GCP environment
+      #   uses: google-github-actions/setup-gcloud@v0.6.0
       - name: Testing if service is up
         run: |
           echo "Testing if ${{ steps.push.outputs.image-name }} is up at ${{ steps.deploy.outputs.url }}"
