@@ -115,10 +115,7 @@ jobs:
           id_token_include_email: true
       - name: Setting up GCP environment
         uses: google-github-actions/setup-gcloud@v0.6.0
-      - run: |
-          gcloud auth list
-      - run: gcloud config list account --format "value(core.account)"
-      - name: Debug
+      - name: Testing if service is up
         run: |
           echo "Testing if ${{ steps.push.outputs.image-name }} is up at ${{ steps.deploy.outputs.url }}"
           curl ${{ steps.deploy.outputs.url }}/health \
