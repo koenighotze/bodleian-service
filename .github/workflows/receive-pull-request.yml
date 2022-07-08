@@ -51,8 +51,6 @@ jobs:
         run: go mod download
       - name: Testing
         run: go test
-      - name: Linting
-        run: golint .
       - name: Checking Dockerfile
         uses: hadolint/hadolint-action@v2.0.0
         with:
