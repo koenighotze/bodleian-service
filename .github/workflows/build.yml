@@ -126,7 +126,7 @@ jobs:
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
-          token_format: id_tokens
+          token_format: id_token
           id_token_audience: ${{ steps.deploy.outputs.url }}
           id_token_include_email: true
           create_credentials_file: false
