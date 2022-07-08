@@ -3,7 +3,6 @@ name: Build main
 on:
   push:
     branches: [main]
-    # tags-ignore: ["**"]
     tags:
       - "v*"
   workflow_dispatch:
@@ -31,6 +30,24 @@ jobs:
           exit-code: "1"
           severity: "CRITICAL"
 
+  qa:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checking out
+        uses: actions/checkout@v3
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: "^1.14.0"
+      - name: Install dependencies
+        run: go mod download
+      - name: Linting
+        run: golint .
+      - name: Checking Dockerfile
+        uses: hadolint/hadolint-action@v2.0.0
+        with:
+          verbose: true
+
   test:
     runs-on: ubuntu-20.04
     steps:
@@ -55,6 +72,7 @@ jobs:
 
   build-and-deploy-container:
     needs:
+      - qa
       - test
       - security-scan-code
 
@@ -110,7 +128,7 @@ jobs:
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
-          token_format: id_token
+          token_format: id_tokens
           id_token_audience: ${{ steps.deploy.outputs.url }}
           id_token_include_email: true
           create_credentials_file: false

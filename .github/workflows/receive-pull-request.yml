@@ -3,27 +3,80 @@ name: Receive pull request
 on:
   pull_request:
 
+# TODO: Update pull request, e.g.,
+# - name: Update Pull Request
+#   uses: actions/github-script@v6
+#   if: github.event_name == 'pull_request'
+#   with:
+#     script: |
+#       const output = `
+#       #### Hadolint: \`${{ steps.hadolint.outcome }}\`
+#       \`\`\`
+#       ${process.env.HADOLINT_RESULTS}
+#       \`\`\`
+#       `;
+
+#       github.rest.issues.createComment({
+#         issue_number: context.issue.number,
+#         owner: context.repo.owner,
+#         repo: context.repo.repo,
+#         body: output
+#       })
+
 jobs:
-  lint:
+  security-scan-code:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - name: Checking out
+        uses: actions/checkout@v3
+      - name: Run Trivy vulnerability scanner in repo mode
+        uses: aquasecurity/trivy-action@0.5.1
+        with:
+          scan-type: "fs"
+          ignore-unfixed: false
+          format: "table"
+          exit-code: "1"
+          severity: "CRITICAL"
 
   qa:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - name: Checking out
+        uses: actions/checkout@v3
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: "^1.14.0"
+      - name: Install dependencies
+        run: go mod download
+      - name: Testing
+        run: go test
+      - name: Linting
+        run: golint .
+      - name: Checking Dockerfile
+        uses: hadolint/hadolint-action@v2.0.0
+        with:
+          verbose: true
 
-  security-scan:
+  build:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - name: Checking out
+        uses: actions/checkout@v3
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: "^1.14.0"
+      - name: Install dependencies
+        run: go mod download
+      - name: Building
+        run: go build -o bodleian-service
 
   mark-pr:
     needs:
-      - lint
       - qa
-      - security-scan
+      - build
+      - security-scan-code
     runs-on: ubuntu-20.04
     permissions:
       pull-requests: write
