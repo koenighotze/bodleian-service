@@ -112,7 +112,7 @@ jobs:
           OUTPUT_MODE: push
       - name: Deploying to Cloud Run
         id: deploy
-        uses: google-github-actions/deploy-cloudrun@v0.10.1
+        uses: google-github-actions/deploy-cloudrun@v0.10.3
         with:
           image: ${{ steps.push.outputs.image-name }}
           service: ${{ secrets.CLOUD_RUN_SERVICE }}
