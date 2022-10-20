@@ -51,7 +51,7 @@ jobs:
           # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
           version: v1.29
       - name: Checking Dockerfile
-        uses: hadolint/hadolint-action@v2.0.0
+        uses: hadolint/hadolint-action@v2.1.0
         with:
           verbose: true
 
