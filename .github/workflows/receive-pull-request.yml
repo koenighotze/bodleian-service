@@ -30,7 +30,7 @@ jobs:
       - name: Checking out
         uses: actions/checkout@v3
       - name: Run Trivy vulnerability scanner in repo mode
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: aquasecurity/trivy-action@0.5.1
         with:
           scan-type: "fs"
           ignore-unfixed: false
@@ -38,55 +38,55 @@ jobs:
           exit-code: "1"
           severity: "CRITICAL"
 
-  qa:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checking out
-        uses: actions/checkout@v3
-      - name: Setup Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: "^1.14.0"
-      - name: Install dependencies
-        run: go mod download
-      - name: Testing
-        run: go test
-      - name: Checking Dockerfile
-        uses: hadolint/hadolint-action@v2.1.0
-        with:
-          verbose: true
+#  qa:
+#    runs-on: ubuntu-20.04
+#    steps:
+#      - name: Checking out
+#        uses: actions/checkout@v3
+#      - name: Setup Go
+#        uses: actions/setup-go@v3
+#        with:
+#          go-version: "^1.14.0"
+#      - name: Install dependencies
+#        run: go mod download
+#      - name: Testing
+#        run: go test
+#      - name: Checking Dockerfile
+#        uses: hadolint/hadolint-action@v2.0.0
+#        with:
+#          verbose: true
 
-  build:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checking out
-        uses: actions/checkout@v3
-      - name: Setup Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: "^1.14.0"
-      - name: Install dependencies
-        run: go mod download
-      - name: Building
-        run: go build -o bodleian-service
-
-  mark-pr:
-    needs:
-      - qa
-      - build
-      - security-scan-code
-    runs-on: ubuntu-20.04
-    permissions:
-      pull-requests: write
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions-ecosystem/action-add-labels@v1.1.3
-        with:
-          labels: |
-            linted
-            qaed
-            secure
-            ready-for-review
-          token: ${{ secrets.GH_TOKEN_FOR_LABELING }}
-          number: ${{ github.event.number }}
+#  build:
+#    runs-on: ubuntu-20.04
+#    steps:
+#      - name: Checking out
+#        uses: actions/checkout@v3
+#      - name: Setup Go
+#        uses: actions/setup-go@v3
+#        with:
+#          go-version: "^1.14.0"
+#      - name: Install dependencies
+#        run: go mod download
+#      - name: Building
+#        run: go build -o bodleian-service
+#
+#  mark-pr:
+#    needs:
+#      - qa
+#      - build
+#      - security-scan-code
+#    runs-on: ubuntu-20.04
+#    permissions:
+#      pull-requests: write
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: actions-ecosystem/action-add-labels@v1.1.3
+#        with:
+#          labels: |
+#            linted
+#            qaed
+#            secure
+#            ready-for-review
+#          token: ${{ secrets.GH_TOKEN_FOR_LABELING }}
+#          number: ${{ github.event.number }}

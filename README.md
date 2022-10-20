@@ -1,5 +1,9 @@
-# bodleian-service
-Repository for bodleian-service in project bodleian-398addce
+# Bodleian Service
+
+TODO BADGES
+
+The backend service for library management. It exposes a REST API for managing 
+library related resources.
 
 
 ## Bucket list
