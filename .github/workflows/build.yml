@@ -120,7 +120,7 @@ jobs:
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0.10.0
         with:
-          image: ${{ steps.push.outputs.image-name }}
+          image: ${{ env.image-name }}
           service: ${{ secrets.CLOUD_RUN_SERVICE }}
           region: ${{ secrets.CLOUD_RUN_REGION }}
           timeout: 30 # allow enough time to startup container
