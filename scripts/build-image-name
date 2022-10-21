@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+: "${GITHUB_SHA?'Expected env var GITHUB_SHA not set'}"
+: "${GITHUB_REF?'Expected env var GITHUB_REF not set'}"
+: "${CONTAINER_REGISTRY?'Expected env var CONTAINER_REGISTRY not set'}"
+
+if [[ "$GITHUB_REF" = refs/tags/* ]]; then
+  GIT_TAG=${GITHUB_REF/refs\/tags\/}
+  # shellcheck disable=SC2086
+  echo "image-name=$CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GIT_TAG" >> "$GITHUB_ENV"
+else
+  echo "image-name=$CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA" >> "$GITHUB_ENV"
+fi
