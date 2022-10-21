@@ -11,28 +11,28 @@ permissions:
   contents: read
   # pull-requests: read
 
-#env:
-#  CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
-#  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+env:
+  CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
 
 jobs:
-#  security-scan-code:
-#    runs-on: ubuntu-20.04
-#    steps:
-#      - name: Checking out
-#        uses: actions/checkout@v3
-#      - name: Run Snyk to check for vulnerabilities
-#        uses: snyk/actions/golang@0.3.0
-#        env:
-#          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-#      - name: Run Trivy vulnerability scanner in repo mode
-#        uses: aquasecurity/trivy-action@0.5.1
-#        with:
-#          scan-type: "fs"
-#          ignore-unfixed: false
-#          format: "table"
-#          exit-code: "1"
-#          severity: "CRITICAL"
+  security-scan-code:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checking out
+        uses: actions/checkout@v3
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/golang@0.3.0
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Run Trivy vulnerability scanner in repo mode
+        uses: aquasecurity/trivy-action@0.5.1
+        with:
+          scan-type: "fs"
+          ignore-unfixed: false
+          format: "table"
+          exit-code: "1"
+          severity: "CRITICAL"
 
   qa:
     runs-on: ubuntu-20.04
@@ -43,13 +43,13 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: "^1.14.0"
-#      - name: Install dependencies
-#        run: go mod download
       - name: Lint
         uses: golangci/golangci-lint-action@v3
         with:
           # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
           version: v1.29
+      - name: Vet
+        run: go vet
       - name: Checking Dockerfile
         uses: hadolint/hadolint-action@v2.1.0
         with:
@@ -77,43 +77,43 @@ jobs:
           CODACY_USERNAME: ${{ github.repository_owner }}
           CODACY_API_TOKEN: ${{ secrets.CODACY_API_TOKEN }}
 
-#  build-and-deploy-container:
-#    needs:
-#      - qa
-#      - test
-#      - security-scan-code
-#
-#    permissions:
-#      id-token: write
-#      contents: read
-#
-#    runs-on: ubuntu-20.04
-#
-#    steps:
-#      - name: Checking out
-#        uses: actions/checkout@v3
-#      - name: Authenticating
-#        uses: google-github-actions/auth@v0.8.0
-#        with:
-#          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-#          service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
-#          token_format: "access_token"
-#      - name: Setting up GCP environment
-#        uses: google-github-actions/setup-gcloud@v0.6.0
-#      - name: Setting up Docker Buildx
-#        uses: docker/setup-buildx-action@v2
-#      - name: Containerizing
-#        id: containerizing
-#        run: ./scripts/containerize
-#      - name: Run Trivy vulnerability scanner
-#        uses: aquasecurity/trivy-action@0.5.1
-#        with:
-#          image-ref: ${{ steps.containerizing.outputs.image-name }}
-#          format: "table"
-#          exit-code: "1"
-#          ignore-unfixed: true
-#          vuln-type: "os,library"
-#          severity: "CRITICAL,HIGH"
+  build-and-deploy-container:
+    needs:
+      - qa
+      - test
+      - security-scan-code
+
+    permissions:
+      id-token: write
+      contents: read
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checking out
+        uses: actions/checkout@v3
+      - name: Authenticating
+        uses: google-github-actions/auth@v0.8.0
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
+          token_format: "access_token"
+      - name: Setting up GCP environment
+        uses: google-github-actions/setup-gcloud@v0.6.0
+      - name: Setting up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Containerizing
+        id: containerizing
+        run: ./scripts/containerize
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.5.1
+        with:
+          image-ref: ${{ steps.containerizing.outputs.image-name }}
+          format: "table"
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: "os,library"
+          severity: "CRITICAL,HIGH"
 #      - name: Pushing image
 #        id: push
 #        run: ./scripts/containerize
