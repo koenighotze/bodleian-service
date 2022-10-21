@@ -20,8 +20,9 @@ COPY go.mod ./
 COPY go.sum ./
 RUN go mod download
 
-COPY cmd ./cmd
 COPY configs ./configs
+COPY *go ./
+COPY internal ./internal
 
 # See https://gist.github.com/asukakenji/f15ba7e588ac42795f421b48b8aede63
 # See https://github.com/docker/labs/issues/215

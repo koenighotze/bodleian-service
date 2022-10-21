@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/koenighotze/bodleian-service/books"
-	"github.com/koenighotze/bodleian-service/database"
+	"github.com/koenighotze/bodleian-service/internal/books"
+	"github.com/koenighotze/bodleian-service/internal/database"
 	"log"
 	"net/http"
 	"os"
