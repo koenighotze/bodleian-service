@@ -14,7 +14,7 @@ NOW=$(date -u +%Y-%m-%dT%T%z)
 
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
     GIT_TAG=${GITHUB_REF/refs\/tags\/}
-    echo "::set-output name=git-tag::$GIT_TAG"
+    echo "git-tag=$GIT_TAG" >> "$GITHUB_ENV"
 fi
 
 DOCKER_BUILD_OPTIONS=""
@@ -31,9 +31,9 @@ docker buildx build --${OUTPUT_MODE} \
 
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
   # shellcheck disable=SC2086
-  echo "::set-output name=image-name::$CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GIT_TAG"
+  echo "image-name=$CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GIT_TAG" >> "$GITHUB_ENV"
 else
-  echo "::set-output name=image-name::$IMAGE_NAME"
+  echo "image-name=$IMAGE_NAME" >> "$GITHUB_ENV"
 fi
 
 echo "::endgroup::"
