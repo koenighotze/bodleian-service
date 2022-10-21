@@ -116,29 +116,29 @@ jobs:
         run: ./scripts/containerize
         env:
           OUTPUT_MODE: push
-#      - name: Deploying to Cloud Run
-#        id: deploy
-#        uses: google-github-actions/deploy-cloudrun@v0.10.0
-#        with:
-#          image: ${{ steps.push.outputs.image-name }}
-#          service: ${{ secrets.CLOUD_RUN_SERVICE }}
-#          region: ${{ secrets.CLOUD_RUN_REGION }}
-#          timeout: 30 # allow enough time to startup container
-#          no_traffic: true
-#          tag: main-latest
-#      - name: Authenticating
-#        id: auth
-#        uses: google-github-actions/auth@v0.7.3
-#        with:
-#          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-#          service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
-#          token_format: id_token
-#          id_token_audience: ${{ steps.deploy.outputs.url }}
-#          id_token_include_email: true
-#          create_credentials_file: false
-#          export_environment_variables: false
-#      - name: Testing if service is up
-#        run: |
-#          echo "Testing if ${{ steps.push.outputs.image-name }} is up at ${{ steps.deploy.outputs.url }}"
-#          curl ${{ steps.deploy.outputs.url }}/health \
-#            --header "Authorization: Bearer ${{ steps.auth.outputs.id_token }}"
+      - name: Deploying to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v0.10.0
+        with:
+          image: ${{ steps.push.outputs.image-name }}
+          service: ${{ secrets.CLOUD_RUN_SERVICE }}
+          region: ${{ secrets.CLOUD_RUN_REGION }}
+          timeout: 30 # allow enough time to startup container
+          no_traffic: true
+          tag: main-latest
+      - name: Authenticating
+        id: auth
+        uses: google-github-actions/auth@v0.7.3
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
+          token_format: id_token
+          id_token_audience: ${{ steps.deploy.outputs.url }}
+          id_token_include_email: true
+          create_credentials_file: false
+          export_environment_variables: false
+      - name: Testing if service is up
+        run: |
+          echo "Testing if ${{ steps.push.outputs.image-name }} is up at ${{ steps.deploy.outputs.url }}"
+          curl ${{ steps.deploy.outputs.url }}/health \
+            --header "Authorization: Bearer ${{ steps.auth.outputs.id_token }}"
