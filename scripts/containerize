@@ -9,7 +9,7 @@ set -Eeuo pipefail
 : "${OUTPUT_MODE:=load}"
 
 IMAGE_NAME="$CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA"
-gcloud auth configure-docker "$(echo $CONTAINER_REGISTRY | cut -d/ -f1)"
+gcloud auth configure-docker "$(echo "$CONTAINER_REGISTRY" | cut -d/ -f1)"
 NOW=$(date -u +%Y-%m-%dT%T%z)
 
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then

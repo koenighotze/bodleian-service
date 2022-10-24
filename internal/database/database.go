@@ -2,8 +2,8 @@ package database
 
 import "log"
 
-func SetupDatabase(username string, password string) error {
-	log.Println("Setting up the database")
+func SetupDatabase(username string, _ string) error {
+	log.Printf("Setting up the database for %v", username)
 
 	return nil
 }
