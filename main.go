@@ -1,28 +1,28 @@
 package main
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/koenighotze/bodleian-service/internal/books"
 	"github.com/koenighotze/bodleian-service/internal/database"
 	"log"
-	"net/http"
-	"os"
 )
-
-func getPort() string {
-	if value, ok := os.LookupEnv("PORT"); ok {
-		return value
-	}
-	return "8080"
-}
 
 func main() {
 	log.Default().Println("Starting up...")
+	router := gin.Default()
+
 	err := database.SetupDatabase("foo", "bar")
 	if err != nil {
 		log.Fatalf("Cannot setup connection to database. Must bail. %v", err)
 	}
 	defer database.Disconnect()
-	books.SetupRoutes("/api")
 
-	log.Fatal(http.ListenAndServe(":"+getPort(), nil))
+	router.OPTIONS("/")
+	api := router.Group("/api")
+	books.SetupRoutes(api)
+
+	err = router.Run()
+	if err != nil {
+		log.Fatalf("Cannot start web framework. Must bail. %v", err)
+	}
 }

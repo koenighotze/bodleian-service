@@ -1,35 +1,29 @@
 package books
 
 import (
-	"encoding/json"
 	"github.com/google/uuid"
-	"log"
 )
 
-type BookId string
+// BookID The ID of a book
+type BookID string
 
 const (
-	NoneId = BookId("undefined")
+	// NoneID represents a 'null' ID
+	NoneID = BookID("undefined")
 )
 
+// Book represents a book
 type Book struct {
-	Id     BookId `json:"id"`
+	ID     BookID `json:"id"`
 	ISBN   string `json:"isbn"`
 	Title  string `json:"title"`
 	Author string `json:"author"`
 }
 
-func (book Book) ToJSON() []byte {
-	asJson, err := json.MarshalIndent(book, "", "   ")
-	if err != nil {
-		log.Default().Fatalf("Cannot marshal %v", book)
-	}
-	return asJson
-}
-
+// NewBook is a factory method for creating new Books
 func NewBook(isbn string, title string, author string) Book {
 	return Book{
-		Id:     BookId(uuid.NewString()),
+		ID:     BookID(uuid.NewString()),
 		ISBN:   isbn,
 		Title:  title,
 		Author: author,

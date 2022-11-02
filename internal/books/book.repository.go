@@ -2,10 +2,9 @@ package books
 
 import (
 	"fmt"
-	"log"
 )
 
-var mockHash = make(map[BookId]Book)
+var mockHash = make(map[BookID]Book)
 
 func init() {
 	var mockData = []Book{
@@ -14,17 +13,19 @@ func init() {
 		NewBook("3423214120", "Der kleine Hobbit", "J.R.R. Tolkien"),
 	}
 	for _, book := range mockData {
-		mockHash[book.Id] = book
+		mockHash[book.ID] = book
 	}
 }
 
-func GetBookById(bookId BookId) (*Book, error) {
-	if book, ok := mockHash[bookId]; ok {
+// GetBookByID todo
+func GetBookByID(bookID BookID) (*Book, error) {
+	if book, ok := mockHash[bookID]; ok {
 		return &book, nil
 	}
-	return nil, fmt.Errorf("book %s not found", bookId)
+	return nil, fmt.Errorf("book %s not found", bookID)
 }
 
+// GetAllBooks todo
 func GetAllBooks() ([]Book, error) {
 	allBooks := make([]Book, 0, len(mockHash))
 
@@ -34,20 +35,32 @@ func GetAllBooks() ([]Book, error) {
 	return allBooks, nil
 }
 
-func DeleteBookById(bookId BookId) error {
-	delete(mockHash, bookId)
+// DeleteBookByID todo
+func DeleteBookByID(bookID BookID) error {
+	delete(mockHash, bookID)
 	return nil
 }
 
+// AddNewBook todo
 func AddNewBook(book Book) error {
-	if _, ok := mockHash[book.Id]; ok {
-		return fmt.Errorf("book %s already exists", book.Id)
+	if _, ok := mockHash[book.ID]; ok {
+		return fmt.Errorf("book %s already exists", book.ID)
 	}
-	mockHash[book.Id] = book
+	mockHash[book.ID] = book
 	return nil
 }
 
-func UpdateBook(original Book, updated Book) error {
-	log.Printf("Should update %v with %v", original, updated)
+// UpdateBookByID todo
+func UpdateBookByID(originalBookID BookID, updated Book) error {
+	book, err := GetBookByID(originalBookID)
+	if err != nil {
+		return err
+	}
+
+	book.ISBN = updated.ISBN
+	book.Author = updated.Author
+	book.Title = updated.Title
+	mockHash[book.ID] = *book
+
 	return nil
 }

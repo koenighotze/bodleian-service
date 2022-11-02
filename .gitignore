@@ -34,3 +34,4 @@ build/
 bodleian-service
 coverage.out
 pgdata
+book2.json

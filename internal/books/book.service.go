@@ -1,162 +1,108 @@
 package books
 
 import (
-	"encoding/json"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/go-http-utils/headers"
 	"github.com/google/uuid"
-	"github.com/ldez/mimetype"
-	"io"
 	"log"
 	"net/http"
-	"strings"
 )
 
-const apiPath = "books"
-
-func getBookIdFromRequest(r *http.Request) (BookId, error) {
-	segments := strings.Split(r.URL.Path, apiPath+"/")
-	if len(segments) != 2 {
-		return NoneId, fmt.Errorf("cannot extract id from %s", r.URL.Path)
-	}
-
-	return BookId(segments[1]), nil
-}
-
-func getRequestedBook(w http.ResponseWriter, r *http.Request) (*Book, error) {
-	id, err := getBookIdFromRequest(r)
+func getRequestedBook(c *gin.Context) (*Book, error) {
+	id := BookID(c.Param("id"))
+	book, err := GetBookByID(id)
 	if err != nil {
 		log.Println(err)
-		w.WriteHeader(http.StatusBadRequest)
-		return nil, err
-	}
-	book, err := GetBookById(id)
-	if err != nil {
-		log.Println(err)
-		w.WriteHeader(http.StatusNotFound)
+		c.AbortWithStatus(http.StatusNotFound)
 		return nil, err
 	}
 	return book, nil
 }
 
-func getBookById(w http.ResponseWriter, book *Book) {
-	w.Header().Set(headers.ContentType, mimetype.ApplicationJSON)
-	w.WriteHeader(http.StatusOK)
-	_, err := w.Write(book.ToJSON())
+func getBookByID(c *gin.Context) {
+	book, err := getRequestedBook(c)
 	if err != nil {
-		log.Println(err)
+		return
+	}
+	c.IndentedJSON(http.StatusOK, book)
+}
+
+func updateBookByID(c *gin.Context) {
+	book, err := getRequestedBook(c)
+	if err != nil {
+		return
+	}
+
+	var newBook Book
+	if err := c.BindJSON(&newBook); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+	}
+
+	err = UpdateBookByID(book.ID, newBook)
+
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
 	}
 }
 
-func updateBook(w http.ResponseWriter, r *http.Request, book *Book) {
-	body, err := io.ReadAll(r.Body)
+func removeBookFromLibraryByID(c *gin.Context) {
+	book, err := getRequestedBook(c)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-	var newBook = Book{}
-	err = json.Unmarshal(body, &newBook)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	err = UpdateBook(*book, newBook)
+	err = DeleteBookByID(book.ID)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
-
-	w.WriteHeader(http.StatusOK)
 }
 
-func deleteBook(w http.ResponseWriter, book *Book) {
-	err := DeleteBookById(book.Id)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	w.WriteHeader(http.StatusOK)
-}
-
-func getAllBooks(w http.ResponseWriter, _ *http.Request) {
+func getAllBooks(c *gin.Context) {
 	books, err := GetAllBooks()
 	if err != nil {
 		log.Println(err)
-		w.WriteHeader(http.StatusInternalServerError)
+		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
 
-	asJson, err := json.MarshalIndent(books, "", "   ")
+	c.IndentedJSON(http.StatusOK, books)
+}
+
+func addNewBookToLibrary(c *gin.Context) {
+	var book Book
+	if err := c.BindJSON(&book); err != nil {
+		log.Println(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	book.ID = BookID(uuid.NewString())
+
+	err := AddNewBook(book)
 	if err != nil {
 		log.Println(err)
-		w.WriteHeader(http.StatusInternalServerError)
+		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set(headers.ContentType, mimetype.ApplicationJSON)
-	w.WriteHeader(http.StatusOK)
-
-	_, err = w.Write(asJson)
-	if err != nil {
-		log.Println(err)
-	}
+	c.Header(headers.Location, fmt.Sprintf("%s/%s", c.Request.URL.Path, book.ID))
+	c.Status(http.StatusCreated)
 }
 
-func createNewBook(w http.ResponseWriter, r *http.Request) {
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-	var newBook = Book{}
-	err = json.Unmarshal(body, &newBook)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	newBook.Id = BookId(uuid.NewString())
-	err = AddNewBook(newBook)
-	if err != nil {
-		log.Println(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set(headers.Location, fmt.Sprintf("%s/%s", r.URL.Path, newBook.Id))
-	w.WriteHeader(http.StatusCreated)
+func booksHandler(group *gin.RouterGroup) {
+	group.GET("", getAllBooks)
+	group.POST("", addNewBookToLibrary)
 }
 
-func bookHandler(w http.ResponseWriter, r *http.Request) {
-	book, err := getRequestedBook(w, r)
-	if err != nil {
-		return
-	}
-	switch r.Method {
-	case http.MethodGet:
-		getBookById(w, book)
-	case http.MethodDelete:
-		deleteBook(w, book)
-	case http.MethodPut:
-		updateBook(w, r, book)
-	default:
-		w.WriteHeader(http.StatusMethodNotAllowed)
-	}
+func bookHandler(group *gin.RouterGroup) {
+	group.GET("", getBookByID)
+	group.DELETE("", removeBookFromLibraryByID)
+	group.POST("", updateBookByID)
 }
 
-func booksHandler(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case http.MethodGet:
-		getAllBooks(w, r)
-	case http.MethodPost:
-		createNewBook(w, r)
-	case http.MethodOptions:
-	default:
-		w.WriteHeader(http.StatusMethodNotAllowed)
-	}
-}
-
-func SetupRoutes(basePath string) {
-	http.HandleFunc(fmt.Sprintf("%s/%s", basePath, apiPath), booksHandler)
-	http.HandleFunc(fmt.Sprintf("%s/%s/", basePath, apiPath), bookHandler)
+// SetupRoutes todo
+func SetupRoutes(group *gin.RouterGroup) {
+	booksHandler(group.Group("/books"))
+	bookHandler(group.Group("/books/:id"))
 }
