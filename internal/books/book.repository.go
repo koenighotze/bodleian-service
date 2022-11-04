@@ -58,7 +58,7 @@ func UpdateBookByID(originalBookID BookID, updated Book) error {
 	}
 
 	book.ISBN = updated.ISBN
-	book.Author = updated.Author
+	book.Authors = updated.Authors
 	book.Title = updated.Title
 	mockHash[book.ID] = *book
 

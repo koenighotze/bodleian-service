@@ -1,0 +1,255 @@
+{
+	"info": {
+		"_postman_id": "3677ba05-75c7-4b36-8dfe-6330d6b60eb5",
+		"name": "Bodleian",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4483654"
+	},
+	"item": [
+		{
+			"name": "CRUD Flow",
+			"item": [
+				{
+					"name": "01_Get All Books",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200)",
+									"})",
+									"",
+									"pm.environment.set(\"book_id\", pm.response.json()[0].id)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/api/books",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"books"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "02_Add book to collection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", () => {",
+									"    pm.response.to.have.status(201)",
+									"})",
+									"",
+									"pm.test(\"Location is present\", () => {",
+									"    pm.response.to.have.header(\"Location\")",
+									"})",
+									"pm.environment.set(\"book_location\", pm.response.headers.get(\"Location\"))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"author\": \"Mark Heckler\",\n  \"isbn\": \"Todo\",\n  \"title\": \"Spring Boot Up & Running\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/api/books",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"books"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "03_Get Book By Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}{{book_location}}",
+							"host": [
+								"{{HOST}}{{book_location}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "04_Update author",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200)",
+									"})",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"author\": \"New author\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}{{book_location}}",
+							"host": [
+								"{{HOST}}{{book_location}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "05_Author should be updated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200)",
+									"})",
+									"",
+									"pm.test(\"Author should be updated\", () => {",
+									"    pm.expect(pm.response.json().author).to.eql(\"New author\")",
+									"})",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"author\": \"New author\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}{{book_location}}",
+							"host": [
+								"{{HOST}}{{book_location}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "06_Delete Book By Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}{{book_location}}",
+							"host": [
+								"{{HOST}}{{book_location}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "07_Book should be deleted",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(404)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}{{book_location}}",
+							"host": [
+								"{{HOST}}{{book_location}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

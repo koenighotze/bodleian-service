@@ -14,18 +14,18 @@ const (
 
 // Book represents a book
 type Book struct {
-	ID     BookID `json:"id"`
-	ISBN   string `json:"isbn"`
-	Title  string `json:"title"`
-	Author string `json:"author"`
+	ID      BookID   `json:"id"`
+	ISBN    string   `json:"isbn"`
+	Title   string   `json:"title"`
+	Authors []string `json:"authors"`
 }
 
 // NewBook is a factory method for creating new Books
 func NewBook(isbn string, title string, author string) Book {
 	return Book{
-		ID:     BookID(uuid.NewString()),
-		ISBN:   isbn,
-		Title:  title,
-		Author: author,
+		ID:      BookID(uuid.NewString()),
+		ISBN:    isbn,
+		Title:   title,
+		Authors: []string{author},
 	}
 }
