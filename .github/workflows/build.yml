@@ -43,14 +43,19 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: "^1.17.0"
-      - name: Lint
+      - name: Lint Go code
         uses: golangci/golangci-lint-action@v3
-      - name: Vet
+      - name: Vet Go code
         run: go vet
       - name: Checking Dockerfile
         uses: hadolint/hadolint-action@v2.1.0
         with:
           verbose: true
+      - name: Check shell scripts
+        uses: ludeeus/action-shellcheck@v1.1.0
+        with:
+          severity: warning
+          scandir: './scripts'
 
   test:
     runs-on: ubuntu-20.04
@@ -101,7 +106,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
       - name: Containerizing
         id: containerizing
-        run: ./scripts/containerize
+        run: ./scripts/containerize.sh
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.7.1
         with:
@@ -113,7 +118,7 @@ jobs:
           severity: "CRITICAL,HIGH"
       - name: Pushing image
         id: push
-        run: ./scripts/containerize
+        run: ./scripts/containerize.sh
         env:
           OUTPUT_MODE: push
       - name: Deploying to Cloud Run

@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-newman run --env-var HOST=localhost:8080 Bodleian.postman_collection.json
