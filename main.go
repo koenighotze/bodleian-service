@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/koenighotze/bodleian-service/internal/books"
 	"github.com/koenighotze/bodleian-service/internal/database"
+	"github.com/koenighotze/bodleian-service/internal/health"
 	"log"
 )
 
@@ -20,6 +21,7 @@ func main() {
 	router.OPTIONS("/")
 	api := router.Group("/api")
 	books.SetupRoutes(api)
+	health.SetupRoutes(api)
 
 	err = router.Run()
 	if err != nil {
