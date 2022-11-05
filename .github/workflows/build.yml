@@ -144,14 +144,15 @@ jobs:
           export_environment_variables: false
       - name: Testing if service is up
         run: |
-          echo "Testing if ${{ steps.push.outputs.image-name }} is up at ${{ steps.deploy.outputs.url }}"
+          echo "Testing if ${{ env.image-name }} is up at ${{ steps.deploy.outputs.url }}"
           curl --fail \ 
-            ${{ steps.deploy.outputs.url }}/api/health \
-            --header "Authorization: Bearer ${{ steps.auth.outputs.id_token }}"
-      - name: Run API tests
-        uses: matt-ball/newman-action@v1.0.4
-        with:
-#          apiKey: ${{ secrets.postmanApiKey }}
-          collection: Bodleian.postman_collection.json
-#          environment: 5922408-228c7edd-fc15-4f68-9665-a35d7df6945b
+            -H "Authorization: Bearer ${{ steps.auth.outputs.id_token }}" \
+            ${{ steps.deploy.outputs.url }}/api/health
+#      - name: Run API tests
+#        uses: matt-ball/newman-action@v1.0.4
+#        with:
+##          apiKey: ${{ secrets.postmanApiKey }}
+#          collection: Bodleian.postman_collection.json
+##          environment: 5922408-228c7edd-fc15-4f68-9665-a35d7df6945b
+
 
