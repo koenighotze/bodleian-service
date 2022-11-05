@@ -145,7 +145,7 @@ jobs:
       - name: Testing if service is up
         run: |
           echo "Testing if ${{ steps.push.outputs.image-name }} is up at ${{ steps.deploy.outputs.url }}"
-          curl --fail-with-body \ 
+          curl --fail \ 
             ${{ steps.deploy.outputs.url }}/api/health \
             --header "Authorization: Bearer ${{ steps.auth.outputs.id_token }}"
       - name: Run API tests
