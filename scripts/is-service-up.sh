@@ -11,8 +11,14 @@ if [[ "${TRACE-0}" == "1" ]]; then set -o xtrace; fi
 : "${BASE_URL?'Expected env var BASE_URL not set'}"
 : "${BEARER_TOKEN?'Expected env var BEARER_TOKEN not set'}"
 
+#echo "Testing if service is up at ${BASE_URL}"
+##     -H "Authorization: Bearer ${BEARER_TOKEN}" \
+#curl --fail \
+#      -H "Authorization: Bearer $(gcloud auth print-identity-token)" \
+#     "${BASE_URL}/api/health"
+
+
 echo "Testing if service is up at ${BASE_URL}"
-#     -H "Authorization: Bearer ${BEARER_TOKEN}" \
 curl --fail \
-      -H "Authorization: Bearer $(gcloud auth print-identity-token)" \
+      -H "Authorization: Bearer $(gcloud auth print-access-token)" \
      "${BASE_URL}/api/health"
