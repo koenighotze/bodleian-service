@@ -145,7 +145,7 @@ jobs:
       - name: Testing if service is up
         run: |
           echo "Testing if ${{ env.image-name }} is up at ${{ steps.deploy.outputs.url }}"
-          curl -H "Authorization: Bearer $(gcloud auth print-identity-token)" https://main-latest---backend-83496-btesdmljxq-ey.a.run.app/api/health
+          curl --fail -H "Authorization: Bearer $(gcloud auth print-identity-token)" "${{ steps.deploy.outputs.url }}/api/health"
 #          curl --fail \
 #            -H "Authorization: Bearer ${{ steps.auth.outputs.id_token }}" \
 #            "${{ steps.deploy.outputs.url }}/api/health"
