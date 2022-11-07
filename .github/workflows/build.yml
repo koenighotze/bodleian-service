@@ -16,74 +16,74 @@ env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
 
 jobs:
-  security-scan-code:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checking out
-        uses: actions/checkout@v3
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/golang@0.3.0
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      - name: Run Trivy vulnerability scanner in repo mode
-        uses: aquasecurity/trivy-action@0.8.0
-        with:
-          scan-type: "fs"
-          ignore-unfixed: false
-          format: "table"
-          exit-code: "1"
-          severity: "CRITICAL"
-
-  qa:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checking out
-        uses: actions/checkout@v3
-      - name: Setup Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: "^1.17.0"
-      - name: Lint Go code
-        uses: golangci/golangci-lint-action@v3
-      - name: Vet Go code
-        run: go vet
-      - name: Checking Dockerfile
-        uses: hadolint/hadolint-action@v2.1.0
-        with:
-          verbose: true
-      - name: Check shell scripts
-        uses: ludeeus/action-shellcheck@1.1.0
-        with:
-          severity: warning
-          scandir: './scripts'
-
-  test:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checking out
-        uses: actions/checkout@v3
-      - name: Setup Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: "^1.17.0"
-      - name: Install dependencies
-        run: go mod download
-      - name: Testing
-        run: go test -coverprofile=coverage.out ./...
-      - name: Uploading coverage
-        run: |
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report --force-coverage-parser go -r coverage.out
-        env:
-          CODACY_PROJECT_NAME: bodleian-service
-          CODACY_ORGANIZATION_PROVIDER: gh
-          CODACY_USERNAME: ${{ github.repository_owner }}
-          CODACY_API_TOKEN: ${{ secrets.CODACY_API_TOKEN }}
+#  security-scan-code:
+#    runs-on: ubuntu-20.04
+#    steps:
+#      - name: Checking out
+#        uses: actions/checkout@v3
+#      - name: Run Snyk to check for vulnerabilities
+#        uses: snyk/actions/golang@0.3.0
+#        env:
+#          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+#      - name: Run Trivy vulnerability scanner in repo mode
+#        uses: aquasecurity/trivy-action@0.8.0
+#        with:
+#          scan-type: "fs"
+#          ignore-unfixed: false
+#          format: "table"
+#          exit-code: "1"
+#          severity: "CRITICAL"
+#
+#  qa:
+#    runs-on: ubuntu-20.04
+#    steps:
+#      - name: Checking out
+#        uses: actions/checkout@v3
+#      - name: Setup Go
+#        uses: actions/setup-go@v3
+#        with:
+#          go-version: "^1.17.0"
+#      - name: Lint Go code
+#        uses: golangci/golangci-lint-action@v3
+#      - name: Vet Go code
+#        run: go vet
+#      - name: Checking Dockerfile
+#        uses: hadolint/hadolint-action@v2.1.0
+#        with:
+#          verbose: true
+#      - name: Check shell scripts
+#        uses: ludeeus/action-shellcheck@1.1.0
+#        with:
+#          severity: warning
+#          scandir: './scripts'
+#
+#  test:
+#    runs-on: ubuntu-20.04
+#    steps:
+#      - name: Checking out
+#        uses: actions/checkout@v3
+#      - name: Setup Go
+#        uses: actions/setup-go@v3
+#        with:
+#          go-version: "^1.17.0"
+#      - name: Install dependencies
+#        run: go mod download
+#      - name: Testing
+#        run: go test -coverprofile=coverage.out ./...
+#      - name: Uploading coverage
+#        run: |
+#          bash <(curl -Ls https://coverage.codacy.com/get.sh) report --force-coverage-parser go -r coverage.out
+#        env:
+#          CODACY_PROJECT_NAME: bodleian-service
+#          CODACY_ORGANIZATION_PROVIDER: gh
+#          CODACY_USERNAME: ${{ github.repository_owner }}
+#          CODACY_API_TOKEN: ${{ secrets.CODACY_API_TOKEN }}
 
   build-container:
-    needs:
-      - qa
-      - test
-      - security-scan-code
+#    needs:
+#      - qa
+#      - test
+#      - security-scan-code
 
     permissions:
       id-token: write
