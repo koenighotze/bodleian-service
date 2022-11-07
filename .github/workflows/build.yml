@@ -143,9 +143,12 @@ jobs:
           create_credentials_file: false
           export_environment_variables: false
       - name: Testing if service is up
-        run: |
-          echo "Testing if ${{ env.image-name }} is up at ${{ steps.deploy.outputs.url }}"
-          curl --fail -H "Authorization: Bearer $(gcloud auth print-identity-token)" "${{ steps.deploy.outputs.url }}/api/health"
+        run: ./scripts/is-service-up.sh
+        env:
+          BASE_URL: ${{ steps.deploy.outputs.url }}
+          BEARER_TOKEN: ${{ steps.auth.outputs.id_token }}
+#          echo "Testing if ${{ env.image-name }} is up at ${{ steps.deploy.outputs.url }}"
+#          curl --fail -H "Authorization: Bearer $(gcloud auth print-identity-token)" "${{ steps.deploy.outputs.url }}/api/health"
 #          curl --fail \
 #            -H "Authorization: Bearer ${{ steps.auth.outputs.id_token }}" \
 #            "${{ steps.deploy.outputs.url }}/api/health"

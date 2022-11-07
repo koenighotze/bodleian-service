@@ -8,4 +8,10 @@ set -o pipefail
 # enable debug mode, by running your script as TRACE=1
 if [[ "${TRACE-0}" == "1" ]]; then set -o xtrace; fi
 
-nodemon --watch './**/*.go' --signal SIGTERM --exec 'go' run cmd/main.go
+: "${BASE_URL?'Expected env var BASE_URL not set'}"
+: "${BEARER_TOKEN?'Expected env var BEARER_TOKEN not set'}"
+
+echo "Testing if service is up at ${{ steps.deploy.outputs.url }}"
+curl --fail \
+     -H "Authorization: Bearer ${BEARER_TOKEN}" \
+     "${BASE_URL}/api/health"
