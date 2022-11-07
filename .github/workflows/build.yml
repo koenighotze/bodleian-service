@@ -144,6 +144,7 @@ jobs:
           export_environment_variables: false
       - name: Testing if service is up
         run: |
+          gcloud auth list
           ./scripts/is-service-up.sh
         env:
           BASE_URL: ${{ steps.deploy.outputs.url }}
