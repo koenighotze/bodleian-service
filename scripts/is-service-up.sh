@@ -12,6 +12,6 @@ if [[ "${TRACE-0}" == "1" ]]; then set -o xtrace; fi
 : "${BEARER_TOKEN?'Expected env var BEARER_TOKEN not set'}"
 
 echo "Testing if service is up at ${BASE_URL}"
-curl --fail \
+curl -v --fail \
      -H "Authorization: Bearer ${BEARER_TOKEN}" \
      "${BASE_URL}/api/health"
