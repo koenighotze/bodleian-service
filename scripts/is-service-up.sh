@@ -19,6 +19,8 @@ if [[ "${TRACE-0}" == "1" ]]; then set -o xtrace; fi
 
 
 echo "Testing if service is up at ${BASE_URL}"
+gcloud auth print-access-token
+gcloud auth print-identity-token
 curl --fail \
       -H "Authorization: Bearer $(gcloud auth print-access-token)" \
      "${BASE_URL}/api/health"
