@@ -143,7 +143,7 @@ jobs:
           id_token_audience: ${{ steps.deploy.outputs.url }}
 #          id_token_include_email: true
 #          create_credentials_file: false
-#          export_environment_variables: false
+          export_environment_variables: false
       - name: Testing if service is up
         run: |
           ./scripts/is-service-up.sh
