@@ -22,7 +22,7 @@ jobs:
       - name: Checking out
         uses: actions/checkout@v3
       - name: Setting up GCP environment
-        uses: google-github-actions/setup-gcloud@v0.6.0
+        uses: google-github-actions/setup-gcloud@v1.0.0
       - name: Authenticating
         id: auth
         uses: google-github-actions/auth@v0.8.3
