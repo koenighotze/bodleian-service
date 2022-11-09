@@ -23,24 +23,44 @@ jobs:
         uses: actions/checkout@v3
       - name: Setting up GCP environment
         uses: google-github-actions/setup-gcloud@v1.0.0
+#      - name: Authenticating
+#        id: auth
+#        uses: google-github-actions/auth@v1.0.0
+#        with:
+##          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+#          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+#          service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
+#          token_format: id_token
+##          token_format: access_token
+#          id_token_audience: https://main-latest---backend-83496-btesdmljxq-ey.a.run.app
+##          id_token_include_email: true
+##          create_credentials_file: false
+##          export_environment_variables: false
+##      - name: Testing if service is up
+##        run: |
+##          ./scripts/is-service-up.sh
+##        env:
+##          BASE_URL: https://main-latest---backend-83496-btesdmljxq-ey.a.run.app
+##          BEARER_TOKEN: ${{ steps.auth.outputs.id_token }}
+#
+
       - name: Authenticating
         id: auth
         uses: google-github-actions/auth@v1.0.0
         with:
-#          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
+          service_account: bodleian-backend-cicd@bodleian-398addce.iam.gserviceaccount.com
           token_format: id_token
-#          token_format: access_token
+#          id_token_audience: https://backend-83496-btesdmljxq-ey.a.run.app
           id_token_audience: https://main-latest---backend-83496-btesdmljxq-ey.a.run.app
-#          id_token_include_email: true
-#          create_credentials_file: false
-#          export_environment_variables: false
-      - name: Testing if service is up
-        run: |
-          ./scripts/is-service-up.sh
-        env:
-          BASE_URL: https://main-latest---backend-83496-btesdmljxq-ey.a.run.app
-          BEARER_TOKEN: ${{ steps.auth.outputs.id_token }}
-
-
+          id_token_include_email: true
+      - name: Setting up GCP environment
+        uses: google-github-actions/setup-gcloud@v1.0.0
+      - run: |
+          gcloud info
+          gcloud auth list
+      - run: gcloud config list account --format "value(core.account)"
+      - id: "invoke-service"
+        run: |-
+          curl https://main-latest---backend-83496-btesdmljxq-ey.a.run.app \
+          --header "Authorization: Bearer ${{ steps.auth.outputs.id_token }}"
