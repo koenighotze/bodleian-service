@@ -1,0 +1,46 @@
+name: Flow test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+
+jobs:
+  test-calling-cloud-run:
+    permissions:
+      id-token: write
+      contents: read
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checking out
+        uses: actions/checkout@v3
+      - name: Setting up GCP environment
+        uses: google-github-actions/setup-gcloud@v0.6.0
+      - name: Authenticating
+        id: auth
+        uses: google-github-actions/auth@v0.8.3
+        with:
+#          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
+          token_format: id_token
+#          token_format: access_token
+          id_token_audience: ${{ steps.deploy.outputs.url }}
+#          id_token_include_email: true
+#          create_credentials_file: false
+#          export_environment_variables: false
+      - name: Testing if service is up
+        run: |
+          ./scripts/is-service-up.sh
+        env:
+          BASE_URL: https://main-latest---backend-83496-btesdmljxq-ey.a.run.app
+          BEARER_TOKEN: ${{ steps.auth.outputs.id_token }}
+
+
