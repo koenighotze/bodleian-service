@@ -22,8 +22,10 @@ echo "Testing if service is up at ${BASE_URL}"
 gcloud auth print-access-token
 gcloud auth print-identity-token
 #curl --fail \
+echo Access token
 curl -H "Authorization: Bearer $(gcloud auth print-access-token)" \
-     "${BASE_URL}"
+     "${BASE_URL}/api/health"
 
+echo Access indentity
 curl -H "Authorization: Bearer $(gcloud auth print-identity-token)" \
-     "${BASE_URL}"
+     "${BASE_URL}/api/health"
