@@ -22,7 +22,7 @@ jobs:
       - name: Checking out
         uses: actions/checkout@v3
       - name: Setting up GCP environment
-        uses: google-github-actions/setup-gcloud@v1.0.0
+        uses: google-github-actions/setup-gcloud@v1.0.1
 #      - name: Authenticating
 #        id: auth
 #        uses: google-github-actions/auth@v1.0.0
@@ -55,7 +55,7 @@ jobs:
           id_token_audience: https://main-latest---backend-83496-btesdmljxq-ey.a.run.app
           id_token_include_email: true
       - name: Setting up GCP environment
-        uses: google-github-actions/setup-gcloud@v1.0.0
+        uses: google-github-actions/setup-gcloud@v1.0.1
       - run: |
           gcloud info
           gcloud auth list
