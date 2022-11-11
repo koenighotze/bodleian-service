@@ -33,9 +33,10 @@ jobs:
           gcloud auth list
       - run: gcloud config list account --format "value(core.account)"
       - id: "invoke-service"
-        run: |-
+        run: | 
+          gcloud auth print-access-token
           curl --fail https://main-latest---backend-83496-btesdmljxq-ey.a.run.app \
-          --header "Authorization: Bearer ${{ steps.auth.outputs.access_token }}"
+          --header "Authorization: Bearer $(gcloud auth print-access-token)"
 
   wlid-test-calling-cloud-run:
     permissions:
@@ -60,6 +61,7 @@ jobs:
       - name: Setting up GCP environment
         uses: google-github-actions/setup-gcloud@v1
       - run: |
+          gcloud auth print-access-token
           gcloud info
           gcloud auth list
       - run: gcloud config list account --format "value(core.account)"
