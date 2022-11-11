@@ -33,10 +33,8 @@ jobs:
           gcloud auth list
       - run: gcloud config list account --format "value(core.account)"
       - id: "invoke-service"
-        run: | 
-          gcloud auth print-access-token
-          curl --fail https://main-latest---backend-83496-btesdmljxq-ey.a.run.app \
-          --header "Authorization: Bearer $(gcloud auth print-access-token)"
+        run: |
+          curl --fail -v -H "Authorization: Bearer $(gcloud auth print-identity-token)" https://main-latest---backend-83496-btesdmljxq-ey.a.run.app/api/health
 
   wlid-test-calling-cloud-run:
     permissions:
