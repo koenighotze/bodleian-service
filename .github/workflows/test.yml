@@ -26,17 +26,11 @@ jobs:
         uses: google-github-actions/auth@v1.0.0
         with:
           credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
-      - name: Setting up GCP environment
-        uses: google-github-actions/setup-gcloud@v1.0.0
-      - run: |
-          gcloud info
-          gcloud auth list
-      - run: gcloud config list account --format "value(core.account)"
       - id: "invoke-service"
         run: |
           curl --fail -v -H "Authorization: Bearer $(gcloud auth print-identity-token)" https://main-latest---backend-83496-btesdmljxq-ey.a.run.app/api/health
 
-  wlid-test-calling-cloud-run:
+  id-token-test-calling-cloud-run:
     permissions:
       id-token: write
       contents: read
@@ -55,12 +49,32 @@ jobs:
           token_format: id_token
           id_token_audience: https://main-latest---backend-83496-btesdmljxq-ey.a.run.app/api/health
           id_token_include_email: true
-      - name: Setting up GCP environment
-        uses: google-github-actions/setup-gcloud@v1
-      - run: |
-          gcloud info
-          gcloud auth list
-      - run: gcloud config list account --format "value(core.account)"
+#      - name: Setting up GCP environment
+#        uses: google-github-actions/setup-gcloud@v1
+#      - run: |
+#          gcloud info
+#          gcloud auth list
+#      - run: gcloud config list account --format "value(core.account)"
       - id: "invoke-service"
         run: |
           curl --fail -v -H "Authorization: Bearer $(gcloud auth print-identity-token)" https://main-latest---backend-83496-btesdmljxq-ey.a.run.app/api/health
+
+  access-token-test-calling-cloud-run:
+    permissions:
+      id-token: write
+      contents: read
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checking out
+        uses: actions/checkout@v3
+      - name: Authenticating
+        id: auth
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: bodleian-backend-cicd@bodleian-398addce.iam.gserviceaccount.com
+          token_format: access_token
+      - run: |
+          curl --fail -v -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" https://main-latest---backend-83496-btesdmljxq-ey.a.run.app/api/health
