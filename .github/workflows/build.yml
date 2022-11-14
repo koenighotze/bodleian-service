@@ -79,6 +79,11 @@ jobs:
           CODACY_API_TOKEN: ${{ secrets.CODACY_API_TOKEN }}
 
   build-container:
+    needs:
+      - qa
+      - test
+      - security-scan-code
+
     permissions:
       id-token: write
       contents: read
