@@ -45,7 +45,7 @@ jobs:
         id: auth
         uses: google-github-actions/auth@v1
         with:
-          workload_identity_provider: projects/642340482178/locations/global/workloadIdentityPools/github-cicd-pool/providers/github-provider
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
           #          token_format: access_token
           token_format: id_token
