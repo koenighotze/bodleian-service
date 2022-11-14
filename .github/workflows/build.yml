@@ -85,9 +85,9 @@ jobs:
 #      - test
 #      - security-scan-code
 
-    permissions:
-      id-token: write
-      contents: read
+#    permissions:
+#      id-token: write
+#      contents: read
 
     runs-on: ubuntu-20.04
 
@@ -131,6 +131,44 @@ jobs:
           timeout: 30 # allow enough time to startup container
           no_traffic: true
           tag: main-latest
+    outputs:
+      service_url: ${{ steps.deploy.outputs.url }}
+#      - name: Authenticating
+#        id: auth
+#        uses: google-github-actions/auth@v1
+#        with:
+#          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+#          service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
+#          token_format: id_token
+#          id_token_audience: ${{ secrets.CLOUD_RUN_BACKEND_URL }}
+#          id_token_include_email: true
+#      - name: Testing if service is up
+#        run: |
+#          ./scripts/is-service-up.sh
+#        env:
+#          BASE_URL: ${{ steps.deploy.outputs.url }}
+#          BEARER_TOKEN: ${{ steps.auth.outputs.id_token }}
+#      - name: Run API tests
+#        uses: matt-ball/newman-action@v1.0.4
+#        with:
+##          apiKey: ${{ secrets.postmanApiKey }}
+#          collection: Bodleian.postman_collection.json
+##          environment: 5922408-228c7edd-fc15-4f68-9665-a35d7df6945b
+
+
+  test-deployment:
+    needs:
+      - build-container
+
+    permissions:
+      id-token: write
+      contents: read
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checking out
+        uses: actions/checkout@v3
       - name: Authenticating
         id: auth
         uses: google-github-actions/auth@v1
@@ -140,17 +178,6 @@ jobs:
           token_format: id_token
           id_token_audience: ${{ secrets.CLOUD_RUN_BACKEND_URL }}
           id_token_include_email: true
-      - name: Testing if service is up
-        run: |
-          ./scripts/is-service-up.sh
-        env:
-          BASE_URL: ${{ steps.deploy.outputs.url }}
-          BEARER_TOKEN: ${{ steps.auth.outputs.id_token }}
-#      - name: Run API tests
-#        uses: matt-ball/newman-action@v1.0.4
-#        with:
-##          apiKey: ${{ secrets.postmanApiKey }}
-#          collection: Bodleian.postman_collection.json
-##          environment: 5922408-228c7edd-fc15-4f68-9665-a35d7df6945b
-
-
+      - run: |
+          curl https://main-latest---backend-83496-btesdmljxq-ey.a.run.app/api/health \
+          --header "Authorization: Bearer ${{ steps.auth.outputs.id_token }}"
