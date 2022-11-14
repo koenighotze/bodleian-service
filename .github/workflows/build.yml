@@ -133,12 +133,12 @@ jobs:
           tag: main-latest
       - name: Authenticating
         id: auth
-        uses: google-github-actions/auth@v1.0.0
+        uses: google-github-actions/auth@v1
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
           token_format: id_token
-          id_token_audience: ${{ steps.deploy.outputs.url }}
+          id_token_audience: ${{ secrets.CLOUD_RUN_BACKEND_URL }}
           id_token_include_email: true
       - name: Testing if service is up
         run: |
@@ -146,11 +146,6 @@ jobs:
         env:
           BASE_URL: ${{ steps.deploy.outputs.url }}
           BEARER_TOKEN: ${{ steps.auth.outputs.id_token }}
-#          echo "Testing if ${{ env.image-name }} is up at ${{ steps.deploy.outputs.url }}"
-#          curl --fail -H "Authorization: Bearer $(gcloud auth print-identity-token)" "${{ steps.deploy.outputs.url }}/api/health"
-#          curl --fail \
-#            -H "Authorization: Bearer ${{ steps.auth.outputs.id_token }}" \
-#            "${{ steps.deploy.outputs.url }}/api/health"
 #      - name: Run API tests
 #        uses: matt-ball/newman-action@v1.0.4
 #        with:
