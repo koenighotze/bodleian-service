@@ -33,6 +33,12 @@ if [[ -n "${GIT_TAG:=}" ]]; then
 fi
 
 # shellcheck disable=SC2086
+echo docker buildx build --${OUTPUT_MODE} \
+  --tag "$IMAGE_NAME" $DOCKER_BUILD_OPTIONS \
+  --label "org.opencontainers.image.revision=${GITHUB_SHA}" \
+  --label "org.opencontainers.image.created=${NOW}" \
+  .
+
 docker buildx build --${OUTPUT_MODE} \
   --tag "$IMAGE_NAME" $DOCKER_BUILD_OPTIONS \
   --label "org.opencontainers.image.revision=${GITHUB_SHA}" \
