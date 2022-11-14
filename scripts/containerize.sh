@@ -15,11 +15,15 @@ if [[ "${TRACE-0}" == "1" ]]; then set -o xtrace; fi
 : "${OUTPUT_MODE:=load}"
 
 IMAGE_NAME="$CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA"
+
+echo "Building image $IMAGE_NAME"
 gcloud auth configure-docker "$(echo "$CONTAINER_REGISTRY" | cut -d/ -f1)"
 NOW=$(date -u +%Y-%m-%dT%T%z)
 
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
     GIT_TAG=${GITHUB_REF/refs\/tags\/}
+    echo "Building for tag $GIT_TAG"
+
     echo "git-tag=$GIT_TAG" >> "$GITHUB_ENV"
 fi
 
@@ -37,6 +41,7 @@ docker buildx build --${OUTPUT_MODE} \
 
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
   # shellcheck disable=SC2086
+  echo "Tagged image name is $CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GIT_TAG"
   echo "image-name=$CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GIT_TAG" >> "$GITHUB_ENV"
 fi
 echo "raw-image-name=$IMAGE_NAME" >> "$GITHUB_ENV"
