@@ -49,82 +49,82 @@ jobs:
           service_account: bodleian-backend-cicd@bodleian-398addce.iam.gserviceaccount.com
           #          token_format: access_token
           token_format: id_token
-          id_token_audience: https://backend-83496-btesdmljxq-ey.a.run.app
+          id_token_audience: ${{ secrets.CLOUD_RUN_BACKEND_URL }}
           id_token_include_email: true
       - run: |
           curl https://main-latest---backend-83496-btesdmljxq-ey.a.run.app/api/health \
           --header "Authorization: Bearer ${{ steps.auth.outputs.id_token }}"
 
-  testing:
-    permissions:
-      id-token: write
-      contents: read
+#  testing:
+#    permissions:
+#      id-token: write
+#      contents: read
+#
+#    runs-on: ubuntu-20.04
+#
+#    steps:
+#      - name: Checking out
+#        uses: actions/checkout@v3
+#      - name: Authenticating
+#        id: auth
+#        uses: google-github-actions/auth@v1
+#        with:
+#          workload_identity_provider: projects/642340482178/locations/global/workloadIdentityPools/github-cicd-pool/providers/github-provider
+#          service_account: bodleian-backend-cicd@bodleian-398addce.iam.gserviceaccount.com
+##          token_format: access_token
+#          token_format: id_token
+#          id_token_audience: https://main-latest---backend-83496-btesdmljxq-ey.a.run.app
+#          id_token_include_email: true
+#      - name: 'Set up Cloud SDK'
+#        uses: 'google-github-actions/setup-gcloud@v1'
+#      - run: |
+#          gcloud info
+#          gcloud iam service-accounts list
+#      - run: |
+#          curl https://main-latest---backend-83496-btesdmljxq-ey.a.run.app \
+#          --header "Authorization: Bearer ${{ steps.auth.outputs.id_token }}"
 
-    runs-on: ubuntu-20.04
 
-    steps:
-      - name: Checking out
-        uses: actions/checkout@v3
-      - name: Authenticating
-        id: auth
-        uses: google-github-actions/auth@v1
-        with:
-          workload_identity_provider: projects/642340482178/locations/global/workloadIdentityPools/github-cicd-pool/providers/github-provider
-          service_account: bodleian-backend-cicd@bodleian-398addce.iam.gserviceaccount.com
+#  id-token-test-calling-cloud-run:
+#    permissions:
+#      id-token: write
+#      contents: read
+#
+#    runs-on: ubuntu-20.04
+#
+#    steps:
+#      - name: Checking out
+#        uses: actions/checkout@v3
+#      - name: Authenticating
+#        id: auth
+#        uses: google-github-actions/auth@v1
+#        with:
+#          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+#          service_account: bodleian-backend-cicd@bodleian-398addce.iam.gserviceaccount.com
+#          token_format: id_token
+#          id_token_audience: https://main-latest---backend-83496-btesdmljxq-ey.a.run.app/api/health
+#          id_token_include_email: true
+#      - id: "invoke-service"
+#        run: |
+#          TOKEN=$(gcloud auth print-identity-token)
+#          curl --fail -v -H "Authorization: Bearer $TOKEN" https://main-latest---backend-83496-btesdmljxq-ey.a.run.app/api/health
+#
+#  access-token-test-calling-cloud-run:
+#    permissions:
+#      id-token: write
+#      contents: read
+#
+#    runs-on: ubuntu-20.04
+#
+#    steps:
+#      - name: Checking out
+#        uses: actions/checkout@v3
+#      - name: Authenticating
+#        id: auth
+#        uses: google-github-actions/auth@v1
+#        with:
+#          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+#          service_account: bodleian-backend-cicd@bodleian-398addce.iam.gserviceaccount.com
 #          token_format: access_token
-          token_format: id_token
-          id_token_audience: https://main-latest---backend-83496-btesdmljxq-ey.a.run.app
-          id_token_include_email: true
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v1'
-      - run: |
-          gcloud info
-          gcloud iam service-accounts list
-      - run: |
-          curl https://main-latest---backend-83496-btesdmljxq-ey.a.run.app \
-          --header "Authorization: Bearer ${{ steps.auth.outputs.id_token }}"
-
-
-  id-token-test-calling-cloud-run:
-    permissions:
-      id-token: write
-      contents: read
-
-    runs-on: ubuntu-20.04
-
-    steps:
-      - name: Checking out
-        uses: actions/checkout@v3
-      - name: Authenticating
-        id: auth
-        uses: google-github-actions/auth@v1
-        with:
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: bodleian-backend-cicd@bodleian-398addce.iam.gserviceaccount.com
-          token_format: id_token
-          id_token_audience: https://main-latest---backend-83496-btesdmljxq-ey.a.run.app/api/health
-          id_token_include_email: true
-      - id: "invoke-service"
-        run: |
-          TOKEN=$(gcloud auth print-identity-token)
-          curl --fail -v -H "Authorization: Bearer $TOKEN" https://main-latest---backend-83496-btesdmljxq-ey.a.run.app/api/health
-
-  access-token-test-calling-cloud-run:
-    permissions:
-      id-token: write
-      contents: read
-
-    runs-on: ubuntu-20.04
-
-    steps:
-      - name: Checking out
-        uses: actions/checkout@v3
-      - name: Authenticating
-        id: auth
-        uses: google-github-actions/auth@v1
-        with:
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: bodleian-backend-cicd@bodleian-398addce.iam.gserviceaccount.com
-          token_format: access_token
-      - run: |
-          curl --fail -v -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" https://main-latest---backend-83496-btesdmljxq-ey.a.run.app/api/health
+#      - run: |
+#          curl --fail -v -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" https://main-latest---backend-83496-btesdmljxq-ey.a.run.app/api/health
