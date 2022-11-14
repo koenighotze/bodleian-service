@@ -79,11 +79,6 @@ jobs:
           CODACY_API_TOKEN: ${{ secrets.CODACY_API_TOKEN }}
 
   build-container:
-    needs:
-      - qa
-      - test
-      - security-scan-code
-
     permissions:
       id-token: write
       contents: read
@@ -112,12 +107,42 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.8.0
         with:
-          image-ref: ${{ env.image-name }}
+          image-ref: ${{ env.raw-image-name }}
           format: "table"
           exit-code: "1"
           ignore-unfixed: true
           vuln-type: "os,library"
           severity: "CRITICAL,HIGH"
+
+  deploy-container:
+    needs:
+      - qa
+      - test
+      - security-scan-code
+      - build-container
+
+    permissions:
+      id-token: write
+      contents: read
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checking out
+        uses: actions/checkout@v3
+      - name: Authenticating
+        uses: google-github-actions/auth@v1
+        id: auth
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.CICD_SA_EMAIL_ADDRESS }}
+          token_format: id_token
+          id_token_audience: ${{ secrets.CLOUD_RUN_BACKEND_URL }}
+          id_token_include_email: true
+      - name: Setting up GCP environment
+        uses: google-github-actions/setup-gcloud@v1
+      - name: Setting up Docker Buildx
+        uses: docker/setup-buildx-action@v2
       - name: Pushing image
         id: push
         run: ./scripts/containerize.sh
@@ -139,7 +164,6 @@ jobs:
         env:
           BASE_URL: ${{ steps.deploy.outputs.url }}
           BEARER_TOKEN: ${{ steps.auth.outputs.id_token }}
-
 
 
 # Cannot do this because url contains a 'secret'

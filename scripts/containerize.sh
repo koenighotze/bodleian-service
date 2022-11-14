@@ -38,8 +38,7 @@ docker buildx build --${OUTPUT_MODE} \
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
   # shellcheck disable=SC2086
   echo "image-name=$CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GIT_TAG" >> "$GITHUB_ENV"
-else
-  echo "image-name=$IMAGE_NAME" >> "$GITHUB_ENV"
 fi
+echo "raw-image-name=$IMAGE_NAME" >> "$GITHUB_ENV"
 
 echo "::endgroup::"
