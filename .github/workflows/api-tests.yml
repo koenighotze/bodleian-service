@@ -31,7 +31,7 @@ jobs:
         uses: matt-ball/newman-action@v1.0.4
         with:
           collection: Bodleian.postman_collection.json
-          envVar: '[{ "key": "HOST", "value": "${{ secret.CLOUD_RUN_BACKEND_URL }}" }, { "key": "TOKEN", "value": "${{ steps.auth.outputs.id_token }}" }]'
+          envVar: '[{ "key": "HOST", "value": "${{ secrets.CLOUD_RUN_BACKEND_URL }}" }, { "key": "TOKEN", "value": "${{ steps.auth.outputs.id_token }}" }]'
           timeoutRequest: 3
 
 
