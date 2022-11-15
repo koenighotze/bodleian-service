@@ -152,7 +152,7 @@ jobs:
 #          tag_traffic: "${{ env.git-tag }}=100"
         run: |
           echo "Routing full traffic to tag $git-tag"
-          gcloud run services update-traffic --region=${{ secrets.CLOUD_RUN_REGION }} ${{ secrets.CLOUD_RUN_SERVICE }} --to-tags="$git-tag=100"
+          gcloud run services update-traffic --region=${{ secrets.CLOUD_RUN_REGION }} ${{ secrets.CLOUD_RUN_SERVICE }} --to-tags="${{ env.git-tag }}=100"
 
 #        id: release
 #        uses: google-github-actions/deploy-cloudrun@v0.10.1
