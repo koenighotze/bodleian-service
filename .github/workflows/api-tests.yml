@@ -1,4 +1,4 @@
-name: Build main
+name: API Tests
 
 on:
   push:
@@ -132,28 +132,15 @@ jobs:
           no_traffic: true
           flags: '--concurrency=1 --cpu=1 --max-instances=1'
 #          no_traffic: ${{ !startsWith(github.event.ref, 'refs/tags/v') }}
-          tag: ${{ env.git-tag }}
+#          tag: ${{ env.git-tag }}
       - name: Testing if service is up
         run: |
           ./scripts/is-service-up.sh
         env:
           BASE_URL: ${{ steps.deploy.outputs.url }}
           BEARER_TOKEN: ${{ steps.auth.outputs.id_token }}
-      - name: Routing traffic to new version
-        if: ${{ startsWith(github.event.ref, 'refs/tags/v') }}
-        uses: google-github-actions/deploy-cloudrun@v0.10.1
-        with:
-          image: ${{ env.image-name }}
-          service: ${{ secrets.CLOUD_RUN_SERVICE }}
-          region: ${{ secrets.CLOUD_RUN_REGION }}
-          timeout: 10 # allow enough time to startup container
-          flags: "--concurrency=10 --cpu=1 --max-instances=2"
-          tag: ${{ env.git-tag }}
-          tag_traffic: "${{ env.git-tag }}=100"
-
-#        run: |
-#          echo "Routing full traffic to tag $git-tag"
-#          gcloud run services update-traffic --region=${{ secrets.CLOUD_RUN_REGION }} ${{ secrets.CLOUD_RUN_SERVICE }} --to-tags="$git-tag=100"
+#      - name: Routing traffic to new version
+#        if: ${{ startsWith(github.event.ref, 'refs/tags/v') }}
 #        id: release
 #        uses: google-github-actions/deploy-cloudrun@v0.10.1
 #        with:
