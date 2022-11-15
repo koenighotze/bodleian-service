@@ -24,7 +24,7 @@ if [[ "$GITHUB_REF" = refs/tags/* ]]; then
     GIT_TAG=${GITHUB_REF/refs\/tags\/}
     echo "Building for tag $GIT_TAG"
 
-    echo "git-tag=$GIT_TAG" >> "$GITHUB_ENV"
+    echo "git-tag=$(echo $GIT_TAG | tr . -)" >> "$GITHUB_ENV"
 else
     echo "git-tag=main-latest" >> "$GITHUB_ENV"
 fi
