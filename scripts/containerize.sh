@@ -29,7 +29,7 @@ fi
 
 DOCKER_BUILD_OPTIONS=""
 if [[ -n "${GIT_TAG:=}" ]]; then
-    DOCKER_BUILD_OPTIONS="--tag=$GIT_TAG"
+    DOCKER_BUILD_OPTIONS="--tag=$CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GIT_TAG"
 fi
 
 # shellcheck disable=SC2086
