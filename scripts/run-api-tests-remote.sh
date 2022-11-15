@@ -8,4 +8,7 @@ set -o pipefail
 # enable debug mode, by running your script as TRACE=1
 if [[ "${TRACE-0}" == "1" ]]; then set -o xtrace; fi
 
-newman run --env-var HOST=https://backend-83496-btesdmljxq-ey.a.run.app --env-var TOKEN=$(gcloud auth print-identity-token) Bodleian.postman_collection.jsong
+: "${BASE_URL?'Expected env var BASE_URL not set'}"
+: "${BEARER_TOKEN?'Expected env var BEARER_TOKEN not set'}"
+
+newman run --env-var HOST="$BASE_URL" --env-var TOKEN="$BEARER_TOKEN" Bodleian.postman_collection.jsong
