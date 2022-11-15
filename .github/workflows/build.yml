@@ -111,7 +111,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.8.0
         with:
-          image-ref: ${{ env.raw-image-name }}
+          image-ref: ${{ env.image-name }}
           format: "table"
           exit-code: "1"
           ignore-unfixed: true
@@ -125,12 +125,12 @@ jobs:
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0.10.1
         with:
-          image: ${{ env.raw-image-name }}
+          image: ${{ env.image-name }}
           service: ${{ secrets.CLOUD_RUN_SERVICE }}
           region: ${{ secrets.CLOUD_RUN_REGION }}
-          timeout: 30 # allow enough time to startup container
-          no_traffic: true
-          tag: main-latest
+          timeout: 10 # allow enough time to startup container
+          no_traffic: ${{ startsWith(github.event.ref, 'refs/tags/v') && 'false' || 'true' }}
+          tag: ${{ startsWith(github.event.ref, 'refs/tags/v') && env.GIT_TAG || 'main-latest' }}
       - name: Testing if service is up
         run: |
           ./scripts/is-service-up.sh

@@ -44,6 +44,6 @@ if [[ "$GITHUB_REF" = refs/tags/* ]]; then
   echo "Tagged image name is $CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GIT_TAG"
   echo "image-name=$CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GIT_TAG" >> "$GITHUB_ENV"
 fi
-echo "raw-image-name=$IMAGE_NAME" >> "$GITHUB_ENV"
+echo "image-name=$IMAGE_NAME" >> "$GITHUB_ENV"
 
 echo "::endgroup::"
