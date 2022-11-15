@@ -25,6 +25,8 @@ if [[ "$GITHUB_REF" = refs/tags/* ]]; then
     echo "Building for tag $GIT_TAG"
 
     echo "git-tag=$GIT_TAG" >> "$GITHUB_ENV"
+else
+    echo "git-tag=main-latest" >> "$GITHUB_ENV"
 fi
 
 DOCKER_BUILD_OPTIONS=""
@@ -40,10 +42,11 @@ docker buildx build --${OUTPUT_MODE} \
   .
 
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
-  # shellcheck disable=SC2086
-  echo "Tagged image name is $CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GIT_TAG"
-  echo "image-name=$CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GIT_TAG" >> "$GITHUB_ENV"
+    # shellcheck disable=SC2086
+    echo "Tagged image name is $CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GIT_TAG"
+    echo "image-name=$CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GIT_TAG" >> "$GITHUB_ENV"
+else
+    echo "image-name=$IMAGE_NAME" >> "$GITHUB_ENV"
 fi
-echo "image-name=$IMAGE_NAME" >> "$GITHUB_ENV"
 
 echo "::endgroup::"
