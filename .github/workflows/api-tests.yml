@@ -3,9 +3,6 @@ name: API Tests
 on:
   workflow_dispatch:
 
-permissions:
-  contents: read
-
 env:
   CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
