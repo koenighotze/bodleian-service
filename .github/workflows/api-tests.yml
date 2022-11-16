@@ -40,15 +40,11 @@ jobs:
           token_format: id_token
           id_token_audience: ${{ secrets.CLOUD_RUN_BACKEND_URL }}
           id_token_include_email: true
-      - name: Stumpf ist Trumpf
-        run: |
-          curl -H "Authorization: Bearer ${{ steps.auth.outputs.id_token }}" https://backend-83496-btesdmljxq-ey.a.run.app/api/health
       - name: Run API tests
         uses: matt-ball/newman-action@v1.0.4
         with:
           collection: Bodleian.postman_collection.json
           envVar: '[{ "key": "HOST", "value": "${{ secrets.CLOUD_RUN_BACKEND_URL }}" }, { "key": "TOKEN", "value": "${{ steps.auth.outputs.id_token }}" }]'
-#          timeoutRequest: 30
           bail: true
       - name: Report Status
         uses: ravsamhq/notify-slack-action@v2
