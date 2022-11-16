@@ -32,6 +32,7 @@ jobs:
         with:
           collection: Bodleian.postman_collection.json
           envVar: '[{ "key": "HOST", "value": "${{ secrets.CLOUD_RUN_BACKEND_URL }}" }, { "key": "TOKEN", "value": "${{ steps.auth.outputs.id_token }}" }]'
-          timeoutRequest: 3
+#          timeoutRequest: 3
+          bail: true
 
 

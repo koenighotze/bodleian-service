@@ -11,4 +11,4 @@ if [[ "${TRACE-0}" == "1" ]]; then set -o xtrace; fi
 : "${BASE_URL?'Expected env var BASE_URL not set'}"
 : "${BEARER_TOKEN?'Expected env var BEARER_TOKEN not set'}"
 
-newman run --env-var HOST="$BASE_URL" --env-var TOKEN="$BEARER_TOKEN" Bodleian.postman_collection.jsong
+newman run --env-var HOST="$BASE_URL" --env-var TOKEN="$BEARER_TOKEN" Bodleian.postman_collection.json
