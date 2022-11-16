@@ -163,7 +163,7 @@
 									"})",
 									"",
 									"pm.test(\"Author should be updated\", () => {",
-									"    pm.expect(pm.response.json().author[0]).to.eql(\"New author\")",
+									"    pm.expect(pm.response.json().authors[0]).to.eql(\"New author\")",
 									"})",
 									""
 								],

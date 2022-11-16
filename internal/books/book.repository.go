@@ -57,9 +57,15 @@ func UpdateBookByID(originalBookID BookID, updated Book) error {
 		return err
 	}
 
-	book.ISBN = updated.ISBN
-	book.Authors = updated.Authors
-	book.Title = updated.Title
+	if updated.ISBN != "" {
+		book.ISBN = updated.ISBN
+	}
+	if updated.Authors != nil {
+		book.Authors = updated.Authors
+	}
+	if updated.Title != "" {
+		book.Title = updated.Title
+	}
 	mockHash[book.ID] = *book
 
 	return nil

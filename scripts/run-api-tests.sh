@@ -8,4 +8,4 @@ set -o pipefail
 # enable debug mode, by running your script as TRACE=1
 if [[ "${TRACE-0}" == "1" ]]; then set -o xtrace; fi
 
-newman run --env-var HOST=localhost:8080 Bodleian.postman_collection.json
+newman run --bail --env-var HOST=localhost:8080 Bodleian.postman_collection.json
