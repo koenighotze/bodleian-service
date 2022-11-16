@@ -48,7 +48,7 @@ jobs:
         with:
           collection: Bodleian.postman_collection.json
           envVar: '[{ "key": "HOST", "value": "${{ secrets.CLOUD_RUN_BACKEND_URL }}" }, { "key": "TOKEN", "value": "${{ steps.auth.outputs.id_token }}" }]'
-          timeoutRequest: 30
+#          timeoutRequest: 30
           bail: true
       - name: Report Status
         uses: ravsamhq/notify-slack-action@v2
