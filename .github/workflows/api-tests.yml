@@ -2,6 +2,12 @@ name: API Tests
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: [ "Build main" ]
+    types:
+      - completed
+  schedule:
+    - cron: '0 12 * * *' # every day at noon
 
 env:
   CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
@@ -9,6 +15,8 @@ env:
 
 jobs:
   run-api-test:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
     permissions:
       id-token: write
       contents: read
@@ -32,7 +40,17 @@ jobs:
         with:
           collection: Bodleian.postman_collection.json
           envVar: '[{ "key": "HOST", "value": "${{ secrets.CLOUD_RUN_BACKEND_URL }}" }, { "key": "TOKEN", "value": "${{ steps.auth.outputs.id_token }}" }]'
-#          timeoutRequest: 3
+          timeoutRequest: 10
           bail: true
-
-
+      - name: Report Status
+        uses: ravsamhq/notify-slack-action@v2
+        if: always()
+        with:
+          status: ${{ job.status }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          notification_title: "{workflow} has {status_message}"
+          message_format: "{emoji} *{workflow}* {status_message} in <{repo_url}|{repo}>"
+          footer: "Linked Repo <{repo_url}|{repo}> | <{workflow_url}|View Workflow>"
+#          notify_when: "failure"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

@@ -154,28 +154,6 @@ jobs:
           echo "Routing full traffic to tag $git-tag"
           gcloud run services update-traffic --region=${{ secrets.CLOUD_RUN_REGION }} ${{ secrets.CLOUD_RUN_SERVICE }} --to-tags="${{ env.git-tag }}=100"
 
-#        id: release
-#        uses: google-github-actions/deploy-cloudrun@v0.10.1
-#        with:
-#          image: ${{ env.image-name }}
-#          service: ${{ secrets.CLOUD_RUN_SERVICE }}
-#          region: ${{ secrets.CLOUD_RUN_REGION }}
-#          timeout: 10 # allow enough time to startup container
-#          tag: ${{ env.git-tag }}
-#          tag_traffix: '${{ env.git-tag}}=100'
-        #          flags: '--add-cloudsql-instances=... --concurrency=3 --cpu=1 --max-instances=2 '
-
-
-
 # Cannot do this because url contains a 'secret'
 #    outputs:
 #      service_url: ${{ steps.deploy.outputs.url }}
-
-#      - name: Run API tests
-#        uses: matt-ball/newman-action@v1.0.4
-#        with:
-##          apiKey: ${{ secrets.postmanApiKey }}
-#          collection: Bodleian.postman_collection.json
-##          environment: 5922408-228c7edd-fc15-4f68-9665-a35d7df6945b
-
-
