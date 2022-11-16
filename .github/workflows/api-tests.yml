@@ -2,6 +2,11 @@ name: API Tests
 
 on:
   workflow_dispatch:
+    inputs:
+      force:
+        required: true
+        default: false
+        type: boolean
   workflow_run:
     workflows: [ "Build main" ]
     types:
@@ -15,7 +20,7 @@ env:
 
 jobs:
   run-api-test:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.inputs.force || github.event.workflow_run.conclusion == 'success' }}
 
     permissions:
       id-token: write
