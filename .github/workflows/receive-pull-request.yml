@@ -27,13 +27,13 @@ jobs:
   security-scan-code:
     runs-on: ubuntu-20.04
     steps:
-      - name: Checking out
+      - name: Checkout
         uses: actions/checkout@v3
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/golang@0.3.0
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      - name: Run Trivy vulnerability scanner in repo mode
+      - name: Run vulnerability scanner in repo mode
         uses: aquasecurity/trivy-action@0.8.0
         with:
           scan-type: "fs"
@@ -45,7 +45,7 @@ jobs:
   qa:
     runs-on: ubuntu-20.04
     steps:
-      - name: Checking out
+      - name: Checkout
         uses: actions/checkout@v3
       - name: Setup Go
         uses: actions/setup-go@v3
@@ -63,7 +63,7 @@ jobs:
   test:
     runs-on: ubuntu-20.04
     steps:
-      - name: Checking out
+      - name: Checkout
         uses: actions/checkout@v3
       - name: Setup Go
         uses: actions/setup-go@v3
@@ -71,13 +71,13 @@ jobs:
           go-version: "^1.17.0"
       - name: Install dependencies
         run: go mod download
-      - name: Testing
+      - name: Test
         run: go test ./...
 
   build:
     runs-on: ubuntu-20.04
     steps:
-      - name: Checking out
+      - name: Checkout
         uses: actions/checkout@v3
       - name: Setup Go
         uses: actions/setup-go@v3

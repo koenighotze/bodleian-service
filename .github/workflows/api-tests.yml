@@ -29,9 +29,9 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - name: Checking out
+      - name: Checkout
         uses: actions/checkout@v3
-      - name: Authenticating
+      - name: Authenticate
         uses: google-github-actions/auth@v1
         id: auth
         with:
@@ -46,7 +46,7 @@ jobs:
           collection: Bodleian.postman_collection.json
           envVar: '[{ "key": "HOST", "value": "${{ secrets.CLOUD_RUN_BACKEND_URL }}" }, { "key": "TOKEN", "value": "${{ steps.auth.outputs.id_token }}" }]'
           bail: true
-      - name: Report Status
+      - name: Report API test failures
         uses: ravsamhq/notify-slack-action@v2
         if: always()
         with:
