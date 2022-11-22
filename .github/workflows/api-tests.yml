@@ -8,11 +8,11 @@ on:
         default: false
         type: boolean
   workflow_run:
-    workflows: [ "Build main" ]
+    workflows: ["Build main"]
     types:
       - completed
   schedule:
-    - cron: '0 12 * * *' # every day at noon
+    - cron: "0 12 * * *" # every day at noon
 
 env:
   CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
@@ -20,7 +20,7 @@ env:
 
 jobs:
   run-api-test:
-    if: ${{ github.event.inputs.force || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.schedule || github.event.inputs.force || github.event.workflow_run.conclusion == 'success' }}
 
     permissions:
       id-token: write
