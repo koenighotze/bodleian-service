@@ -10,6 +10,8 @@ func SetupDatabase(username string, _ string) error {
 }
 
 // Disconnect todo
-func Disconnect() {
+func Disconnect() error {
 	log.Println("Disconnecting")
+
+	return nil
 }

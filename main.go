@@ -16,7 +16,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("Cannot setup connection to database. Must bail. %v", err)
 	}
-	defer database.Disconnect()
+	defer func() {
+		if err := database.Disconnect(); err != nil {
+			log.Printf("Cannot disconnect because of: %v", err)
+		}
+	}()
 
 	router.OPTIONS("/")
 	api := router.Group("/api")
