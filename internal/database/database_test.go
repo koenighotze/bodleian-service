@@ -6,13 +6,16 @@ import (
 )
 
 func TestSetupDatabaseReturnNilOnSuccess(t *testing.T) {
-	err := SetupDatabase("", "")
+	db := MockDatabase{}
+	err := db.SetupDatabase("", "")
 
 	assert.Nil(t, err)
 }
 
 func TestDisconnectReturnNilOnSuccess(t *testing.T) {
-	err := Disconnect()
+	db := MockDatabase{}
+
+	err := db.Disconnect()
 
 	assert.Nil(t, err)
 }

@@ -2,11 +2,23 @@ package books
 
 import (
 	"fmt"
+	"github.com/koenighotze/bodleian-service/internal/database"
 )
 
-var mockHash = make(map[BookID]Book)
+type BookRepository interface {
+	GetBookByID(bookID BookID) (*Book, error)
+	GetAllBooks() ([]Book, error)
+	UpdateBookByID(originalBookID BookID, updated Book) error
+	AddNewBook(book Book) error
+	DeleteBookByID(bookID BookID) error
+}
 
-func init() {
+type InMemoryBookRepository struct {
+	mockHash map[BookID]Book
+}
+
+func New(_ database.Database) BookRepository {
+	var mockHash = make(map[BookID]Book)
 	var mockData = []Book{
 		NewBook("3596294312", "Buddenbrooks. Verfall einer Familie", "Thomas Mann"),
 		NewBook("310048391X", "Joseph und seine Brüder", "Thomas Mann"),
@@ -15,44 +27,48 @@ func init() {
 	for _, book := range mockData {
 		mockHash[book.ID] = book
 	}
+
+	return &InMemoryBookRepository{
+		mockHash: mockHash,
+	}
 }
 
 // GetBookByID todo
-func GetBookByID(bookID BookID) (*Book, error) {
-	if book, ok := mockHash[bookID]; ok {
+func (repo *InMemoryBookRepository) GetBookByID(bookID BookID) (*Book, error) {
+	if book, ok := repo.mockHash[bookID]; ok {
 		return &book, nil
 	}
 	return nil, fmt.Errorf("book %s not found", bookID)
 }
 
 // GetAllBooks todo
-func GetAllBooks() ([]Book, error) {
-	allBooks := make([]Book, 0, len(mockHash))
+func (repo *InMemoryBookRepository) GetAllBooks() ([]Book, error) {
+	allBooks := make([]Book, 0, len(repo.mockHash))
 
-	for _, book := range mockHash {
+	for _, book := range repo.mockHash {
 		allBooks = append(allBooks, book)
 	}
 	return allBooks, nil
 }
 
 // DeleteBookByID todo
-func DeleteBookByID(bookID BookID) error {
-	delete(mockHash, bookID)
+func (repo *InMemoryBookRepository) DeleteBookByID(bookID BookID) error {
+	delete(repo.mockHash, bookID)
 	return nil
 }
 
 // AddNewBook todo
-func AddNewBook(book Book) error {
-	if _, ok := mockHash[book.ID]; ok {
+func (repo *InMemoryBookRepository) AddNewBook(book Book) error {
+	if _, ok := repo.mockHash[book.ID]; ok {
 		return fmt.Errorf("book %s already exists", book.ID)
 	}
-	mockHash[book.ID] = book
+	repo.mockHash[book.ID] = book
 	return nil
 }
 
 // UpdateBookByID todo
-func UpdateBookByID(originalBookID BookID, updated Book) error {
-	book, err := GetBookByID(originalBookID)
+func (repo *InMemoryBookRepository) UpdateBookByID(originalBookID BookID, updated Book) error {
+	book, err := repo.GetBookByID(originalBookID)
 	if err != nil {
 		return err
 	}
@@ -66,7 +82,7 @@ func UpdateBookByID(originalBookID BookID, updated Book) error {
 	if updated.Title != "" {
 		book.Title = updated.Title
 	}
-	mockHash[book.ID] = *book
+	repo.mockHash[book.ID] = *book
 
 	return nil
 }

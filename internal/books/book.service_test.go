@@ -14,10 +14,12 @@ import (
 	"testing"
 )
 
+var repo = New(nil)
+
 func setupRouter() *gin.Engine {
 	r := gin.Default()
 
-	SetupRoutes(r.Group("/api"))
+	SetupRoutes(r.Group("/api"), repo)
 
 	return r
 }
@@ -64,7 +66,7 @@ func TestAddingABook(t *testing.T) {
 }
 
 func TestUpdatingTheAuthorOfABook(t *testing.T) {
-	books, _ := GetAllBooks()
+	books, _ := repo.GetAllBooks()
 	firstBook := books[0]
 	router := setupRouter()
 	w := httptest.NewRecorder()
@@ -72,7 +74,7 @@ func TestUpdatingTheAuthorOfABook(t *testing.T) {
 
 	req, _ := http.NewRequest(http.MethodPost, fmt.Sprintf("/api/books/%v", firstBook.ID), strings.NewReader(payload))
 	router.ServeHTTP(w, req)
-	bookThatShouldBeUpdated, _ := GetBookByID(firstBook.ID)
+	bookThatShouldBeUpdated, _ := repo.GetBookByID(firstBook.ID)
 
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Equal(t, "New Title", bookThatShouldBeUpdated.Title)
@@ -81,7 +83,7 @@ func TestUpdatingTheAuthorOfABook(t *testing.T) {
 }
 
 func TestGetBookByID(t *testing.T) {
-	books, _ := GetAllBooks()
+	books, _ := repo.GetAllBooks()
 	firstBook := books[0]
 
 	router := setupRouter()
@@ -98,7 +100,7 @@ func TestGetBookByID(t *testing.T) {
 }
 
 func TestRemoveBookByID(t *testing.T) {
-	books, _ := GetAllBooks()
+	books, _ := repo.GetAllBooks()
 	firstBook := books[0]
 
 	router := setupRouter()
@@ -108,6 +110,6 @@ func TestRemoveBookByID(t *testing.T) {
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusOK, w.Code)
-	_, err := GetBookByID(firstBook.ID)
+	_, err := repo.GetBookByID(firstBook.ID)
 	assert.Error(t, err)
 }

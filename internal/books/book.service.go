@@ -9,9 +9,13 @@ import (
 	"net/http"
 )
 
-func getRequestedBook(c *gin.Context) (*Book, error) {
+type BookService struct {
+	repository BookRepository
+}
+
+func (service BookService) getRequestedBook(c *gin.Context) (*Book, error) {
 	id := BookID(c.Param("id"))
-	book, err := GetBookByID(id)
+	book, err := service.repository.GetBookByID(id)
 	if err != nil {
 		log.Println(err)
 		c.AbortWithStatus(http.StatusNotFound)
@@ -20,16 +24,16 @@ func getRequestedBook(c *gin.Context) (*Book, error) {
 	return book, nil
 }
 
-func getBookByID(c *gin.Context) {
-	book, err := getRequestedBook(c)
+func (service BookService) getBookByID(c *gin.Context) {
+	book, err := service.getRequestedBook(c)
 	if err != nil {
 		return
 	}
 	c.IndentedJSON(http.StatusOK, book)
 }
 
-func updateBookByID(c *gin.Context) {
-	book, err := getRequestedBook(c)
+func (service BookService) updateBookByID(c *gin.Context) {
+	book, err := service.getRequestedBook(c)
 	if err != nil {
 		return
 	}
@@ -39,7 +43,7 @@ func updateBookByID(c *gin.Context) {
 		c.AbortWithStatus(http.StatusBadRequest)
 	}
 
-	err = UpdateBookByID(book.ID, newBook)
+	err = service.repository.UpdateBookByID(book.ID, newBook)
 
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
@@ -47,21 +51,21 @@ func updateBookByID(c *gin.Context) {
 	}
 }
 
-func removeBookFromLibraryByID(c *gin.Context) {
-	book, err := getRequestedBook(c)
+func (service BookService) removeBookFromLibraryByID(c *gin.Context) {
+	book, err := service.getRequestedBook(c)
 	if err != nil {
 		return
 	}
 
-	err = DeleteBookByID(book.ID)
+	err = service.repository.DeleteBookByID(book.ID)
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
 }
 
-func getAllBooks(c *gin.Context) {
-	books, err := GetAllBooks()
+func (service BookService) getAllBooks(c *gin.Context) {
+	books, err := service.repository.GetAllBooks()
 	if err != nil {
 		log.Println(err)
 		c.AbortWithStatus(http.StatusInternalServerError)
@@ -71,7 +75,7 @@ func getAllBooks(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, books)
 }
 
-func addNewBookToLibrary(c *gin.Context) {
+func (service BookService) addNewBookToLibrary(c *gin.Context) {
 	var book Book
 	if err := c.BindJSON(&book); err != nil {
 		log.Println(err)
@@ -80,7 +84,7 @@ func addNewBookToLibrary(c *gin.Context) {
 	}
 	book.ID = BookID(uuid.NewString())
 
-	err := AddNewBook(book)
+	err := service.repository.AddNewBook(book)
 	if err != nil {
 		log.Println(err)
 		c.AbortWithStatus(http.StatusInternalServerError)
@@ -90,19 +94,23 @@ func addNewBookToLibrary(c *gin.Context) {
 	c.Status(http.StatusCreated)
 }
 
-func booksHandler(group *gin.RouterGroup) {
-	group.GET("", getAllBooks)
-	group.POST("", addNewBookToLibrary)
+func booksHandler(group *gin.RouterGroup, service BookService) {
+	group.GET("", service.getAllBooks)
+	group.POST("", service.addNewBookToLibrary)
 }
 
-func bookHandler(group *gin.RouterGroup) {
-	group.GET("", getBookByID)
-	group.DELETE("", removeBookFromLibraryByID)
-	group.POST("", updateBookByID)
+func bookHandler(group *gin.RouterGroup, service BookService) {
+	group.GET("", service.getBookByID)
+	group.DELETE("", service.removeBookFromLibraryByID)
+	group.POST("", service.updateBookByID)
 }
 
 // SetupRoutes todo
-func SetupRoutes(group *gin.RouterGroup) {
-	booksHandler(group.Group("/books"))
-	bookHandler(group.Group("/books/:id"))
+func SetupRoutes(group *gin.RouterGroup, repository BookRepository) {
+	service := BookService{
+		repository: repository,
+	}
+
+	booksHandler(group.Group("/books"), service)
+	bookHandler(group.Group("/books/:id"), service)
 }
