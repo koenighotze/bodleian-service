@@ -5,6 +5,7 @@ import (
 	"github.com/koenighotze/bodleian-service/internal/database"
 )
 
+// BookRepository todo
 type BookRepository interface {
 	GetBookByID(bookID BookID) (*Book, error)
 	GetAllBooks() ([]Book, error)
@@ -13,10 +14,11 @@ type BookRepository interface {
 	DeleteBookByID(bookID BookID) error
 }
 
-type InMemoryBookRepository struct {
+type inMemoryBookRepository struct {
 	mockHash map[BookID]Book
 }
 
+// New TODO
 func New(_ database.Database) BookRepository {
 	var mockHash = make(map[BookID]Book)
 	var mockData = []Book{
@@ -28,13 +30,13 @@ func New(_ database.Database) BookRepository {
 		mockHash[book.ID] = book
 	}
 
-	return &InMemoryBookRepository{
+	return &inMemoryBookRepository{
 		mockHash: mockHash,
 	}
 }
 
 // GetBookByID todo
-func (repo *InMemoryBookRepository) GetBookByID(bookID BookID) (*Book, error) {
+func (repo *inMemoryBookRepository) GetBookByID(bookID BookID) (*Book, error) {
 	if book, ok := repo.mockHash[bookID]; ok {
 		return &book, nil
 	}
@@ -42,7 +44,7 @@ func (repo *InMemoryBookRepository) GetBookByID(bookID BookID) (*Book, error) {
 }
 
 // GetAllBooks todo
-func (repo *InMemoryBookRepository) GetAllBooks() ([]Book, error) {
+func (repo *inMemoryBookRepository) GetAllBooks() ([]Book, error) {
 	allBooks := make([]Book, 0, len(repo.mockHash))
 
 	for _, book := range repo.mockHash {
@@ -52,13 +54,13 @@ func (repo *InMemoryBookRepository) GetAllBooks() ([]Book, error) {
 }
 
 // DeleteBookByID todo
-func (repo *InMemoryBookRepository) DeleteBookByID(bookID BookID) error {
+func (repo *inMemoryBookRepository) DeleteBookByID(bookID BookID) error {
 	delete(repo.mockHash, bookID)
 	return nil
 }
 
 // AddNewBook todo
-func (repo *InMemoryBookRepository) AddNewBook(book Book) error {
+func (repo *inMemoryBookRepository) AddNewBook(book Book) error {
 	if _, ok := repo.mockHash[book.ID]; ok {
 		return fmt.Errorf("book %s already exists", book.ID)
 	}
@@ -67,7 +69,7 @@ func (repo *InMemoryBookRepository) AddNewBook(book Book) error {
 }
 
 // UpdateBookByID todo
-func (repo *InMemoryBookRepository) UpdateBookByID(originalBookID BookID, updated Book) error {
+func (repo *inMemoryBookRepository) UpdateBookByID(originalBookID BookID, updated Book) error {
 	book, err := repo.GetBookByID(originalBookID)
 	if err != nil {
 		return err

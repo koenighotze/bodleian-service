@@ -8,7 +8,7 @@ import (
 	"log"
 )
 
-func Start(database database.Database) *gin.Engine {
+func start(database database.Database) *gin.Engine {
 	log.Default().Println("Starting up...")
 	router := gin.Default()
 
@@ -31,7 +31,7 @@ func Start(database database.Database) *gin.Engine {
 }
 
 func main() {
-	router := Start(database.New())
+	router := start(database.New())
 	if err := router.Run(); err != nil {
 		log.Fatalf("Cannot start web framework. Must bail. %v", err)
 	}

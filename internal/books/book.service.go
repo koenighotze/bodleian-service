@@ -9,6 +9,7 @@ import (
 	"net/http"
 )
 
+// BookService todo
 type BookService struct {
 	repository BookRepository
 }

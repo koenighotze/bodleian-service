@@ -55,14 +55,14 @@ func TestAddingABook(t *testing.T) {
 	req, _ = http.NewRequest(http.MethodGet, location, nil)
 	router.ServeHTTP(w, req)
 
-	var bookFromApi Book
-	_ = json.Unmarshal(w.Body.Bytes(), &bookFromApi)
+	var bookFromAPI Book
+	_ = json.Unmarshal(w.Body.Bytes(), &bookFromAPI)
 
 	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, book.Title, bookFromApi.Title)
-	assert.Equal(t, book.ISBN, bookFromApi.ISBN)
-	assert.Equal(t, book.Authors, bookFromApi.Authors)
-	assert.NotEqual(t, book.ID, bookFromApi.ID)
+	assert.Equal(t, book.Title, bookFromAPI.Title)
+	assert.Equal(t, book.ISBN, bookFromAPI.ISBN)
+	assert.Equal(t, book.Authors, bookFromAPI.Authors)
+	assert.NotEqual(t, book.ID, bookFromAPI.ID)
 }
 
 func TestUpdatingTheAuthorOfABook(t *testing.T) {

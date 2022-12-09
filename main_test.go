@@ -28,11 +28,11 @@ func TestMainShouldStartTheDatabase(t *testing.T) {
 	mockDb.EXPECT().SetupDatabase(gomock.Any(), gomock.Any()).Times(1)
 	mockDb.EXPECT().Disconnect().Times(1)
 
-	Start(mockDb)
+	start(mockDb)
 }
 
 func TestMainShouldRegisterServicesUnderAPI(t *testing.T) {
-	router := Start(&StubDb{})
+	router := start(&StubDb{})
 
 	found := false
 	for _, r := range router.Routes() {
@@ -44,7 +44,7 @@ func TestMainShouldRegisterServicesUnderAPI(t *testing.T) {
 }
 
 func TestMainShouldRegisterAHealthEndpoint(t *testing.T) {
-	router := Start(&StubDb{})
+	router := start(&StubDb{})
 
 	found := false
 	for _, r := range router.Routes() {
@@ -56,7 +56,7 @@ func TestMainShouldRegisterAHealthEndpoint(t *testing.T) {
 }
 
 func TestMainShouldRegisterAnEndpointForOptions(t *testing.T) {
-	router := Start(&StubDb{})
+	router := start(&StubDb{})
 
 	found := false
 	for _, r := range router.Routes() {
