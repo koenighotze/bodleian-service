@@ -8,7 +8,7 @@ import (
 )
 
 func TestAddNewBookShouldAddABook(t *testing.T) {
-	repo := New(nil)
+	repo := NewInMemoryBookRepository(nil)
 	book := NewBook(string(rune(rand.Int())), string(rune(rand.Int())), string(rune(rand.Int())))
 
 	assert.Nil(t, repo.AddNewBook(book))
@@ -19,7 +19,7 @@ func TestAddNewBookShouldAddABook(t *testing.T) {
 }
 
 func TestAddNewBookShouldReturnAnErrorIfTheBookIsAlreadyKnown(t *testing.T) {
-	repo := New(nil)
+	repo := NewInMemoryBookRepository(nil)
 	book := NewBook(string(rune(rand.Int())), string(rune(rand.Int())), string(rune(rand.Int())))
 	assert.Nil(t, repo.AddNewBook(book))
 
@@ -27,7 +27,7 @@ func TestAddNewBookShouldReturnAnErrorIfTheBookIsAlreadyKnown(t *testing.T) {
 }
 
 func TestUpdateBookSetsISBNTitleAndAuthor(t *testing.T) {
-	repo := New(nil)
+	repo := NewInMemoryBookRepository(nil)
 	books, _ := repo.GetAllBooks()
 	originalBook := books[rand.Intn(cap(books))]
 
@@ -44,14 +44,14 @@ func TestUpdateBookSetsISBNTitleAndAuthor(t *testing.T) {
 }
 
 func TestUpdateBookByIDAnUnknownBookShouldReturnAnError(t *testing.T) {
-	repo := New(nil)
+	repo := NewInMemoryBookRepository(nil)
 	err := repo.UpdateBookByID(BookID(uuid.NewString()), NewBook("A different ISBN", "A different title", "a different author"))
 
 	assert.NotNil(t, err)
 }
 
 func TestDeleteBookByID(t *testing.T) {
-	repo := New(nil)
+	repo := NewInMemoryBookRepository(nil)
 	books, _ := repo.GetAllBooks()
 	originalBook := books[rand.Intn(cap(books))]
 

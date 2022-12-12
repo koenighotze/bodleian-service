@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-var repo = New(nil)
+var repo = NewInMemoryBookRepository(nil)
 
 func setupRouter() *gin.Engine {
 	r := gin.Default()
@@ -70,16 +70,16 @@ func TestUpdatingTheAuthorOfABook(t *testing.T) {
 	firstBook := books[0]
 	router := setupRouter()
 	w := httptest.NewRecorder()
-	payload := "{  \"authors\": [\"New Author\"],  \"title\": \"New Title\"}"
+	payload := "{  \"authors\": [\"NewInMemoryBookRepository Author\"],  \"title\": \"NewInMemoryBookRepository Title\"}"
 
 	req, _ := http.NewRequest(http.MethodPost, fmt.Sprintf("/api/books/%v", firstBook.ID), strings.NewReader(payload))
 	router.ServeHTTP(w, req)
 	bookThatShouldBeUpdated, _ := repo.GetBookByID(firstBook.ID)
 
 	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, "New Title", bookThatShouldBeUpdated.Title)
+	assert.Equal(t, "NewInMemoryBookRepository Title", bookThatShouldBeUpdated.Title)
 	assert.Equal(t, firstBook.ISBN, bookThatShouldBeUpdated.ISBN)
-	assert.Equal(t, []string{"New Author"}, bookThatShouldBeUpdated.Authors)
+	assert.Equal(t, []string{"NewInMemoryBookRepository Author"}, bookThatShouldBeUpdated.Authors)
 }
 
 func TestGetBookByID(t *testing.T) {

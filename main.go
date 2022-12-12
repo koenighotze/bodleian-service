@@ -24,14 +24,14 @@ func start(database database.Database) *gin.Engine {
 
 	router.OPTIONS("/")
 	api := router.Group("/api")
-	books.SetupRoutes(api, books.New(database))
+	books.SetupRoutes(api, books.NewInMemoryBookRepository(database))
 	health.SetupRoutes(api)
 
 	return router
 }
 
 func main() {
-	router := start(database.New())
+	router := start(database.NewMockDatabase())
 	if err := router.Run(); err != nil {
 		log.Fatalf("Cannot start web framework. Must bail. %v", err)
 	}
