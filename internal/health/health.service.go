@@ -1,3 +1,4 @@
+// Package health
 package health
 
 import (
@@ -5,22 +6,22 @@ import (
 	"net/http"
 )
 
-type HealthService struct {
+type healthService struct {
 }
 
-func (service HealthService) getHealth(context *gin.Context) {
+func (service healthService) getHealth(context *gin.Context) {
 	context.IndentedJSON(http.StatusOK, gin.H{
 		"health": "ok",
 	})
 }
 
-func healthHandler(group *gin.RouterGroup, service HealthService) {
+func healthHandler(group *gin.RouterGroup, service healthService) {
 	group.GET("", service.getHealth)
 }
 
 // SetupRoutes todo
 func SetupRoutes(group *gin.RouterGroup) {
-	service := HealthService{}
+	service := healthService{}
 
 	healthHandler(group.Group("/health"), service)
 }
