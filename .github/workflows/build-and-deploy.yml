@@ -25,7 +25,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Run vulnerability scanner in repo mode
-        uses: aquasecurity/trivy-action@0.8.0
+        uses: aquasecurity/trivy-action@0.9.0
         with:
           scan-type: "fs"
           ignore-unfixed: false
@@ -109,7 +109,7 @@ jobs:
       - name: Build image
         run: ./scripts/containerize.sh
       - name: Run vulnerability scanner
-        uses: aquasecurity/trivy-action@0.8.0
+        uses: aquasecurity/trivy-action@0.9.0
         with:
           image-ref: ${{ env.image-name }}
           format: "table"
