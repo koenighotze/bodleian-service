@@ -126,7 +126,7 @@ jobs:
           OUTPUT_MODE: push
       - name: Deploy
         id: deploy
-        uses: google-github-actions/deploy-cloudrun@v1.0.0
+        uses: google-github-actions/deploy-cloudrun@v1.0.2
         with:
           image: ${{ env.image-name }}
           service: ${{ secrets.CLOUD_RUN_SERVICE }}
