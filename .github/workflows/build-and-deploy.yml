@@ -25,7 +25,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Run vulnerability scanner in repo mode
-        uses: aquasecurity/trivy-action@0.8.0
+        uses: aquasecurity/trivy-action@0.10.0
         with:
           scan-type: "fs"
           ignore-unfixed: false
@@ -39,7 +39,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v4
         with:
           go-version: "^1.17.0"
       - name: Lint Go code
@@ -51,7 +51,7 @@ jobs:
         with:
           verbose: true
       - name: Check shell scripts
-        uses: ludeeus/action-shellcheck@1.1.0
+        uses: ludeeus/action-shellcheck@2.0.0
         with:
           severity: warning
           scandir: './scripts'
@@ -62,7 +62,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v4
         with:
           go-version: "^1.17.0"
       - name: Install dependencies
@@ -109,7 +109,7 @@ jobs:
       - name: Build image
         run: ./scripts/containerize.sh
       - name: Run vulnerability scanner
-        uses: aquasecurity/trivy-action@0.8.0
+        uses: aquasecurity/trivy-action@0.10.0
         with:
           image-ref: ${{ env.image-name }}
           format: "table"
