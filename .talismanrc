@@ -1,4 +1,7 @@
 fileignoreconfig:
 - filename: .github/workflows/git-guardian-scan.yml
   checksum: 5b26bc7e385d09daf82f036efc087e1b701fcccf65e0f06e6aef11b15743d05b
+allowed_patterns:
+- secrets.CLOUD_RUN_REGION
+- secrets.CLOUD_RUN_SERVICE
 version: ""
