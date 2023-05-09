@@ -67,7 +67,7 @@ jobs:
           go-version: "^1.17.0"
       - name: Install dependencies
         run: go mod download
-      - name: Unit test
+      - name: Unit test with coverage
         run: go test -coverprofile=coverage.out ./...
       - name: Upload coverage
         run: |

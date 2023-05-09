@@ -1,11 +1,12 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 	"github.com/koenighotze/bodleian-service/internal/books"
 	"github.com/koenighotze/bodleian-service/internal/database"
 	"github.com/koenighotze/bodleian-service/internal/health"
-	"log"
 )
 
 func start(database database.Database) *gin.Engine {
