@@ -1,6 +1,10 @@
 fileignoreconfig:
 - filename: .github/workflows/git-guardian-scan.yml
   checksum: 5b26bc7e385d09daf82f036efc087e1b701fcccf65e0f06e6aef11b15743d05b
+- filename: go.sum
+  checksum: d99d8525c57b79044b0b8e99003845c4756ba229228a6238adbc7d3bfe9bd07c
+- filename: .github/workflows/api-tests.yml
+  checksum: 41e403da41bf8cb886f85de62b49b3080f76436ffdef68cf03c84174d1b0f071
 allowed_patterns:
 - secrets.CLOUD_RUN_REGION
 - secrets.CLOUD_RUN_SERVICE
@@ -9,4 +13,7 @@ allowed_patterns:
 - GITGUARDIAN_API_KEY
 - "TOKEN"
 - steps.auth.outputs.id_token
+- service.configuration.Database.Password
+- pgadmin
+- HOST
 version: ""
