@@ -4,4 +4,6 @@ fileignoreconfig:
 allowed_patterns:
 - secrets.CLOUD_RUN_REGION
 - secrets.CLOUD_RUN_SERVICE
+- secrets.CLOUD_RUN_BACKEND_URL
+- secrets.GITGUARDIAN_API_KEY
 version: ""
