@@ -3,7 +3,7 @@ name: GitGuardian scan
 on: 
   push:
     paths-ignore:
-      - '**/*md'
+      - '**.md'
   pull_request:
 
 permissions:

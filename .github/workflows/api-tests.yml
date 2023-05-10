@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       force:
+        description: "Set to true to force the API tests to run"
         required: true
         default: false
         type: boolean
