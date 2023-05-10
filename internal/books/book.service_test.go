@@ -4,22 +4,23 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/go-http-utils/headers"
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/gin-gonic/gin"
+	"github.com/go-http-utils/headers"
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 )
 
-var repo = NewInMemoryBookRepository(nil)
+var repo = NewInMemoryBookRepository()
 
 func setupRouter() *gin.Engine {
 	r := gin.Default()
 
-	SetupRoutes(r.Group("/api"), repo)
+	SetupRoutes(r.Group("/api"), NewBookService(repo))
 
 	return r
 }

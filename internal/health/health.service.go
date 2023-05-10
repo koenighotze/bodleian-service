@@ -2,26 +2,24 @@
 package health
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
+
+type HealthService interface {
+	GetHealth(context *gin.Context)
+}
 
 type healthService struct {
 }
 
-func (service healthService) getHealth(context *gin.Context) {
+func (service healthService) GetHealth(context *gin.Context) {
 	context.IndentedJSON(http.StatusOK, gin.H{
 		"health": "ok",
 	})
 }
 
-func healthHandler(group *gin.RouterGroup, service healthService) {
-	group.GET("", service.getHealth)
-}
-
-// SetupRoutes todo
-func SetupRoutes(group *gin.RouterGroup) {
-	service := healthService{}
-
-	healthHandler(group.Group("/health"), service)
+func NewHealthService() HealthService {
+	return healthService{}
 }

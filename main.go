@@ -2,38 +2,36 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/koenighotze/bodleian-service/internal"
 	"github.com/koenighotze/bodleian-service/internal/books"
-	"github.com/koenighotze/bodleian-service/internal/database"
 	"github.com/koenighotze/bodleian-service/internal/health"
 )
 
-func start(database database.Database) *gin.Engine {
+func start() (*gin.Engine, error) {
+	components, err := internal.WireComponents()
+	if err != nil {
+		return nil, err
+	}
+
 	log.Default().Println("Starting up...")
 	router := gin.Default()
 
-	err := database.SetupDatabase("foo", "bar")
-	if err != nil {
-		log.Fatalf("Cannot setup connection to database. Must bail. %v", err)
-	}
-	defer func() {
-		if err := database.Disconnect(); err != nil {
-			log.Printf("Cannot disconnect because of: %v", err)
-		}
-	}()
-
 	router.OPTIONS("/")
 	api := router.Group("/api")
-	books.SetupRoutes(api, books.NewInMemoryBookRepository(database))
-	health.SetupRoutes(api)
 
-	return router
+	books.SetupRoutes(api, components.BookService)
+	health.SetupRoutes(api, components.HealthService)
+
+	return router, nil
 }
 
 func main() {
-	router := start(database.NewMockDatabase())
-	if err := router.Run(); err != nil {
+	router, err := start()
+	if err != nil || router.Run() != nil {
 		log.Fatalf("Cannot start web framework. Must bail. %v", err)
+		os.Exit(1)
 	}
 }

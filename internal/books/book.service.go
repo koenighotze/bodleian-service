@@ -3,11 +3,12 @@ package books
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-http-utils/headers"
 	"github.com/google/uuid"
-	"log"
-	"net/http"
 )
 
 // BookService todo
@@ -96,23 +97,8 @@ func (service BookService) addNewBookToLibrary(c *gin.Context) {
 	c.Status(http.StatusCreated)
 }
 
-func booksHandler(group *gin.RouterGroup, service BookService) {
-	group.GET("", service.getAllBooks)
-	group.POST("", service.addNewBookToLibrary)
-}
-
-func bookHandler(group *gin.RouterGroup, service BookService) {
-	group.GET("", service.getBookByID)
-	group.DELETE("", service.removeBookFromLibraryByID)
-	group.POST("", service.updateBookByID)
-}
-
-// SetupRoutes todo
-func SetupRoutes(group *gin.RouterGroup, repository BookRepository) {
-	service := BookService{
+func NewBookService(repository BookRepository) BookService {
+	return BookService{
 		repository: repository,
 	}
-
-	booksHandler(group.Group("/books"), service)
-	bookHandler(group.Group("/books/:id"), service)
 }

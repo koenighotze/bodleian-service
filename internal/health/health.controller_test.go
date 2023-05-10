@@ -2,21 +2,21 @@ package health
 
 import (
 	"encoding/json"
-	"github.com/gin-gonic/gin"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
 )
 
 func setupRouter() *gin.Engine {
 	r := gin.Default()
 
-	SetupRoutes(r.Group("/api"))
+	SetupRoutes(r.Group("/api"), NewHealthService())
 
 	return r
 }
-
 func TestGettingHealth(t *testing.T) {
 	router := setupRouter()
 	w := httptest.NewRecorder()

@@ -1,38 +1,15 @@
 package main
 
 import (
-	"github.com/golang/mock/gomock"
-	"github.com/koenighotze/bodleian-service/internal/mocks"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
-type StubDb struct {
-}
-
-func (db StubDb) Disconnect() error {
-	return nil
-}
-
-func (db StubDb) SetupDatabase(username string, password string) error {
-	return nil
-}
-
-func TestMainShouldStartTheDatabase(t *testing.T) {
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	mockDb := mock_database.NewMockDatabase(ctrl)
-	mockDb.EXPECT().SetupDatabase(gomock.Any(), gomock.Any()).Times(1)
-	mockDb.EXPECT().Disconnect().Times(1)
-
-	start(mockDb)
-}
-
 func TestMainShouldRegisterServicesUnderAPI(t *testing.T) {
-	router := start(&StubDb{})
+	router, _ := start()
 
 	found := false
 	for _, r := range router.Routes() {
@@ -44,7 +21,7 @@ func TestMainShouldRegisterServicesUnderAPI(t *testing.T) {
 }
 
 func TestMainShouldRegisterAHealthEndpoint(t *testing.T) {
-	router := start(&StubDb{})
+	router, _ := start()
 
 	found := false
 	for _, r := range router.Routes() {
@@ -56,7 +33,7 @@ func TestMainShouldRegisterAHealthEndpoint(t *testing.T) {
 }
 
 func TestMainShouldRegisterAnEndpointForOptions(t *testing.T) {
-	router := start(&StubDb{})
+	router, _ := start()
 
 	found := false
 	for _, r := range router.Routes() {

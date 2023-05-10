@@ -2,7 +2,6 @@ package books
 
 import (
 	"fmt"
-	"github.com/koenighotze/bodleian-service/internal/database"
 )
 
 type inMemoryBookRepository struct {
@@ -10,7 +9,7 @@ type inMemoryBookRepository struct {
 }
 
 // NewInMemoryBookRepository TODO
-func NewInMemoryBookRepository(_ database.Database) BookRepository {
+func NewInMemoryBookRepository() BookRepository {
 	var mockHash = make(map[BookID]Book)
 	var mockData = []Book{
 		NewBook("3596294312", "Buddenbrooks. Verfall einer Familie", "Thomas Mann"),

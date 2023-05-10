@@ -6,4 +6,7 @@ allowed_patterns:
 - secrets.CLOUD_RUN_SERVICE
 - secrets.CLOUD_RUN_BACKEND_URL
 - secrets.GITGUARDIAN_API_KEY
+- GITGUARDIAN_API_KEY
+- "TOKEN"
+- steps.auth.outputs.id_token
 version: ""
