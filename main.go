@@ -5,10 +5,16 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/koenighotze/bodleian-service/docs"
 	"github.com/koenighotze/bodleian-service/internal"
 	"github.com/koenighotze/bodleian-service/internal/books"
 	"github.com/koenighotze/bodleian-service/internal/health"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	// swagger embed files
 )
+
+// @BasePath /api
 
 func start() (*gin.Engine, error) {
 	components, err := internal.WireComponents()
@@ -18,12 +24,14 @@ func start() (*gin.Engine, error) {
 
 	log.Default().Println("Starting up...")
 	router := gin.Default()
+	docs.SwaggerInfo.BasePath = "/api/v1"
 
 	router.OPTIONS("/")
 	api := router.Group("/api")
 
 	books.SetupRoutes(api, components.BookService)
 	health.SetupRoutes(api, components.HealthService)
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	return router, nil
 }
