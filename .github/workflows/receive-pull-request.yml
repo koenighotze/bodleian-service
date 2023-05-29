@@ -30,7 +30,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/golang@0.3.0
+        uses: snyk/actions/golang@0.4.0
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Run vulnerability scanner in repo mode
