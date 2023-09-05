@@ -21,6 +21,7 @@ COPY go.sum ./
 RUN go mod download
 
 COPY configs ./configs
+COPY docs ./docs
 COPY *go ./
 COPY internal ./internal
 
