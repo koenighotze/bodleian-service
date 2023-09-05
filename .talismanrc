@@ -1,19 +1,22 @@
 fileignoreconfig:
-- filename: .github/workflows/git-guardian-scan.yml
-  checksum: 5b26bc7e385d09daf82f036efc087e1b701fcccf65e0f06e6aef11b15743d05b
+- filename: Dockerfile
+  checksum: 9be8c905944beedea3f62bc80ad3c27bfbdd0f55e28bc3fc24c17b6a7a22e4e1
+- filename: README.md
+  checksum: a952fa9e1555220d42e5756ec7716128e20c471d1b6840f5894bd5922f90887b
+- filename: .github/workflows/test.yml
+  checksum: 17b0c6d525cc177d98f08675830ca3f4c6fe4797e5cb8f1ba867d3e627e24526
 - filename: go.sum
-  checksum: d99d8525c57b79044b0b8e99003845c4756ba229228a6238adbc7d3bfe9bd07c
+  checksum: ebae046195764a9c25773b0e4a96ab6a96c4601dc19c895b12c2696c1aaecc27
+- filename: .github/workflows/build-and-deploy.yml
+  checksum: 37b245df0feb1121c63026cf7cbff126c53b576def7638b0335b41704a04b689
+- filename: .github/workflows/git-guardian-scan.yml
+  checksum: cb1409e27676d2c1398b9d436739962017532ccc428002a232ab376f7e689434
+- filename: Bodleian.postman_collection.json
+  checksum: 47f8ab6a60e23ad2fe7948fed8a12a280e39345e8e248333213a891aa76e16c8
 - filename: .github/workflows/api-tests.yml
   checksum: 41e403da41bf8cb886f85de62b49b3080f76436ffdef68cf03c84174d1b0f071
-allowed_patterns:
-- secrets.CLOUD_RUN_REGION
-- secrets.CLOUD_RUN_SERVICE
-- secrets.CLOUD_RUN_BACKEND_URL
-- secrets.GITGUARDIAN_API_KEY
-- GITGUARDIAN_API_KEY
-- "TOKEN"
-- steps.auth.outputs.id_token
-- service.configuration.Database.Password
-- pgadmin
-- HOST
+- filename: internal/config/configuration.go
+  checksum: e5a022857b3a536c5fb43522abd48dbdb952a41a4570e3cc0bd19d95a2b3c034
+- filename: scripts/start-db.sh
+  checksum: 7b11bb9baee7667a7d8fd0cc5488c0a097dd95d380bc888be5043199e5f8d50d
 version: ""
