@@ -67,6 +67,15 @@ func (service BookService) removeBookFromLibraryByID(c *gin.Context) {
 	}
 }
 
+// PingExample godoc
+// @Summary ping example
+// @Schemes
+// @Description do ping
+// @Tags example
+// @Accept json
+// @Produce json
+// @Success 200 {string} Helloworld
+// @Router /books [get]
 func (service BookService) getAllBooks(c *gin.Context) {
 	books, err := service.repository.GetAllBooks()
 	if err != nil {

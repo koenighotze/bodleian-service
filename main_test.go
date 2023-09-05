@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestMainShouldRegisterServicesUnderAPI(t *testing.T) {
+func TestStart_ShouldRegisterServicesUnderAPI(t *testing.T) {
 	router, _ := start()
 
 	found := false
@@ -20,7 +20,7 @@ func TestMainShouldRegisterServicesUnderAPI(t *testing.T) {
 	assert.True(t, found)
 }
 
-func TestMainShouldRegisterAHealthEndpoint(t *testing.T) {
+func TestStart_ShouldRegisterAHealthEndpoint(t *testing.T) {
 	router, _ := start()
 
 	found := false
@@ -32,7 +32,7 @@ func TestMainShouldRegisterAHealthEndpoint(t *testing.T) {
 	assert.True(t, found)
 }
 
-func TestMainShouldRegisterAnEndpointForOptions(t *testing.T) {
+func TestStart_ShouldRegisterAnEndpointForOptions(t *testing.T) {
 	router, _ := start()
 
 	found := false
