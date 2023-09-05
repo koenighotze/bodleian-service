@@ -1,3 +1,5 @@
+scopeconfig:
+  - scope: go
 fileignoreconfig:
 - filename: go.sum
   checksum: c6eb0f9e76e2c4da9a85d850a2902b623bdb8b29edfd074afe5540fca192ae6b
