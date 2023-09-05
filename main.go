@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+
 	"github.com/koenighotze/bodleian-service/docs"
 	"github.com/koenighotze/bodleian-service/internal"
 	"github.com/koenighotze/bodleian-service/internal/books"
