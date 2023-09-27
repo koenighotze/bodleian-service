@@ -2,13 +2,13 @@ name: Build main
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
     tags:
       - "v*"
     paths-ignore:
       - '**.md'
   workflow_dispatch:
-  
+
 
 permissions:
   contents: read
@@ -134,7 +134,7 @@ jobs:
           timeout: 10 # allow enough time to startup container
           no_traffic: true
           flags: '--concurrency=1 --cpu=1 --max-instances=1'
-#          no_traffic: ${{ !startsWith(github.event.ref, 'refs/tags/v') }}
+          #          no_traffic: ${{ !startsWith(github.event.ref, 'refs/tags/v') }}
           tag: ${{ env.git-tag }}
       - name: Test if service is up
         run: |

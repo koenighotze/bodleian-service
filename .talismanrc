@@ -1,6 +1,22 @@
-scopeconfig:
-  - scope: go
 fileignoreconfig:
+- filename: README.md
+  checksum: a952fa9e1555220d42e5756ec7716128e20c471d1b6840f5894bd5922f90887b
+- filename: .github/workflows/test.yml
+  checksum: 17b0c6d525cc177d98f08675830ca3f4c6fe4797e5cb8f1ba867d3e627e24526
 - filename: go.sum
-  checksum: c6eb0f9e76e2c4da9a85d850a2902b623bdb8b29edfd074afe5540fca192ae6b
+  checksum: a5d6a294469161a3bdff29f19056d3d782cba2704f0872b16c49b3c1dca6f922
+- filename: .github/workflows/api-tests.yml
+  checksum: 41e403da41bf8cb886f85de62b49b3080f76436ffdef68cf03c84174d1b0f071
+- filename: Bodleian.postman_collection.json
+  checksum: 47f8ab6a60e23ad2fe7948fed8a12a280e39345e8e248333213a891aa76e16c8
+- filename: .github/workflows/git-guardian-scan.yml
+  checksum: d19d09fde6fc4fa5858b9469c27c45e13e2a39929165c370ec5b61a01b4471ce
+- filename: .github/workflows/build-and-deploy.yml
+  checksum: 1cdfe840187e69cfedc3e78e683dfda76f3c42ea581ed08036b9798c26c2baa1
+- filename: internal/config/configuration.go
+  checksum: e5a022857b3a536c5fb43522abd48dbdb952a41a4570e3cc0bd19d95a2b3c034
+- filename: scripts/start-db.sh
+  checksum: 7b11bb9baee7667a7d8fd0cc5488c0a097dd95d380bc888be5043199e5f8d50d
+- filename: Dockerfile
+  checksum: 4489164b374a7aa107afa0350f920cfe8f50a5b3109842cfdc5eda836810857f
 version: ""

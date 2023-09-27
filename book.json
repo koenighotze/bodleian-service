@@ -1,5 +1,7 @@
 {
-  "authors": [ "Mark Heckler"],
+  "authors": [
+    "Mark Heckler"
+  ],
   "isbn": "Todo",
   "title": "Spring Boot Up & Running"
 }

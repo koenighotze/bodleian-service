@@ -9,7 +9,7 @@ on:
         default: false
         type: boolean
   workflow_run:
-    workflows: ["Build main"]
+    workflows: [ "Build main" ]
     types:
       - completed
   schedule:
