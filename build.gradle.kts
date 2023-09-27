@@ -1,3 +1,4 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -6,6 +7,8 @@ plugins {
     kotlin("jvm") version "1.8.22"
     kotlin("plugin.spring") version "1.8.22"
     kotlin("plugin.jpa") version "1.8.22"
+    kotlin("plugin.allopen") version "1.8.22"
+
 }
 
 group = "org.koenighotze"
@@ -20,8 +23,8 @@ repositories {
 }
 
 dependencies {
-// 	implementation("org.springframework.boot:spring-boot-starter-actuator")
-// 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 // 	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
 // 	implementation("org.springframework.boot:spring-boot-starter-data-rest")
 // 	implementation("org.springframework.boot:spring-boot-starter-webflux")
@@ -40,12 +43,12 @@ dependencies {
 //    runtimeOnly("org.postgresql:r2dbc-postgresql")
 //    runtimeOnly("org.springframework.modulith:spring-modulith-actuator")
 //    runtimeOnly("org.springframework.modulith:spring-modulith-observability")
+    testImplementation("io.rest-assured:rest-assured:5.3.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 //    testImplementation("org.springframework.boot:spring-boot-testcontainers")
 //    testImplementation("io.projectreactor:reactor-test")
 //    testImplementation("org.springframework.modulith:spring-modulith-starter-test")
     testImplementation("org.testcontainers:junit-jupiter")
-//    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.testcontainers:postgresql")
 //    testImplementation("org.testcontainers:r2dbc")
@@ -66,4 +69,14 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+
+    testLogging {
+        exceptionFormat = FULL
+    }
+}
+
+allOpen {
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.Embeddable")
+    annotation("jakarta.persistence.MappedSuperclass")
 }

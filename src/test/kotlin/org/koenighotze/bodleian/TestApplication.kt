@@ -5,7 +5,7 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.with
 
 @TestConfiguration(proxyBeanMethods = false)
-class TestBodleianApplication {
+class TestApplication {
 
 //    @Bean
 //    @ServiceConnection
@@ -15,5 +15,5 @@ class TestBodleianApplication {
 }
 
 fun main(args: Array<String>) {
-    fromApplication<BodleianApplication>().with(TestBodleianApplication::class).run(*args)
+    fromApplication<Application>().with(TestApplication::class).run(*args)
 }
