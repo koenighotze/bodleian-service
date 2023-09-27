@@ -1,0 +1,21 @@
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        generate_statistics: true
+
+logging:
+  threshold:
+    console: INFO
+    file: TRACE
+  level:
+    org:
+      hibernate:
+        type: DEBUG
+        stat: DEBUG
+  file:
+    name: bodleian-service-test.log
