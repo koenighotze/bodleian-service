@@ -8,4 +8,4 @@ set -o pipefail
 # enable debug mode, by running your script as TRACE=1
 if [[ "${TRACE-0}" == "1" ]]; then set -o xtrace; fi
 
-nodemon --watch './**/*.go' --signal SIGTERM --exec 'go' run cmd/main.go
+# nodemon --watch './**/*.go' --signal SIGTERM --exec 'go' run cmd/main.go

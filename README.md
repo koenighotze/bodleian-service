@@ -9,15 +9,25 @@
 The backend service for library management. It exposes a REST API for managing
 library related resources.
 
-## Bucket list
+## Bucket list Kotlin / SpringBoot Version
 
-[ ] Container
-[ ] Unit test
-[ ] Documentation
-[ ] Coverage
+[ ] Open Telemetry
+[ ] Auth
+[ ] Testing
+[ ] Load testing
+[ ] DB Setup
+[ ] Dockerfile
+[ ] API Testing
+[ ] JSON Logging
+[ ] Split Slow Tests (only in CI)
+[ ] Linting
+[ ] Integerate extra service for book images
+[ ] Fetch https://openlibrary.org/books/OL7353617M.json
+[ ] Wishlist
+[ ] Owned
 [ ] Deployment
-[ ] Security
-[ ] Metrics
+[ ] Swagger
+[ ] Flux / Coroutines / suspend
+ 
+ 
 
-- Atlas
-- Gin
