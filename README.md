@@ -28,6 +28,8 @@ library related resources.
 [ ] Deployment
 [ ] Swagger
 [ ] Flux / Coroutines / suspend
- 
+[ ] Auf Sha in CI umstellen
+[ ] Sig check mit Gradle
+
  
 
