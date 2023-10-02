@@ -1,22 +1,22 @@
 fileignoreconfig:
-- filename: README.md
-  checksum: a952fa9e1555220d42e5756ec7716128e20c471d1b6840f5894bd5922f90887b
 - filename: .github/workflows/test.yml
   checksum: 17b0c6d525cc177d98f08675830ca3f4c6fe4797e5cb8f1ba867d3e627e24526
-- filename: go.sum
-  checksum: a5d6a294469161a3bdff29f19056d3d782cba2704f0872b16c49b3c1dca6f922
-- filename: .github/workflows/api-tests.yml
-  checksum: 41e403da41bf8cb886f85de62b49b3080f76436ffdef68cf03c84174d1b0f071
-- filename: Bodleian.postman_collection.json
-  checksum: 47f8ab6a60e23ad2fe7948fed8a12a280e39345e8e248333213a891aa76e16c8
-- filename: .github/workflows/git-guardian-scan.yml
-  checksum: d19d09fde6fc4fa5858b9469c27c45e13e2a39929165c370ec5b61a01b4471ce
-- filename: .github/workflows/build-and-deploy.yml
-  checksum: 1cdfe840187e69cfedc3e78e683dfda76f3c42ea581ed08036b9798c26c2baa1
-- filename: internal/config/configuration.go
-  checksum: e5a022857b3a536c5fb43522abd48dbdb952a41a4570e3cc0bd19d95a2b3c034
 - filename: scripts/start-db.sh
   checksum: 7b11bb9baee7667a7d8fd0cc5488c0a097dd95d380bc888be5043199e5f8d50d
-- filename: Dockerfile
-  checksum: 4489164b374a7aa107afa0350f920cfe8f50a5b3109842cfdc5eda836810857f
+- filename: README.md
+  checksum: 470931f108b90c346b1981fdec22539b6d8bb02af2064da960803c574b52f30d
+- filename: .gradle/8.2.1/executionHistory/executionHistory.bin
+  checksum: 791b2c1e8461391839bdca28cc48e7da3f8d12e8cad7c7e7763b57c6f6d4311b
+- filename: build.gradle.kts
+  checksum: bf7f8462fdaa9ea468f26151b023e63f084f26040a46260bbab5d30d5ddfd6c0
+- filename: src/test/resources/sample.book.output.json
+  checksum: bc3414e9c75dde5ef8233f6a82bcde47d1c65d51bcab4c1c4e7e53140522a8bb
+- filename: .github/workflows/git-guardian-scan.yml
+  checksum: 5cb7fda0c58b908760eab201a2526cff284603a8dcace6baa4c7ae98fd0eca1b
+- filename: .github/workflows/api-tests.yml
+  checksum: 13afc53d795d57d073ac6dc04947d032cef84677ca6e38dd78ea0c128545bdee
+- filename: .github/workflows/build-and-deploy.yml
+  checksum: 21c86b7c6570a603e3a4551fc162a0546c8c471819cd1fa3731dd9f61ddbc98d
+- filename: Bodleian.postman_collection.json
+  checksum: 7034551ac6f1070a9f3c64be65d5e04027316c1e8c4282e725ad7cb9edc9db4d
 version: ""
