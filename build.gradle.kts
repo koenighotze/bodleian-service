@@ -16,8 +16,6 @@ plugins {
 
 }
 
-//apply(plugin = "io.spring.dependency-management")
-
 group = "org.koenighotze"
 version = "0.0.1-SNAPSHOT"
 
