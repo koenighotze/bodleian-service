@@ -1,4 +1,6 @@
 fileignoreconfig:
+- filename: .github/workflows/build-and-deploy.yml
+  checksum: 0b793fd8e757d37150c4322b240dac19d8c8cbc0762a822e54a4506244361590
 - filename: README.md
   checksum: 4f1750c8d060a0cc6abb463470d56674b64155c5a746d9fe3e7acce0eb389dbf
 - filename: .github/workflows/build-and-deploy.yml
