@@ -1,10 +1,9 @@
 package org.koenighotze.bodleian
 
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
 
-@SpringBootTest
-class ApplicationTests {
+@IntegrationTest
+class ApplicationIT {
 
     @Test
     fun contextLoads() {

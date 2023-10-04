@@ -11,6 +11,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 class BookRepositoryTest(@Autowired var repository: BookRepository) {
     @Test
     fun `The repository returns an empty list of books`() {
+        repository.deleteAll()
+
         assertThat(repository.findAll()).isEmpty()
     }
 

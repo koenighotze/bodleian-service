@@ -2,7 +2,7 @@ name: Build main
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, migrate-to-kotlin ]
     tags:
       - "v*"
     paths-ignore:
@@ -28,7 +28,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-            args: --severity-threshold=high
+          args: --severity-threshold=high
       - name: Run vulnerability scanner in repo mode
         uses: aquasecurity/trivy-action@0.11.2
         with:
@@ -79,6 +79,7 @@ jobs:
       #     CODACY_API_TOKEN: ${{ secrets.CODACY_API_TOKEN }}
 
   build-container:
+    if: false
     needs:
       - qa
       - test

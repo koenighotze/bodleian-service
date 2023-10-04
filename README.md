@@ -30,6 +30,17 @@ library related resources.
 [ ] Flux / Coroutines / suspend
 [ ] Auf Sha in CI umstellen
 [ ] Sig check mit Gradle
+[ ] Transactions
+
+### Reading
+
+https://stackoverflow.com/questions/38516418/what-is-proper-workaround-for-beforeall-in-kotlin
+https://www.baeldung.com/kotlin/exception-handling
+https://blog.rockthejvm.com/functional-error-handling-in-kotlin/
+https://docs.gradle.org/current/userguide/dependency_verification.html
+https://docs.gradle.org/current/userguide/dependency_verification.html#sec:bootstrapping-signature-verification
+
+
 
  
 

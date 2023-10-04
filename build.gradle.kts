@@ -1,5 +1,9 @@
+@file:Suppress("UnstableApiUsage")
+
+import org.gradle.api.JavaVersion.VERSION_17
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.lang.Runtime.getRuntime
 
 plugins {
     id("org.springframework.boot") version "3.1.4"
@@ -8,6 +12,7 @@ plugins {
     kotlin("plugin.spring") version "1.8.22"
     kotlin("plugin.jpa") version "1.8.22"
     kotlin("plugin.allopen") version "1.8.22"
+    jacoco
 
 }
 
@@ -15,7 +20,7 @@ group = "org.koenighotze"
 version = "0.0.1-SNAPSHOT"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = VERSION_17
 }
 
 repositories {
@@ -51,6 +56,8 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.testcontainers:postgresql")
+    testImplementation("io.mockk:mockk:1.13.8")
+
 //    testImplementation("org.testcontainers:r2dbc")
 }
 
@@ -67,11 +74,64 @@ tasks.withType<KotlinCompile> {
     }
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+val test by testing.suites.existing(JvmTestSuite::class)
+tasks.named("test", Test::class.java) {
+    testClassesDirs = files(test.map { it.sources.output.classesDirs })
+    classpath = files(test.map { it.sources.runtimeClasspath })
+    useJUnitPlatform {
+        excludeTags("slow")
+
+    }
     testLogging {
         events("passed", "skipped", "failed")
         exceptionFormat = FULL
+    }
+    filter {
+        includeTestsMatching("*Test.*")
+    }
+    // from docu
+    maxParallelForks = (getRuntime().availableProcessors() / 2).coerceAtLeast(1)
+}
+
+tasks.register("integrationTests", Test::class.java) {
+    testClassesDirs = files(test.map { it.sources.output.classesDirs })
+    classpath = files(test.map { it.sources.runtimeClasspath })
+    group = "verification"
+    useJUnitPlatform {
+        includeTags("slow")
+    }
+    testLogging {
+        events("passed", "skipped", "failed")
+        exceptionFormat = FULL
+    }
+    filter {
+        excludeTestsMatching("*Test.*")
+    }
+}
+tasks.named("check") {
+    dependsOn("integrationTests")
+}
+
+jacoco {
+//    toolVersion = "0.8.9"
+//    reportsDirectory.set(layout.buildDirectory.dir("customJacocoReportDir"))
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // tests are required to run before generating the report
+    reports {
+        xml.required.set(false)
+        csv.required.set(false)
+    }
+}
+
+tasks.jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = "0.5".toBigDecimal()
+            }
+        }
     }
 }
 
