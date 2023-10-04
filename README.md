@@ -39,7 +39,7 @@ https://www.baeldung.com/kotlin/exception-handling
 https://blog.rockthejvm.com/functional-error-handling-in-kotlin/
 https://docs.gradle.org/current/userguide/dependency_verification.html
 https://docs.gradle.org/current/userguide/dependency_verification.html#sec:bootstrapping-signature-verification
-
+https://www.baeldung.com/kotlin/gradle-dsl
 
 
  

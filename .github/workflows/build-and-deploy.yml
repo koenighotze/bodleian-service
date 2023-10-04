@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Run Snyk to check for vulnerabilities
+      - name: Check for vulnerabilities
         uses: snyk/actions/gradle@0.4.0
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -43,19 +43,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-
-      # - name: Lint Go code
-      #   uses: golangci/golangci-lint-action@v3
-      # - name: Vet Go code
-      #   run: go vet
       - name: Check Dockerfile
-        uses: hadolint/hadolint-action@v3.1.0
+        uses: hadolint/hadolint-action@54c9adbab1582c2ef04b2016b760714a4bfde3cf    #v3.1.0
         with:
           verbose: true
       - name: Check shell scripts
-        uses: ludeeus/action-shellcheck@2.0.0
+        uses: ludeeus/action-shellcheck@00cae500b08a931fb5698e11e79bfbd38e612a38 #2.0.0
         with:
           severity: warning
           scandir: './scripts'
@@ -78,11 +71,22 @@ jobs:
       #     CODACY_USERNAME: ${{ github.repository_owner }}
       #     CODACY_API_TOKEN: ${{ secrets.CODACY_API_TOKEN }}
 
+  integration-test:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Unit test with coverage
+        run: ./gradlew --warning-mode all integrationTests
+
   build-container:
     if: false
     needs:
       - qa
       - test
+      - integration-test
       - security-scan-code
 
     permissions:
@@ -141,7 +145,7 @@ jobs:
           BASE_URL: ${{ steps.deploy.outputs.url }}
           BEARER_TOKEN: ${{ steps.auth.outputs.id_token }}
       - name: Report failures to Slack
-        uses: ravsamhq/notify-slack-action@v2
+        uses: ravsamhq/notify-slack-action@bca2d7f5660b833a27bda4f6b8bef389ebfefd25  #v2
         if: always()
         with:
           status: ${{ job.status }}
@@ -159,6 +163,3 @@ jobs:
           echo "Routing full traffic to tag $git-tag"
           gcloud run services update-traffic --region=${{ secrets.CLOUD_RUN_REGION }} ${{ secrets.CLOUD_RUN_SERVICE }} --to-tags="${{ env.git-tag }}=100"
 
-# Cannot do this because url contains a 'secret'
-#    outputs:
-#      service_url: ${{ steps.deploy.outputs.url }}
