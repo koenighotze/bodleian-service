@@ -1,4 +1,14 @@
 fileignoreconfig:
+- filename: README.md
+  checksum: 4f1750c8d060a0cc6abb463470d56674b64155c5a746d9fe3e7acce0eb389dbf
+- filename: .github/workflows/build-and-deploy.yml
+  checksum: 7a2fdc6a592c46d6cee1bcc7aaead27a78432536dff8556b57fa62320e5d7a1e
+- filename: .gradle/8.2.1/executionHistory/executionHistory.bin
+  checksum: 8136764d608ecfa48b158b257805e0c514ecf9efe694d8e538e0c8e63fb5ec01
+- filename: .github/workflows/api-tests.yml
+  checksum: d3d8d6ed04bc3379296b42ea3ca52607c9b47938e95dbf75f6d93b64714d97dd
+- filename: build.gradle.kts
+  checksum: 55aacbc41960c30af4a46494de7eecca2517ce27f0d060c9a4706f227b86c66b
 - filename: .github/workflows/test.yml
   checksum: 17b0c6d525cc177d98f08675830ca3f4c6fe4797e5cb8f1ba867d3e627e24526
 - filename: scripts/start-db.sh
