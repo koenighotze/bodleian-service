@@ -117,6 +117,7 @@ tasks.register("integrationTests", Test::class.java) {
     }
     testLogging.showStandardStreams = true
 }
+
 tasks.named("check") {
     dependsOn("integrationTests")
 }
