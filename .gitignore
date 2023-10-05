@@ -39,3 +39,4 @@ book2.json
 bodleian-service-test.log
 *gz
 .gradle
+logs/

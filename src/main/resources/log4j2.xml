@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Properties>
+        <Property name="LOG_PATTERN">
+            %d{yyyy-MM-dd HH:mm:ss.SSS} --- thread_id="%tid" thread_name="%tn" thread_priority="%tp" --- [%p] %m%n
+        </Property>
+        <Property name="CONSOLE_PATTERN">
+            %style{%d{ISO8601}}{black} [%highlight{%-5level }] [%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %m%n%throwable
+        </Property>
+    </Properties>
+    <Appenders>
+        <RollingFile name="RollingName" filename="logs/app.log"
+                     filePattern="logs/$${date:yyyy-MM}/app-%d{yyyy-MM-dd}-%i.log">
+            <JSONLayout compact="true" eventEol="true" properties="true" stacktraceAsString="true"
+                        includeTimeMillis="true"/>
+            <Policies>
+                <OnStartupTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="5 MB"/>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
+        <Console name="Console" target="SYSTEM_OUT">
+            <ThresholdFilter level="info"/>
+            <PatternLayout pattern="${CONSOLE_PATTERN}"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="org.koenighotze" level="debug"/>
+        <Logger name="org.springframework" level="debug"/>
+        <Root level="warn">
+            <AppenderRef ref="RollingName"/>
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>

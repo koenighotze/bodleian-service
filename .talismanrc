@@ -1,5 +1,7 @@
 fileignoreconfig:
 - filename: .github/workflows/build-and-deploy.yml
+  checksum: 708278df98ed10eb581e7d25fe16c818cec4696ae3f6b1b9b3a3737fac4b5519
+- filename: .github/workflows/build-and-deploy.yml
   checksum: cf1042b83f6f20ed108940ee4aa2d8663c3901612984c5b2f96d8c390c66db33
 - filename: build.gradle.kts
   checksum: 55aacbc41960c30af4a46494de7eecca2517ce27f0d060c9a4706f227b86c66b

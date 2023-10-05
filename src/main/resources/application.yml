@@ -9,12 +9,3 @@ spring:
     console:
       enabled: true
       path: /h2-console
-
-logging:
-  threshold:
-    console: INFO
-  level:
-    org:
-      hibernate:
-        type: INFO
-        stat: INFO

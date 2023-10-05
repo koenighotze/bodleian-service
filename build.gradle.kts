@@ -27,6 +27,10 @@ repositories {
     mavenCentral()
 }
 
+configurations.all {
+    exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
+}
+
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -34,6 +38,9 @@ dependencies {
 // 	implementation("org.springframework.boot:spring-boot-starter-data-rest")
 // 	implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-log4j2")
+
+
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
 // 	implementation("org.flywaydb:flyway-core")
@@ -89,6 +96,7 @@ tasks.named("test", Test::class.java) {
     filter {
         includeTestsMatching("*Test.*")
     }
+    testLogging.showStandardStreams = true
     // from docu
     maxParallelForks = (getRuntime().availableProcessors() / 2).coerceAtLeast(1)
 }
@@ -107,6 +115,7 @@ tasks.register("integrationTests", Test::class.java) {
     filter {
         excludeTestsMatching("*Test.*")
     }
+    testLogging.showStandardStreams = true
 }
 tasks.named("check") {
     dependsOn("integrationTests")
