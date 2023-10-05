@@ -11,26 +11,26 @@ library related resources.
 
 ## Bucket list Kotlin / SpringBoot Version
 
-[ ] Open Telemetry
-[ ] Auth
-[ ] Testing
-[ ] Load testing
-[ ] DB Setup
-[ ] Dockerfile
-[ ] API Testing
-[ ] JSON Logging
-[ ] Split Slow Tests (only in CI)
-[ ] Linting
-[ ] Integerate extra service for book images
-[ ] Fetch https://openlibrary.org/books/OL7353617M.json
-[ ] Wishlist
-[ ] Owned
-[ ] Deployment
-[ ] Swagger
-[ ] Flux / Coroutines / suspend
-[ ] Auf Sha in CI umstellen
-[ ] Sig check mit Gradle
-[ ] Transactions
+- [ ] Open Telemetry
+- [ ] Auth
+- [ ] Testing
+- [ ] Load testing
+- [ ] DB Setup
+- [ ] Dockerfile
+- [ ] API Testing
+- [ ] JSON Logging
+- [ ] Split Slow Tests (only in CI)
+- [ ] Linting
+- [ ] Integerate extra service for book images
+- [ ] Fetch https://openlibrary.org/books/OL7353617M.json
+- [ ] Wishlist
+- [ ] Owned
+- [ ] Deployment
+- [ ] Swagger
+- [ ] Flux / Coroutines / suspend
+- [ ] Auf Sha in CI umstellen
+- [ ] Sig check mit Gradle
+- [ ] Transactions
 
 ### Reading
 
