@@ -8,13 +8,13 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/gradle@0.4.0
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Run vulnerability scanner in repo mode
-        uses: aquasecurity/trivy-action@0.11.2
+        uses: aquasecurity/trivy-action@0.12.0
         with:
           scan-type: "fs"
           ignore-unfixed: false
@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
@@ -34,9 +34,8 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
       - name: Unit test
         run: ./gradlew --warning-mode all cleanTest test
-
