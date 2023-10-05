@@ -3,26 +3,6 @@ name: Receive pull request
 on:
   pull_request:
 
-# TODO: Update pull request, e.g.,
-# - name: Update Pull Request
-#   uses: actions/github-script@v6
-#   if: github.event_name == 'pull_request'
-#   with:
-#     script: |
-#       const output = `
-#       #### Hadolint: \`${{ steps.hadolint.outcome }}\`
-#       \`\`\`
-#       ${process.env.HADOLINT_RESULTS}
-#       \`\`\`
-#       `;
-
-#       github.rest.issues.createComment({
-#         issue_number: context.issue.number,
-#         owner: context.repo.owner,
-#         repo: context.repo.repo,
-#         body: output
-#       })
-
 jobs:
   security-scan-code:
     runs-on: ubuntu-20.04
@@ -30,7 +10,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/golang@0.4.0
+        uses: snyk/actions/gradle@0.4.0
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Run vulnerability scanner in repo mode
@@ -47,43 +27,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: "^1.17.0"
-      - name: Lint
-        uses: golangci/golangci-lint-action@v3
-      - name: Vet
-        run: go vet
-      - name: Checking Dockerfile
-        uses: hadolint/hadolint-action@v3.1.0
-        with:
-          verbose: true
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
 
   test:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: "^1.17.0"
-      - name: Install dependencies
-        run: go mod download
-      - name: Test
-        run: go test ./...
-
-  build:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: "^1.17.0"
-      - name: Install dependencies
-        run: go mod download
-      - name: Building
-        run: go build -o bodleian-service
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Unit test
+        run: ./gradlew --warning-mode all cleanTest test

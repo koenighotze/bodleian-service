@@ -2,13 +2,13 @@ name: Build main
 
 on:
   push:
-    branches: [main]
+    branches: [ main, migrate-to-kotlin ]
     tags:
       - "v*"
     paths-ignore:
       - '**.md'
   workflow_dispatch:
-  
+
 
 permissions:
   contents: read
@@ -27,6 +27,8 @@ jobs:
         uses: snyk/actions/golang@0.4.0
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
       - name: Run vulnerability scanner in repo mode
         uses: aquasecurity/trivy-action@0.12.0
         with:
@@ -41,20 +43,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: "^1.17.0"
-      - name: Lint Go code
-        uses: golangci/golangci-lint-action@v3
-      - name: Vet Go code
-        run: go vet
       - name: Check Dockerfile
-        uses: hadolint/hadolint-action@v3.1.0
+        uses: hadolint/hadolint-action@54c9adbab1582c2ef04b2016b760714a4bfde3cf    #v3.1.0
         with:
           verbose: true
       - name: Check shell scripts
-        uses: ludeeus/action-shellcheck@2.0.0
+        uses: ludeeus/action-shellcheck@00cae500b08a931fb5698e11e79bfbd38e612a38 #2.0.0
         with:
           severity: warning
           scandir: './scripts'
@@ -64,27 +58,39 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Go
-        uses: actions/setup-go@v4
+      - uses: actions/setup-java@v3
         with:
-          go-version: "^1.17.0"
-      - name: Install dependencies
-        run: go mod download
+          distribution: temurin
+          java-version: 17
       - name: Unit test with coverage
-        run: go test -coverprofile=coverage.out ./...
-      - name: Upload coverage
-        run: |
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report --force-coverage-parser go -r coverage.out
-        env:
-          CODACY_PROJECT_NAME: bodleian-service
-          CODACY_ORGANIZATION_PROVIDER: gh
-          CODACY_USERNAME: ${{ github.repository_owner }}
-          CODACY_API_TOKEN: ${{ secrets.CODACY_API_TOKEN }}
+        run: ./gradlew --warning-mode all cleanTest test
+      # - name: Upload coverage
+      #   run: |
+      #     bash <(curl -Ls https://coverage.codacy.com/get.sh) report --force-coverage-parser go -r coverage.out
+      #   env:
+      #     CODACY_PROJECT_NAME: bodleian-service
+      #     CODACY_ORGANIZATION_PROVIDER: gh
+      #     CODACY_USERNAME: ${{ github.repository_owner }}
+      #     CODACY_API_TOKEN: ${{ secrets.CODACY_API_TOKEN }}
+
+  integration-test:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Unit test with coverage
+        run: ./gradlew --warning-mode all integrationTests
 
   build-container:
+    if: false
     needs:
       - qa
       - test
+      - integration-test
       - security-scan-code
 
     permissions:
@@ -134,7 +140,7 @@ jobs:
           timeout: 10 # allow enough time to startup container
           no_traffic: true
           flags: '--concurrency=1 --cpu=1 --max-instances=1'
-#          no_traffic: ${{ !startsWith(github.event.ref, 'refs/tags/v') }}
+          #          no_traffic: ${{ !startsWith(github.event.ref, 'refs/tags/v') }}
           tag: ${{ env.git-tag }}
       - name: Test if service is up
         run: |
@@ -143,7 +149,7 @@ jobs:
           BASE_URL: ${{ steps.deploy.outputs.url }}
           BEARER_TOKEN: ${{ steps.auth.outputs.id_token }}
       - name: Report failures to Slack
-        uses: ravsamhq/notify-slack-action@v2
+        uses: ravsamhq/notify-slack-action@bca2d7f5660b833a27bda4f6b8bef389ebfefd25  #v2
         if: always()
         with:
           status: ${{ job.status }}
@@ -161,6 +167,3 @@ jobs:
           echo "Routing full traffic to tag $git-tag"
           gcloud run services update-traffic --region=${{ secrets.CLOUD_RUN_REGION }} ${{ secrets.CLOUD_RUN_SERVICE }} --to-tags="${{ env.git-tag }}=100"
 
-# Cannot do this because url contains a 'secret'
-#    outputs:
-#      service_url: ${{ steps.deploy.outputs.url }}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Properties>
+        <Property name="CONSOLE_PATTERN">
+            %style{%d{ISO8601}}{black} [%highlight{%-5level }] [%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %m%n%throwable
+        </Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${CONSOLE_PATTERN}"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="org.koenighotze" level="debug"/>
+        <Logger name="org.springframework" level="info"/>
+        <Logger name="org.hibernate.type" level="debug"/>
+        <Logger name="org.hibernate.stat" level="debug"/>
+        <Root level="warn">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>

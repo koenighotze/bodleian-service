@@ -19,6 +19,7 @@ IMAGE_NAME="$CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA"
 echo "Building image $IMAGE_NAME"
 gcloud auth configure-docker "$(echo "$CONTAINER_REGISTRY" | cut -d/ -f1)"
 NOW=$(date -u +%Y-%m-%dT%T%z)
+echo "$NOW"
 
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
     GIT_TAG=${GITHUB_REF/refs\/tags\/}
@@ -33,13 +34,14 @@ DOCKER_BUILD_OPTIONS=""
 if [[ -n "${GIT_TAG:=}" ]]; then
     DOCKER_BUILD_OPTIONS="--tag=$CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GIT_TAG"
 fi
+echo "$DOCKER_BUILD_OPTIONS"
 
-# shellcheck disable=SC2086
-docker buildx build --${OUTPUT_MODE} \
-  --tag "$IMAGE_NAME" $DOCKER_BUILD_OPTIONS \
-  --label "org.opencontainers.image.revision=${GITHUB_SHA}" \
-  --label "org.opencontainers.image.created=${NOW}" \
-  .
+# # shellcheck disable=SC2086
+# docker buildx build --${OUTPUT_MODE} \
+#   --tag "$IMAGE_NAME" $DOCKER_BUILD_OPTIONS \
+#   --label "org.opencontainers.image.revision=${GITHUB_SHA}" \
+#   --label "org.opencontainers.image.created=${NOW}" \
+#   .
 
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
     # shellcheck disable=SC2086

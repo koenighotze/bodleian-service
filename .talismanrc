@@ -1,6 +1,48 @@
-scopeconfig:
-  - scope: go
 fileignoreconfig:
-- filename: go.sum
-  checksum: c6eb0f9e76e2c4da9a85d850a2902b623bdb8b29edfd074afe5540fca192ae6b
+- filename: build.gradle.kts
+  checksum: 3d0ed91a6143fdd29b1e8a0ed1675bdd5c32b696de8df49cc32c29dfa977b6d6
+- filename: .github/workflows/build-and-deploy.yml
+  checksum: 708278df98ed10eb581e7d25fe16c818cec4696ae3f6b1b9b3a3737fac4b5519
+- filename: .github/workflows/build-and-deploy.yml
+  checksum: cf1042b83f6f20ed108940ee4aa2d8663c3901612984c5b2f96d8c390c66db33
+- filename: build.gradle.kts
+  checksum: 55aacbc41960c30af4a46494de7eecca2517ce27f0d060c9a4706f227b86c66b
+- filename: build.gradle.kts
+  checksum: 203da6ba725b576dca09526f7411e814fc7da7edbb3fe345aba647f8e83785fc
+- filename: .github/workflows/build-and-deploy.yml
+  checksum: 1f179efa413c6ec9c65ea263dc1c53f40366da1b37df338244b45f4e2d4b0965
+- filename: build.gradle.kts
+  checksum: f06ce2988756700510fdcfe16fab7829a57b6847907428194574054d3fd49f6a
+- filename: .github/workflows/build-and-deploy.yml
+  checksum: 0b793fd8e757d37150c4322b240dac19d8c8cbc0762a822e54a4506244361590
+- filename: README.md
+  checksum: 4f1750c8d060a0cc6abb463470d56674b64155c5a746d9fe3e7acce0eb389dbf
+- filename: .github/workflows/build-and-deploy.yml
+  checksum: 7a2fdc6a592c46d6cee1bcc7aaead27a78432536dff8556b57fa62320e5d7a1e
+- filename: .gradle/8.2.1/executionHistory/executionHistory.bin
+  checksum: 8136764d608ecfa48b158b257805e0c514ecf9efe694d8e538e0c8e63fb5ec01
+- filename: .github/workflows/api-tests.yml
+  checksum: d3d8d6ed04bc3379296b42ea3ca52607c9b47938e95dbf75f6d93b64714d97dd
+- filename: build.gradle.kts
+  checksum: 55aacbc41960c30af4a46494de7eecca2517ce27f0d060c9a4706f227b86c66b
+- filename: .github/workflows/test.yml
+  checksum: 17b0c6d525cc177d98f08675830ca3f4c6fe4797e5cb8f1ba867d3e627e24526
+- filename: scripts/start-db.sh
+  checksum: 7b11bb9baee7667a7d8fd0cc5488c0a097dd95d380bc888be5043199e5f8d50d
+- filename: README.md
+  checksum: 470931f108b90c346b1981fdec22539b6d8bb02af2064da960803c574b52f30d
+- filename: .gradle/8.2.1/executionHistory/executionHistory.bin
+  checksum: 791b2c1e8461391839bdca28cc48e7da3f8d12e8cad7c7e7763b57c6f6d4311b
+- filename: build.gradle.kts
+  checksum: bf7f8462fdaa9ea468f26151b023e63f084f26040a46260bbab5d30d5ddfd6c0
+- filename: src/test/resources/sample.book.output.json
+  checksum: bc3414e9c75dde5ef8233f6a82bcde47d1c65d51bcab4c1c4e7e53140522a8bb
+- filename: .github/workflows/git-guardian-scan.yml
+  checksum: 5cb7fda0c58b908760eab201a2526cff284603a8dcace6baa4c7ae98fd0eca1b
+- filename: .github/workflows/api-tests.yml
+  checksum: 13afc53d795d57d073ac6dc04947d032cef84677ca6e38dd78ea0c128545bdee
+- filename: .github/workflows/build-and-deploy.yml
+  checksum: 21c86b7c6570a603e3a4551fc162a0546c8c471819cd1fa3731dd9f61ddbc98d
+- filename: Bodleian.postman_collection.json
+  checksum: 7034551ac6f1070a9f3c64be65d5e04027316c1e8c4282e725ad7cb9edc9db4d
 version: ""
