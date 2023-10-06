@@ -43,10 +43,10 @@ echo "$DOCKER_BUILD_OPTIONS"
 #   --label "org.opencontainers.image.created=${NOW}" \
 #   .
 
-echo OCI_REVISION="${GITHUB_SHA}" \
+OCI_REVISION="${GITHUB_SHA}" \
 OCI_SOURCE="$(git config --get remote.origin.url)" \
 OCI_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" \
-  ./gradlew bootBuildImage --imageName="$IMAGE_NAME" "$OUTPUT_MODE"
+  ./gradlew bootBuildImage --imageName="$IMAGE_NAME"  # "$OUTPUT_MODE"
 
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
     # shellcheck disable=SC2086
