@@ -148,7 +148,7 @@ tasks.jacocoTestCoverageVerification {
 
 
 tasks.named<BootBuildImage>("bootBuildImage") {
-    fun propertyOrEmpty(name: String, default: String = "") = (project.properties["revision"] ?: default) as String
+    fun propertyOrEmpty(name: String, default: String = "") = (project.properties[name] ?: default) as String
 
     environment.set(
         mapOf(

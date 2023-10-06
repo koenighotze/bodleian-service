@@ -1,5 +1,23 @@
 fileignoreconfig:
 - filename: .github/workflows/build-and-deploy.yml
+  checksum: 7fd1020571c9e17e7b25ef15990bd7e9b8d1440b255f8157155c200865f70b34
+- filename: README.md
+  checksum: 2ab94e1145c3bedfe3ba322d0ec7f146c685d4e893bb2a8b85bab17aaaee34a0
+- filename: .github/workflows/test.yml
+  checksum: 72a8dbc24240a9220536acb394fe45244e7703ce2a5877ba6ad23ab185ca0392
+- filename: build.gradle.kts
+  checksum: dd3d64996d0c835637df9eaeaeb38e300499ad5e7187093c6adf88e622950b70
+- filename: .github/workflows/api-tests.yml
+  checksum: 8d877dcf4d10d900024838bbc641d250a189ea9461b81740ce6a6a4e263fc201
+- filename: Bodleian.postman_collection.json
+  checksum: 7034551ac6f1070a9f3c64be65d5e04027316c1e8c4282e725ad7cb9edc9db4d
+- filename: .github/workflows/git-guardian-scan.yml
+  checksum: 59e7a25a580c84dd7cc906ec7d3ff7fac7c52193c7f54d52b2bfa456919c386f
+- filename: src/test/resources/sample.book.output.json
+  checksum: bc3414e9c75dde5ef8233f6a82bcde47d1c65d51bcab4c1c4e7e53140522a8bb
+- filename: scripts/start-db.sh
+  checksum: 7b11bb9baee7667a7d8fd0cc5488c0a097dd95d380bc888be5043199e5f8d50d
+- filename: .github/workflows/build-and-deploy.yml
   checksum: 8cdf3ca29f0d1f899d52b593b592da0a4b77fff846fc05dc7bca30f6ae067fb1
 - filename: README.md
   checksum: 2ab94e1145c3bedfe3ba322d0ec7f146c685d4e893bb2a8b85bab17aaaee34a0
