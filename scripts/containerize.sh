@@ -43,7 +43,7 @@ echo "$DOCKER_BUILD_OPTIONS"
 #   --label "org.opencontainers.image.created=${NOW}" \
 #   .
 
-OCI_REVISION="${GITHUB_SHA}" \
+echo OCI_REVISION="${GITHUB_SHA}" \
 OCI_SOURCE="$(git config --get remote.origin.url)" \
 OCI_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" \
   ./gradlew bootBuildImage --imageName="$IMAGE_NAME" "$OUTPUT_MODE"
