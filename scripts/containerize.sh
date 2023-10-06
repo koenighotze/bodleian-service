@@ -10,16 +10,16 @@ if [[ "${TRACE-0}" == "1" ]]; then set -o xtrace; fi
 
 : "${GITHUB_SHA?'Expected env var GITHUB_SHA not set'}"
 : "${GITHUB_REF?'Expected env var GITHUB_REF not set'}"
+: "${GITHUB_SERVER_URL?'Expected env var GITHUB_SERVER_URL not set'}"
+: "${GITHUB_REPOSITORY?'Expected env var GITHUB_REPOSITORY not set'}"
 : "${CONTAINER_REGISTRY?'Expected env var CONTAINER_REGISTRY not set'}"
 : "${CONTAINER_PORTS:=8080}"
-: "${OUTPUT_MODE:=load}"
+: "${OUTPUT_MODE:=}"
 
 IMAGE_NAME="$CONTAINER_REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA"
 
 echo "Building image $IMAGE_NAME"
 gcloud auth configure-docker "$(echo "$CONTAINER_REGISTRY" | cut -d/ -f1)"
-NOW=$(date -u +%Y-%m-%dT%T%z)
-echo "$NOW"
 
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
     GIT_TAG=${GITHUB_REF/refs\/tags\/}
@@ -42,6 +42,11 @@ echo "$DOCKER_BUILD_OPTIONS"
 #   --label "org.opencontainers.image.revision=${GITHUB_SHA}" \
 #   --label "org.opencontainers.image.created=${NOW}" \
 #   .
+
+OCI_REVISION="${GITHUB_SHA}" \
+OCI_SOURCE="$(git config --get remote.origin.url)" \
+OCI_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" \
+  ./gradlew bootBuildImage --imageName="$IMAGE_NAME" "$OUTPUT_MODE"
 
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
     # shellcheck disable=SC2086

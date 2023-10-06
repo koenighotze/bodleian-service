@@ -1,4 +1,12 @@
 fileignoreconfig:
+- filename: .github/workflows/build-and-deploy.yml
+  checksum: 8cdf3ca29f0d1f899d52b593b592da0a4b77fff846fc05dc7bca30f6ae067fb1
+- filename: README.md
+  checksum: 2ab94e1145c3bedfe3ba322d0ec7f146c685d4e893bb2a8b85bab17aaaee34a0
+- filename: .github/workflows/git-guardian-scan.yml
+  checksum: 59e7a25a580c84dd7cc906ec7d3ff7fac7c52193c7f54d52b2bfa456919c386f
+- filename: build.gradle.kts
+  checksum: dd3d64996d0c835637df9eaeaeb38e300499ad5e7187093c6adf88e622950b70
 - filename: README.md
   checksum: 4f1750c8d060a0cc6abb463470d56674b64155c5a746d9fe3e7acce0eb389dbf
 - filename: Bodleian.postman_collection.json

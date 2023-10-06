@@ -86,7 +86,6 @@ jobs:
         run: ./gradlew --warning-mode all integrationTests
 
   build-container:
-    if: false
     needs:
       - qa
       - test
@@ -126,44 +125,44 @@ jobs:
           ignore-unfixed: true
           vuln-type: "os,library"
           severity: "CRITICAL,HIGH"
-      - name: Push image
-        run: ./scripts/containerize.sh
-        env:
-          OUTPUT_MODE: push
-      - name: Deploy
-        id: deploy
-        uses: google-github-actions/deploy-cloudrun@v1.0.2
-        with:
-          image: ${{ env.image-name }}
-          service: ${{ secrets.CLOUD_RUN_SERVICE }}
-          region: ${{ secrets.CLOUD_RUN_REGION }}
-          timeout: 10 # allow enough time to startup container
-          no_traffic: true
-          flags: '--concurrency=1 --cpu=1 --max-instances=1'
-          #          no_traffic: ${{ !startsWith(github.event.ref, 'refs/tags/v') }}
-          tag: ${{ env.git-tag }}
-      - name: Test if service is up
-        run: |
-          ./scripts/is-service-up.sh
-        env:
-          BASE_URL: ${{ steps.deploy.outputs.url }}
-          BEARER_TOKEN: ${{ steps.auth.outputs.id_token }}
-      - name: Report failures to Slack
-        uses: ravsamhq/notify-slack-action@bca2d7f5660b833a27bda4f6b8bef389ebfefd25  #v2
-        if: always()
-        with:
-          status: ${{ job.status }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          notification_title: "{workflow} has {status_message}"
-          message_format: "{emoji} *{workflow}* {status_message} in <{repo_url}|{repo}>"
-          footer: "Linked Repo <{repo_url}|{repo}> | <{workflow_url}|View Workflow>"
-          notify_when: "failure"
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      - name: Route traffic to new version
-        # TODO: check why using the deploy-action does not work with tags.
-        if: ${{ startsWith(github.event.ref, 'refs/tags/v') }}
-        run: |
-          echo "Routing full traffic to tag $git-tag"
-          gcloud run services update-traffic --region=${{ secrets.CLOUD_RUN_REGION }} ${{ secrets.CLOUD_RUN_SERVICE }} --to-tags="${{ env.git-tag }}=100"
+#      - name: Push image
+#        run: ./scripts/containerize.sh
+#        env:
+#          OUTPUT_MODE: push
+#      - name: Deploy
+#        id: deploy
+#        uses: google-github-actions/deploy-cloudrun@v1.0.2
+#        with:
+#          image: ${{ env.image-name }}
+#          service: ${{ secrets.CLOUD_RUN_SERVICE }}
+#          region: ${{ secrets.CLOUD_RUN_REGION }}
+#          timeout: 10 # allow enough time to startup container
+#          no_traffic: true
+#          flags: '--concurrency=1 --cpu=1 --max-instances=1'
+#          #          no_traffic: ${{ !startsWith(github.event.ref, 'refs/tags/v') }}
+#          tag: ${{ env.git-tag }}
+#      - name: Test if service is up
+#        run: |
+#          ./scripts/is-service-up.sh
+#        env:
+#          BASE_URL: ${{ steps.deploy.outputs.url }}
+#          BEARER_TOKEN: ${{ steps.auth.outputs.id_token }}
+#      - name: Report failures to Slack
+#        uses: ravsamhq/notify-slack-action@bca2d7f5660b833a27bda4f6b8bef389ebfefd25  #v2
+#        if: always()
+#        with:
+#          status: ${{ job.status }}
+#          token: ${{ secrets.GITHUB_TOKEN }}
+#          notification_title: "{workflow} has {status_message}"
+#          message_format: "{emoji} *{workflow}* {status_message} in <{repo_url}|{repo}>"
+#          footer: "Linked Repo <{repo_url}|{repo}> | <{workflow_url}|View Workflow>"
+#          notify_when: "failure"
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+#      - name: Route traffic to new version
+#        # TODO: check why using the deploy-action does not work with tags.
+#        if: ${{ startsWith(github.event.ref, 'refs/tags/v') }}
+#        run: |
+#          echo "Routing full traffic to tag $git-tag"
+#          gcloud run services update-traffic --region=${{ secrets.CLOUD_RUN_REGION }} ${{ secrets.CLOUD_RUN_SERVICE }} --to-tags="${{ env.git-tag }}=100"
 
