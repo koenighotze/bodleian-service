@@ -21,17 +21,16 @@ library related resources.
 * [ ] JSON Logging
 * [ ] Split Slow Tests (only in CI)
 * [ ] Linting
-* [ ] Integerate extra service for book images
+* [ ] Integrate extra service for book images
 * [ ] Fetch https://openlibrary.org/books/OL7353617M.json
-* [ ] Wishlist
-* [ ] Owned
+* [ ] Wishlist Feature
+* [ ] Owned Feature
 * [ ] Deployment
 * [ ] Swagger
 * [ ] Flux / Coroutines / suspend
-* [ ] Auf Sha in CI umstellen
-* [ ] Sig check mit Gradle
+* [x] Auf Sha in CI umstellen
+* [x] Sig check mit Gradle
 * [ ] Transactions
-
 
 ### Reading
 
@@ -41,6 +40,7 @@ https://blog.rockthejvm.com/functional-error-handling-in-kotlin/
 https://docs.gradle.org/current/userguide/dependency_verification.html
 https://docs.gradle.org/current/userguide/dependency_verification.html#sec:bootstrapping-signature-verification
 https://www.baeldung.com/kotlin/gradle-dsl
+https://www.baeldung.com/spring-response-status-exception
 
 
  

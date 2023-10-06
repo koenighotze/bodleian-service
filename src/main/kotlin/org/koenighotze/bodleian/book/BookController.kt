@@ -15,7 +15,7 @@ class BookController(private val bookManager: BookManager) {
     fun getAllBooks() =
         try {
             ok(BooksDTO.from(books = bookManager.allBooks()))
-        } catch (e: Exception) {
+        } catch (e: RuntimeException) {
             status(INTERNAL_SERVER_ERROR).build()
         }
 }

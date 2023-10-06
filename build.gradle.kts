@@ -3,6 +3,7 @@
 import org.gradle.api.JavaVersion.VERSION_17
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 import java.lang.Runtime.getRuntime
 
 plugins {
@@ -144,6 +145,24 @@ tasks.jacocoTestCoverageVerification {
         }
     }
 }
+
+
+tasks.named<BootBuildImage>("bootBuildImage") {
+    fun propertyOrEmpty(name: String, default: String = "") = (project.properties["revision"] ?: default) as String
+
+    environment.set(
+        mapOf(
+            "BP_OCI_DESCRIPTION" to propertyOrEmpty("OCI_DESCRIPTION"),
+            "BP_OCI_AUTHORS" to propertyOrEmpty("OCI_AUTHORS", "Koenighotze"),
+            "BP_OCI_DOCUMENTATION" to propertyOrEmpty("OCI_DOCUMENTATION"),
+            "BP_OCI_LICENSES" to propertyOrEmpty("OCI_LICENSES", "MIT"),
+            "BP_OCI_REVISION" to propertyOrEmpty("OCI_REVISION"),
+            "BP_OCI_SOURCE" to propertyOrEmpty("OCI_SOURCE"),
+            "BP_OCI_URL" to propertyOrEmpty("OCI_URL")
+        )
+    )
+}
+
 
 allOpen {
     annotation("jakarta.persistence.Entity")
