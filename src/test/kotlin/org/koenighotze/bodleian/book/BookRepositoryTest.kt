@@ -2,7 +2,9 @@ package org.koenighotze.bodleian.book
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.koenighotze.bodleian.book.Book.Companion.randomId
+import org.koenighotze.bodleian.book.DomainTestDataHelper.randomAuthorsGroup
+import org.koenighotze.bodleian.book.entity.Book
+import org.koenighotze.bodleian.book.entity.Book.Companion.randomId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 
@@ -17,7 +19,7 @@ class BookRepositoryTest(@Autowired var repository: BookRepository) {
     }
 
     fun `a stored book is returned`() {
-        repository.save(Book(title = "Some title", authors = "Some author", id = randomId()))
+        repository.save(Book(title = "Some title", authorsGroup = randomAuthorsGroup(), id = randomId()))
 
         assertThat(repository.findAll()).isNotEmpty
     }

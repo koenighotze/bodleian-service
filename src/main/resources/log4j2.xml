@@ -19,14 +19,31 @@
                 <TimeBasedTriggeringPolicy/>
             </Policies>
         </RollingFile>
+
+        <File append="false" name="SqlLog" filename="logs/sql.log">
+            <PatternLayout>
+                <Pattern>%d{HH:mm:ss.SSS} %c{1.} %m%n</Pattern>
+            </PatternLayout>
+        </File>
+
         <Console name="Console" target="SYSTEM_OUT">
             <ThresholdFilter level="info"/>
             <PatternLayout pattern="${CONSOLE_PATTERN}"/>
         </Console>
     </Appenders>
     <Loggers>
+        <Logger name="org.hibernate.stat" level="info">
+            <AppenderRef ref="SqlLog"/>
+        </Logger>
+        <Logger name="org.hibernate.SQL" level="debug">
+            <AppenderRef ref="SqlLog"/>
+        </Logger>
+        <Logger name="org.hibernate.type" level="warn">
+            <AppenderRef ref="SqlLog"/>
+        </Logger>
+
         <Logger name="org.koenighotze" level="debug"/>
-        <Logger name="org.springframework" level="debug"/>
+        <Logger name="org.springframework" level="info"/>
         <Root level="warn">
             <AppenderRef ref="RollingName"/>
             <AppenderRef ref="Console"/>

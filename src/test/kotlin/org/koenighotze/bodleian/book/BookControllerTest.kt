@@ -4,6 +4,8 @@ import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.koenighotze.bodleian.book.entity.AuthorsGroup
+import org.koenighotze.bodleian.book.entity.Book
 import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 import org.springframework.http.HttpStatus.OK
 
@@ -23,7 +25,11 @@ class BookControllerTest {
 
     @Test
     fun `when books are found, getting all books returns the books`() {
-        val expectedBook = Book(title = "bar", authors = "foo", id = Book.randomId())
+        val expectedBook = Book(
+            title = "bar",
+            authorsGroup = AuthorsGroup(id = AuthorsGroup.randomId(), authors = mutableSetOf()),
+            id = Book.randomId()
+        )
         val bookManager = mockk<BookManager>()
 
         every { bookManager.allBooks() } returns listOf(expectedBook)
@@ -36,7 +42,7 @@ class BookControllerTest {
         with(response.body!!.books.first()) {
             assertThat(title).isEqualTo(expectedBook.title)
             assertThat(id).isEqualTo(expectedBook.id)
-            assertThat(authors).isEqualTo(expectedBook.authors)
+            assertThat(authorsGroup.id).isEqualTo(expectedBook.authorsGroup!!.id)
         }
     }
 

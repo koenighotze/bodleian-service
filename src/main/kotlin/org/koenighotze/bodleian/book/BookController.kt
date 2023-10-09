@@ -1,5 +1,6 @@
 package org.koenighotze.bodleian.book
 
+import org.koenighotze.bodleian.book.dto.BooksDTO
 import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.http.ResponseEntity.status

@@ -6,6 +6,9 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.koenighotze.bodleian.IntegrationTest
+import org.koenighotze.bodleian.book.dto.BooksDTO
+import org.koenighotze.bodleian.book.entity.AuthorsGroup
+import org.koenighotze.bodleian.book.entity.Book
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpStatus.OK
@@ -17,13 +20,13 @@ class BookControllerIT(@Autowired var testTemplate: TestRestTemplate, @Autowired
         Book(
             isbn = randomUUID().toString(),
             title = "Random Title ${randomUUID()}",
-            authors = "Random authors ${randomUUID()}",
+            authorsGroup = AuthorsGroup(id = randomUUID().toString(), authors = mutableSetOf()),
             id = Book.randomId()
         ),
         Book(
             isbn = randomUUID().toString(),
             title = "Random Title ${randomUUID()}",
-            authors = "Random authors ${randomUUID()}",
+            authorsGroup = AuthorsGroup(id = randomUUID().toString(), authors = mutableSetOf()),
             id = Book.randomId()
         )
     )
