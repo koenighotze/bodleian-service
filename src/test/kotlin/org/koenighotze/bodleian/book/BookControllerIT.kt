@@ -11,11 +11,20 @@ import org.koenighotze.bodleian.book.entity.AuthorsGroup
 import org.koenighotze.bodleian.book.entity.Book
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection
 import org.springframework.http.HttpStatus.OK
+import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.junit.jupiter.Container
 import java.util.UUID.randomUUID
 
 @IntegrationTest
 class BookControllerIT(@Autowired var testTemplate: TestRestTemplate, @Autowired var bookRepository: BookRepository) {
+    companion object {
+        @Container
+        @ServiceConnection
+        val postgreSQLContainer = PostgreSQLContainer("postgres:16.0-alpine3.18")
+    }
+
     val knownBooks = listOf(
         Book(
             isbn = randomUUID().toString(),

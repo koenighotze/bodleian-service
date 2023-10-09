@@ -13,6 +13,9 @@
     <Loggers>
         <Logger name="org.koenighotze" level="debug"/>
         <Logger name="org.springframework" level="info"/>
+        <Logger name="org.springframework.boot.testcontainers" level="debug"/>
+        <Logger name="org.testcontainers" level="debug"/>
+
         <Logger name="org.hibernate.stat" level="debug"/>
         <Logger name="org.hibernate.SQL" level="debug"/>
         <Logger name="org.hibernate.type" level="warn"/>

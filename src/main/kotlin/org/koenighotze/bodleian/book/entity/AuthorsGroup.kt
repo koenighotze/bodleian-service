@@ -33,7 +33,6 @@ class AuthorsGroup(
         return this
     }
 
-
     fun withBook(book: Book): AuthorsGroup {
         books.add(book)
         book.authorsGroup = this
