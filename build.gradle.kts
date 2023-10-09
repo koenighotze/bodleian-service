@@ -50,7 +50,7 @@ dependencies {
 // 	implementation("org.springframework.modulith:spring-modulith-starter-core")
 // 	implementation("org.springframework.modulith:spring-modulith-starter-jpa")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-    runtimeOnly("com.h2database:h2:2.2.220")
+    runtimeOnly("com.h2database:h2:2.2.224")
     runtimeOnly("org.yaml:snakeyaml:2.0")
 // 	runtimeOnly("io.r2dbc:r2dbc-h2")
     runtimeOnly("org.postgresql:postgresql")
