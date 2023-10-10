@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.koenighotze.bodleian.IntegrationTest
+import org.koenighotze.bodleian.book.dto.BookDTO
 import org.koenighotze.bodleian.book.dto.BooksDTO
 import org.koenighotze.bodleian.book.entity.AuthorsGroup
 import org.koenighotze.bodleian.book.entity.Book
@@ -55,6 +56,17 @@ class BookControllerIT(@Autowired var testTemplate: TestRestTemplate, @Autowired
             val response = testTemplate.getForEntity("/books", BooksDTO::class.java)
             assertThat(response.statusCode).isEqualTo(OK)
             assertThat(response.body!!.books).hasSize(knownBooks.size)
+        }
+    }
+
+    @Nested
+    @DisplayName("When getting a single book")
+    inner class GetBook {
+        @Test
+        fun `the book is returned`() {
+            val response = testTemplate.getForEntity("/books/${knownBooks[0].id}", BookDTO::class.java)
+            assertThat(response.statusCode).isEqualTo(OK)
+            assertThat(response.body!!).isEqualTo(BookDTO.fromBook(knownBooks[0]))
         }
     }
 }

@@ -26,11 +26,11 @@ library related resources.
 * [ ] Auth
 * [ ] Testing
 * [ ] Load testing
-* [ ] DB Setup
+* [x] DB Setup
 * [x] Dockerfile / not needed we use build packs
 * [ ] API Testing
-* [ ] JSON Logging
-* [ ] Split Slow Tests (only in CI)
+* [x] JSON Logging
+* [x] Split Slow Tests (only in CI)
 * [ ] Linting
 * [ ] Deployment
 * [ ] Swagger
@@ -39,6 +39,7 @@ library related resources.
 * [x] Sig check mit Gradle
 * [x] Signed commit
 * [ ] Transactions
+* [ ] Rest assured
 
 ### Reading
 
@@ -49,6 +50,12 @@ https://docs.gradle.org/current/userguide/dependency_verification.html
 https://docs.gradle.org/current/userguide/dependency_verification.html#sec:bootstrapping-signature-verification
 https://www.baeldung.com/kotlin/gradle-dsl
 https://www.baeldung.com/spring-response-status-exception
+https://www.baeldung.com/kotlin/mockmvc-kotlin-dsl
+https://code.haleby.se/2019/09/06/rest-assured-in-kotlin/
+https://github.com/rest-assured/rest-assured/wiki/GettingStarted
+https://reflectoring.io/objectmother-fluent-builder/
+https://openlibrary.org/dev/docs/api/books
+
 
 
  

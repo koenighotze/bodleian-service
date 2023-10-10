@@ -5,6 +5,8 @@ import org.koenighotze.bodleian.book.entity.Author
 import org.koenighotze.bodleian.book.entity.AuthorsGroup
 import org.koenighotze.bodleian.book.entity.Book
 import org.koenighotze.bodleian.book.entity.Book.Companion.randomId
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -14,6 +16,10 @@ import java.util.UUID.randomUUID
 
 @SpringBootApplication
 class Application {
+    companion object {
+        var logger: Logger = LoggerFactory.getLogger(Application::class.java)
+    }
+
     // TODO Bootstrap not with random data
     fun randomAuthorsGroup() = AuthorsGroup(
         id = AuthorsGroup.randomId(),
@@ -35,20 +41,13 @@ class Application {
 
     @Bean
     fun cliRunner(ctx: ApplicationContext, bookRepository: BookRepository): CommandLineRunner {
-        return CommandLineRunner { _ ->
-            bookRepository.findAll().forEach(::println)
-//            args.forEach(::println)
-//            ctx.beanDefinitionNames.sorted().forEach(::println)
+        return CommandLineRunner { args ->
+            args.forEach { logger.debug(it) }
+            ctx.beanDefinitionNames.sorted().forEach { logger.debug(it) }
 
-            println("Generating crappy random books")
-            val entities = (1..1).map { randomBook() }
-
-            entities.forEach {
-                println("Should persists $it")
-                bookRepository.save(it)
-            }
-
-//            bookRepository.saveAll(entities)
+            logger.debug("Generating crappy random books")
+            val entities = (1..10).map { randomBook() }
+            bookRepository.saveAll(entities)
         }
 
     }

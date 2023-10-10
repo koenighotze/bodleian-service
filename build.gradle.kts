@@ -95,9 +95,6 @@ tasks.named("test", Test::class.java) {
         events("passed", "skipped", "failed")
         exceptionFormat = FULL
     }
-    filter {
-        includeTestsMatching("*Test.*")
-    }
     testLogging.showStandardStreams = true
     // from docu
     maxParallelForks = (getRuntime().availableProcessors() / 2).coerceAtLeast(1)
