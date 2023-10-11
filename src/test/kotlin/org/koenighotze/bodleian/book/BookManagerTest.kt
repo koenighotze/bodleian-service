@@ -1,7 +1,6 @@
 package org.koenighotze.bodleian.book
 
-import io.mockk.every
-import io.mockk.mockk
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -47,6 +46,53 @@ class BookManagerTest {
             every { repo.findAll() } throws RuntimeException("Bumm")
 
             assertThrows<RuntimeException> { manager.allBooks() }
+        }
+    }
+
+    @Nested
+    @DisplayName("when deleting a book")
+    inner class DeleteBook {
+        @Test
+        fun `and the book is found, should delete the book and return true`() {
+            val book = randomBook()
+            val repo = mockk<BookRepository>()
+            val manager = BookManager(repo)
+
+            every { repo.delete(any()) } just Runs
+
+            val result = manager.deleteBook(book)
+
+            assertThat(result).isTrue()
+            verify(exactly = 1) {
+                repo.delete(book)
+            }
+        }
+
+        @Test
+        fun `and an error occurs, should throw`() {
+            val book = randomBook()
+            val repo = mockk<BookRepository>()
+            val manager = BookManager(repo)
+
+            every { repo.delete(any()) } throws RuntimeException("bumm")
+
+            assertThrows<RuntimeException> { manager.deleteBook(book) }
+        }
+    }
+
+    @Nested
+    @DisplayName("when updating a book")
+    inner class UpdateBook {
+        @Test
+        fun `and the book is found, should update the book and return true`() {
+        }
+
+        @Test
+        fun `and book is not found, should return false`() {
+        }
+
+        @Test
+        fun `and an error occurs, should throw`() {
         }
     }
 

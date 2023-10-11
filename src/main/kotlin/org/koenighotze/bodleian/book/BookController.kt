@@ -5,10 +5,7 @@ import org.koenighotze.bodleian.book.dto.BooksDTO
 import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.*
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/books")
@@ -30,6 +27,21 @@ class BookController(private val bookManager: BookManager) {
                 }
                 .orElse(notFound().build())
 
+        } catch (e: RuntimeException) {
+            status(INTERNAL_SERVER_ERROR).build()
+        }
+
+    @DeleteMapping("/{bookId}")
+    fun deleteBook(@PathVariable bookId: String): ResponseEntity<Unit> =
+        try {
+            bookManager.getBookById(bookId)
+                .map {
+                    bookManager.deleteBook(it)
+                }
+                .map {
+                    ok().build<Unit>()
+                }
+                .orElse(notFound().build())
         } catch (e: RuntimeException) {
             status(INTERNAL_SERVER_ERROR).build()
         }

@@ -2,11 +2,13 @@ package org.koenighotze.bodleian.book
 
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Ignore
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.koenighotze.bodleian.book.DomainTestDataHelper.randomBook
 import org.koenighotze.bodleian.book.dto.BookDTO
 import org.koenighotze.bodleian.book.entity.AuthorsGroup
 import org.koenighotze.bodleian.book.entity.Book
@@ -80,17 +82,30 @@ class BookControllerTest {
     inner class DeletingASingleBook {
         @Test
         fun `and the book is found, should delete the book`() {
+            val expectedBook = randomBook()
+            val bookManager = mockk<BookManager>()
+            every { bookManager.getBookById(expectedBook.id!!) } returns Optional.of(expectedBook)
+            every { bookManager.deleteBook(expectedBook) } returns true
+            val controller = BookController(bookManager)
 
-        }
+            val response = controller.deleteBook(expectedBook.id!!)
 
-        @Test
-        fun `and the book is found, should return OK`() {
-
+            assertThat(response.statusCode).isEqualTo(OK)
+            verify(exactly = 1) {
+                bookManager.deleteBook(expectedBook)
+            }
         }
 
         @Test
         fun `and the book is not found, should return 404`() {
+            val expectedBook = randomBook()
+            val bookManager = mockk<BookManager>()
+            every { bookManager.getBookById(expectedBook.id!!) } returns Optional.empty()
+            val controller = BookController(bookManager)
 
+            val response = controller.deleteBook(expectedBook.id!!)
+
+            assertThat(response.statusCode).isEqualTo(NOT_FOUND)
         }
 
         @Test

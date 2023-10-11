@@ -40,6 +40,7 @@ library related resources.
 * [x] Signed commit
 * [ ] Transactions
 * [ ] Rest assured
+* [ ] Optimistic locking
 
 ### Reading
 
