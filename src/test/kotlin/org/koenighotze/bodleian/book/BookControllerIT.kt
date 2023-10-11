@@ -10,6 +10,7 @@ import org.koenighotze.bodleian.book.dto.BookDTO
 import org.koenighotze.bodleian.book.dto.BooksDTO
 import org.koenighotze.bodleian.book.entity.AuthorsGroup
 import org.koenighotze.bodleian.book.entity.Book
+import org.koenighotze.bodleian.book.entity.ISBN
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection
@@ -28,13 +29,13 @@ class BookControllerIT(@Autowired var testTemplate: TestRestTemplate, @Autowired
 
     val knownBooks = listOf(
         Book(
-            isbn = randomUUID().toString(),
+            isbn = ISBN(randomUUID().toString()),
             title = "Random Title ${randomUUID()}",
             authorsGroup = AuthorsGroup(id = randomUUID().toString(), authors = mutableSetOf()),
             id = Book.randomId()
         ),
         Book(
-            isbn = randomUUID().toString(),
+            isbn = ISBN(randomUUID().toString()),
             title = "Random Title ${randomUUID()}",
             authorsGroup = AuthorsGroup(id = randomUUID().toString(), authors = mutableSetOf()),
             id = Book.randomId()

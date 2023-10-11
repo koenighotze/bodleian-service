@@ -12,6 +12,7 @@ import org.koenighotze.bodleian.book.DomainTestDataHelper.randomBook
 import org.koenighotze.bodleian.book.dto.BookDTO
 import org.koenighotze.bodleian.book.entity.AuthorsGroup
 import org.koenighotze.bodleian.book.entity.Book
+import org.koenighotze.bodleian.book.entity.ISBN
 import org.springframework.http.HttpStatus.*
 import java.util.*
 
@@ -119,7 +120,7 @@ class BookControllerTest {
     inner class GettingASingleBook {
         @Test
         fun `and the book is found, should return the book`() {
-            val book = Book(title = "foo", isbn = "12345", id = Book.randomId())
+            val book = Book(title = "foo", isbn = ISBN("12345"), id = Book.randomId())
             val bookManager = mockk<BookManager>()
             every { bookManager.getBookById(book.id!!) } returns Optional.of(book)
             val controller = BookController(bookManager)

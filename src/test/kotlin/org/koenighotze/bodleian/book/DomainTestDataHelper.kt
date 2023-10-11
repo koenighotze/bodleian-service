@@ -3,12 +3,14 @@ package org.koenighotze.bodleian.book
 import org.koenighotze.bodleian.book.entity.Author
 import org.koenighotze.bodleian.book.entity.AuthorsGroup
 import org.koenighotze.bodleian.book.entity.Book
+import org.koenighotze.bodleian.book.entity.ISBN
 import java.util.*
+import java.util.UUID.randomUUID
 
 object DomainTestDataHelper {
     fun randomBook() = Book(
-        isbn = UUID.randomUUID().toString(),
-        title = "Random Title ${UUID.randomUUID()}",
+        isbn = ISBN(randomUUID().toString()),
+        title = "Random Title ${randomUUID()}",
         authorsGroup = randomAuthorsGroup(),
         id = Book.randomId()
     )
@@ -18,8 +20,8 @@ object DomainTestDataHelper {
     fun randomAuthors() = 1.until(Random().nextInt(1, 4)).map { randomAuthor() }.toMutableSet()
 
     fun randomAuthor() = Author(
-        firstName = "Random first name ${UUID.randomUUID()}",
-        lastName = "Random last name ${UUID.randomUUID()}",
+        firstName = "Random first name ${randomUUID()}",
+        lastName = "Random last name ${randomUUID()}",
         id = Author.randomId()
     )
 }

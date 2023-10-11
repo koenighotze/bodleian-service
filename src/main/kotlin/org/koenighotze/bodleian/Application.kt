@@ -5,6 +5,7 @@ import org.koenighotze.bodleian.book.entity.Author
 import org.koenighotze.bodleian.book.entity.AuthorsGroup
 import org.koenighotze.bodleian.book.entity.Book
 import org.koenighotze.bodleian.book.entity.Book.Companion.randomId
+import org.koenighotze.bodleian.book.entity.ISBN
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.CommandLineRunner
@@ -34,7 +35,7 @@ class Application {
     )
 
     fun randomBook() = Book(
-        isbn = randomUUID().toString(),
+        isbn = ISBN(code = randomUUID().toString()),
         title = "Random Title ${randomUUID()}",
         id = randomId()
     ).withAuthorsGroup(randomAuthorsGroup())

@@ -1,6 +1,7 @@
 package org.koenighotze.bodleian.book.dto
 
 import jakarta.persistence.Id
+import org.koenighotze.bodleian.book.dto.AuthorsGroupDTO.Companion.fromAuthorsGroup
 import org.koenighotze.bodleian.book.entity.Book
 
 data class BookDTO(
@@ -13,8 +14,8 @@ data class BookDTO(
         fun fromBook(book: Book) =
             BookDTO(
                 title = book.title,
-                authorsGroup = AuthorsGroupDTO.fromAuthorsGroup(book.authorsGroup),
-                isbn = book.isbn,
+                authorsGroup = fromAuthorsGroup(book.authorsGroup),
+                isbn = book.isbn?.code,
                 id = book.id
             )
     }

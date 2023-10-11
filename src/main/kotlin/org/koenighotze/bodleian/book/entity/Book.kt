@@ -17,7 +17,9 @@ class Book(
         fetch = EAGER,
         optional = false
     ) var authorsGroup: AuthorsGroup? = null,
-    var isbn: String? = null,
+    @Convert(converter = ISBNStringConverter::class)
+    @Basic
+    var isbn: ISBN? = null,
     @Id var id: String? = null
 ) {
     companion object {
