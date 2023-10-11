@@ -3,4 +3,8 @@ ignore:
     'SNYK-JAVA-COMH2DATABASE-31685':
      - '* > com.h2database:h2@2.2.220':
         reason: 'No fix available'
-        expires: '2024-01-01T00:00:00.000Z'
+        expires: '2023-11-01T00:00:00.000Z'
+    'SNYK-JAVA-ORGAPACHETOMCATEMBED-5953331':
+     - '* > org.apache.tomcat.embed:tomcat-embed-core@10.1.13':
+        reason: 'No fix available'
+        expires: '2023-11-01T00:00:00.000Z'
