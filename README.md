@@ -24,7 +24,7 @@ library related resources.
 * [ ] Deployment
 * [ ] Database (pot. self managed as a container?)
 * [ ] Auth
-* [ ] Testing
+* [x] Testing
 * [ ] Load testing
 * [x] DB Setup
 * [x] Dockerfile / not needed we use build packs
@@ -40,7 +40,8 @@ library related resources.
 * [x] Signed commit
 * [ ] Transactions
 * [ ] Rest assured
-* [ ] Optimistic locking
+* [ ] Cosign
+* [ ] Distroless base image
 
 ### Reading
 
@@ -56,6 +57,18 @@ https://code.haleby.se/2019/09/06/rest-assured-in-kotlin/
 https://github.com/rest-assured/rest-assured/wiki/GettingStarted
 https://reflectoring.io/objectmother-fluent-builder/
 https://openlibrary.org/dev/docs/api/books
+https://www.innoq.com/en/articles/2023/10/spring-boot-testing/
+https://www.baeldung.com/kotlin/mockmvc-kotlin-dsl
+https://code.haleby.se/2019/09/06/rest-assured-in-kotlin/
+implementation("com.squareup.okhttp3:okhttp:4.9.0")
+
+https://microcks.io/documentation/getting-started/
+https://edu.chainguard.dev/chainguard/chainguard-images/reference/jdk/provenance_info/
+
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order
+to avoid potential conflicts
+
+
 
 
 
