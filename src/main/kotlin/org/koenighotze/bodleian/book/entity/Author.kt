@@ -1,16 +1,21 @@
 package org.koenighotze.bodleian.book.entity
 
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.ManyToMany
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import java.util.UUID.randomUUID
+
+typealias AuthorId = String
 
 @Entity
 @Table(name = "AUTHORS")
 class Author(
-    @ManyToMany(mappedBy = "authors") var authorsGroup: MutableSet<AuthorsGroup> = mutableSetOf(),
-    var firstName: String, var lastName: String, @Id var id: String? = null
+    @ManyToMany(mappedBy = "authors")
+    var authorsGroup: MutableSet<AuthorsGroup> = mutableSetOf(),
+    @Column(nullable = false, length = 100)
+    var firstName: String,
+    @Column(nullable = false, length = 100)
+    var lastName: String,
+    @Column(nullable = false, length = 36)
+    @Id var id: AuthorId? = null
 ) {
     companion object {
         fun randomId() = randomUUID().toString()

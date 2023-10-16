@@ -3,8 +3,11 @@ package org.koenighotze.bodleian.book.entity
 import jakarta.persistence.*
 import jakarta.persistence.CascadeType.MERGE
 import jakarta.persistence.CascadeType.PERSIST
+import jakarta.persistence.FetchType.EAGER
 import jakarta.persistence.FetchType.LAZY
 import java.util.UUID.randomUUID
+
+typealias AuthorsGroupId = String
 
 @Entity
 @Table(name = "AUTHORS_GROUP")
@@ -16,11 +19,12 @@ class AuthorsGroup(
     )
     var books: MutableSet<Book> = mutableSetOf(),
     @ManyToMany(
-        cascade = [MERGE, PERSIST]
+        cascade = [MERGE, PERSIST],
+        fetch = EAGER // TODO TEST FOR THIS!!!
     )
     var authors: MutableSet<Author>,
     @Id
-    var id: String? = null
+    var id: AuthorsGroupId? = null,
 ) {
     companion object {
         fun randomId() = randomUUID().toString()

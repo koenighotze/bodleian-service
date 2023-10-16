@@ -6,10 +6,12 @@ import jakarta.persistence.CascadeType.PERSIST
 import jakarta.persistence.FetchType.EAGER
 import java.util.UUID.randomUUID
 
+typealias BookId = String
 
 @Entity
 @Table(name = "BOOKS")
 class Book(
+    @Column(nullable = false, length = 100)
     var title: String,
     @JoinColumn
     @ManyToOne(
@@ -17,13 +19,14 @@ class Book(
         fetch = EAGER,
         optional = false
     ) var authorsGroup: AuthorsGroup? = null,
-    @Convert(converter = ISBNStringConverter::class)
     @Basic
+    @Convert(converter = ISBNStringConverter::class)
+    @Column(nullable = true, length = 36)
     var isbn: ISBN? = null,
-    @Id var id: String? = null
+    @Column(nullable = false, length = 36, updatable = false)
+    @Id var id: BookId? = null
 ) {
     companion object {
-
         fun randomId() = randomUUID().toString()
     }
 
