@@ -36,17 +36,10 @@ if [[ -n "${GIT_TAG:=}" ]]; then
 fi
 echo "$DOCKER_BUILD_OPTIONS"
 
-# # shellcheck disable=SC2086
-# docker buildx build --${OUTPUT_MODE} \
-#   --tag "$IMAGE_NAME" $DOCKER_BUILD_OPTIONS \
-#   --label "org.opencontainers.image.revision=${GITHUB_SHA}" \
-#   --label "org.opencontainers.image.created=${NOW}" \
-#   .
-
 OCI_REVISION="${GITHUB_SHA}" \
 OCI_SOURCE="$(git config --get remote.origin.url)" \
 OCI_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" \
-  ./gradlew bootBuildImage --imageName="$IMAGE_NAME"  # "$OUTPUT_MODE"
+  ./gradlew bootBuildImage --imageName="$IMAGE_NAME"  --builder paketobuildpacks/builder:tiny # "$OUTPUT_MODE"
 
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
     # shellcheck disable=SC2086
