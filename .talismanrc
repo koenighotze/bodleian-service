@@ -2,6 +2,8 @@ threshold: high
 
 fileignoreconfig:
 - filename: README.md
+  checksum: b86a7545f1ee52c9dda19132e9bb4d2902de1cc5afd811f7ee4c06c6fcace331
+- filename: README.md
   checksum: a06935ac76ce381fcfec7c6f99e83f1a211dbcc461a980f5d3fda3d1a9220f7b
 - filename: .github/workflows/build-and-deploy.yml
   checksum: 863f6b7de615286bc566b7277a33dcd138621e571ad122a52665baa400722bf9
