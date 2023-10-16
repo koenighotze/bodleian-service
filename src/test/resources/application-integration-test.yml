@@ -1,6 +1,7 @@
+# Configuration for running the integration tests
+
 spring:
   jpa:
-    show-sql: true
     hibernate:
       ddl-auto: create
     properties:

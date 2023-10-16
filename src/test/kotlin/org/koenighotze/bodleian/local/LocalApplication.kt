@@ -5,14 +5,16 @@ import com.github.dockerjava.api.model.HostConfig
 import com.github.dockerjava.api.model.PortBinding
 import com.github.dockerjava.api.model.Ports
 import org.koenighotze.bodleian.Application
-import org.springframework.boot.fromApplication
+import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.PropertySource
 import org.testcontainers.containers.PostgreSQLContainer
 
 
 @TestConfiguration(proxyBeanMethods = false)
+@PropertySource("classpath:/application-local.yml")
 internal class LocalApplicationConfiguration {
     @Bean
     @ServiceConnection
@@ -20,6 +22,10 @@ internal class LocalApplicationConfiguration {
         val containerPort = 5432
         val localPort = 5432
 
+//      TODO: try using wolfi
+//        val container = PostgreSQLContainer(
+//            DockerImageName.parse("cgr.dev/chainguard/postgres:latest-dev").asCompatibleSubstituteFor("postgres")
+//        )
         val container = PostgreSQLContainer("postgres:16.0-alpine3.18")
             .withDatabaseName("bodleian")
             .withUsername("postgres")
@@ -38,6 +44,10 @@ internal class LocalApplicationConfiguration {
 }
 
 fun main(args: Array<String>) {
-    fromApplication<Application>().with(LocalApplicationConfiguration::class.java).run(*args)
+    SpringApplicationBuilder()
+        .profiles("local")
+        .sources(Application::class.java)
+        .sources(LocalApplicationConfiguration::class.java)
+        .run()
 }
 

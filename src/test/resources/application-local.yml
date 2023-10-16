@@ -1,0 +1,9 @@
+# Configuration for running the application locally
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        generate_statistics: true
