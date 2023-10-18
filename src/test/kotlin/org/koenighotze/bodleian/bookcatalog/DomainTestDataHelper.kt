@@ -1,9 +1,9 @@
-package org.koenighotze.bodleian.book
+package org.koenighotze.bodleian.bookcatalog
 
-import org.koenighotze.bodleian.book.entity.Author
-import org.koenighotze.bodleian.book.entity.AuthorsGroup
-import org.koenighotze.bodleian.book.entity.Book
-import org.koenighotze.bodleian.book.entity.ISBN
+import org.koenighotze.bodleian.bookcatalog.entity.Author
+import org.koenighotze.bodleian.bookcatalog.entity.AuthorsGroup
+import org.koenighotze.bodleian.bookcatalog.entity.Book
+import org.koenighotze.bodleian.bookcatalog.entity.ISBN
 import java.util.*
 import java.util.UUID.randomUUID
 

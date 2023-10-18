@@ -1,4 +1,4 @@
-package org.koenighotze.bodleian.book.entity
+package org.koenighotze.bodleian.bookcatalog.entity
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter

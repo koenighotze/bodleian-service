@@ -1,14 +1,14 @@
-package org.koenighotze.bodleian.book.dto
+package org.koenighotze.bodleian.bookcatalog.dto
 
 import jakarta.persistence.Id
-import org.koenighotze.bodleian.book.dto.AuthorsGroupDTO.Companion.fromAuthorsGroup
-import org.koenighotze.bodleian.book.entity.Book
+import org.koenighotze.bodleian.bookcatalog.dto.AuthorsGroupDTO.Companion.fromAuthorsGroup
+import org.koenighotze.bodleian.bookcatalog.entity.Book
 
 data class BookDTO(
     val title: String,
     val authorsGroup: AuthorsGroupDTO,
     val isbn: String? = null,
-    @Id val id: String? = null
+    @Id val id: String? = null,
 ) {
     companion object {
         fun fromBook(book: Book) =

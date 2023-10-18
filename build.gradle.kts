@@ -47,6 +47,8 @@ dependencies {
 // 	implementation("org.flywaydb:flyway-core")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+    implementation("org.springframework.retry:spring-retry")
+
 // 	implementation("org.springframework.modulith:spring-modulith-starter-core")
 // 	implementation("org.springframework.modulith:spring-modulith-starter-jpa")
     developmentOnly("org.springframework.boot:spring-boot-devtools")

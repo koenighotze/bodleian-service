@@ -1,6 +1,6 @@
-package org.koenighotze.bodleian.book.dto
+package org.koenighotze.bodleian.bookcatalog.dto
 
-import org.koenighotze.bodleian.book.entity.Book
+import org.koenighotze.bodleian.bookcatalog.entity.Book
 
 data class BooksDTO(val books: Collection<BookDTO>) {
     companion object {

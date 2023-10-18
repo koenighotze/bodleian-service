@@ -5,10 +5,7 @@ spring:
     open-in-view: false
     generate-ddl: false
 
-
-Foo: "bar"
-
 bodleian:
   externalServices:
     openLibrary:
-      apiBaseUrl: "foo"
+      apiBaseUrl: https://openlibrary.org/

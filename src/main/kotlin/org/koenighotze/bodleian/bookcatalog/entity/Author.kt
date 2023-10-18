@@ -1,4 +1,4 @@
-package org.koenighotze.bodleian.book.entity
+package org.koenighotze.bodleian.bookcatalog.entity
 
 import jakarta.persistence.*
 import java.util.UUID.randomUUID
@@ -15,7 +15,7 @@ class Author(
     @Column(nullable = false, length = 100)
     var lastName: String,
     @Column(nullable = false, length = 36)
-    @Id var id: AuthorId? = null
+    @Id var id: AuthorId? = null,
 ) {
     companion object {
         fun randomId() = randomUUID().toString()

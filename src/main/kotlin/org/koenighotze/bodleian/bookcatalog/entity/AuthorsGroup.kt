@@ -1,4 +1,4 @@
-package org.koenighotze.bodleian.book.entity
+package org.koenighotze.bodleian.bookcatalog.entity
 
 import jakarta.persistence.*
 import jakarta.persistence.CascadeType.MERGE
@@ -20,7 +20,7 @@ class AuthorsGroup(
     var books: MutableSet<Book> = mutableSetOf(),
     @ManyToMany(
         cascade = [MERGE, PERSIST],
-        fetch = EAGER // TODO TEST FOR THIS!!!
+        fetch = EAGER
     )
     var authors: MutableSet<Author>,
     @Id

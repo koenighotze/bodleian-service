@@ -1,4 +1,4 @@
-package org.koenighotze.bodleian.book
+package org.koenighotze.bodleian.bookcatalog
 
 import io.mockk.every
 import io.mockk.mockk
@@ -8,15 +8,15 @@ import org.junit.Ignore
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.koenighotze.bodleian.book.DomainTestDataHelper.randomBook
-import org.koenighotze.bodleian.book.dto.BookDTO
-import org.koenighotze.bodleian.book.entity.AuthorsGroup
-import org.koenighotze.bodleian.book.entity.Book
-import org.koenighotze.bodleian.book.entity.ISBN
+import org.koenighotze.bodleian.bookcatalog.DomainTestDataHelper.randomBook
+import org.koenighotze.bodleian.bookcatalog.dto.BookDTO
+import org.koenighotze.bodleian.bookcatalog.entity.AuthorsGroup
+import org.koenighotze.bodleian.bookcatalog.entity.Book
+import org.koenighotze.bodleian.bookcatalog.entity.ISBN
 import org.springframework.http.HttpStatus.*
 import java.util.*
 
-class BookControllerTest {
+class BookCatalogControllerTest {
     @Nested
     @DisplayName("when updating a single book")
     @Ignore
@@ -84,25 +84,25 @@ class BookControllerTest {
         @Test
         fun `and the book is found, should delete the book`() {
             val expectedBook = randomBook()
-            val bookManager = mockk<BookManager>()
-            every { bookManager.getBookById(expectedBook.id!!) } returns Optional.of(expectedBook)
-            every { bookManager.deleteBook(expectedBook) } returns true
-            val controller = BookController(bookManager)
+            val bookCatalogManager = mockk<BookCatalogManager>()
+            every { bookCatalogManager.getBookById(expectedBook.id!!) } returns Optional.of(expectedBook)
+            every { bookCatalogManager.deleteBook(expectedBook) } returns true
+            val controller = BookCatalogController(bookCatalogManager)
 
             val response = controller.deleteBook(expectedBook.id!!)
 
             assertThat(response.statusCode).isEqualTo(OK)
             verify(exactly = 1) {
-                bookManager.deleteBook(expectedBook)
+                bookCatalogManager.deleteBook(expectedBook)
             }
         }
 
         @Test
         fun `and the book is not found, should return 404`() {
             val expectedBook = randomBook()
-            val bookManager = mockk<BookManager>()
-            every { bookManager.getBookById(expectedBook.id!!) } returns Optional.empty()
-            val controller = BookController(bookManager)
+            val bookCatalogManager = mockk<BookCatalogManager>()
+            every { bookCatalogManager.getBookById(expectedBook.id!!) } returns Optional.empty()
+            val controller = BookCatalogController(bookCatalogManager)
 
             val response = controller.deleteBook(expectedBook.id!!)
 
@@ -121,9 +121,9 @@ class BookControllerTest {
         @Test
         fun `and the book is found, should return the book`() {
             val book = Book(title = "foo", isbn = ISBN("12345"), id = Book.randomId())
-            val bookManager = mockk<BookManager>()
-            every { bookManager.getBookById(book.id!!) } returns Optional.of(book)
-            val controller = BookController(bookManager)
+            val bookCatalogManager = mockk<BookCatalogManager>()
+            every { bookCatalogManager.getBookById(book.id!!) } returns Optional.of(book)
+            val controller = BookCatalogController(bookCatalogManager)
 
             val response = controller.getBookById(book.id!!)
 
@@ -133,9 +133,9 @@ class BookControllerTest {
 
         @Test
         fun `and the book is not found, should return 404`() {
-            val bookManager = mockk<BookManager>()
-            every { bookManager.getBookById(any()) } returns Optional.empty()
-            val controller = BookController(bookManager)
+            val bookCatalogManager = mockk<BookCatalogManager>()
+            every { bookCatalogManager.getBookById(any()) } returns Optional.empty()
+            val controller = BookCatalogController(bookCatalogManager)
 
             val response = controller.getBookById("someid")
 
@@ -144,9 +144,9 @@ class BookControllerTest {
 
         @Test
         fun `and an error occurs, should return a internal error`() {
-            val bookManager = mockk<BookManager>()
-            every { bookManager.getBookById(any()) } throws RuntimeException("Bumm")
-            val controller = BookController(bookManager)
+            val bookCatalogManager = mockk<BookCatalogManager>()
+            every { bookCatalogManager.getBookById(any()) } throws RuntimeException("Bumm")
+            val controller = BookCatalogController(bookCatalogManager)
 
             val response = controller.getBookById("someid")
 
@@ -160,9 +160,9 @@ class BookControllerTest {
     inner class GettingBooks {
         @Test
         fun `and no books are found, should return an empty collection`() {
-            val bookManager = mockk<BookManager>()
-            every { bookManager.allBooks() } returns emptyList()
-            val controller = BookController(bookManager)
+            val bookCatalogManager = mockk<BookCatalogManager>()
+            every { bookCatalogManager.allBooks() } returns emptyList()
+            val controller = BookCatalogController(bookCatalogManager)
 
             val response = controller.getAllBooks()
 
@@ -178,10 +178,10 @@ class BookControllerTest {
                 authorsGroup = AuthorsGroup(id = AuthorsGroup.randomId(), authors = mutableSetOf()),
                 id = Book.randomId()
             )
-            val bookManager = mockk<BookManager>()
+            val bookCatalogManager = mockk<BookCatalogManager>()
 
-            every { bookManager.allBooks() } returns listOf(expectedBook)
-            val controller = BookController(bookManager)
+            every { bookCatalogManager.allBooks() } returns listOf(expectedBook)
+            val controller = BookCatalogController(bookCatalogManager)
 
             val response = controller.getAllBooks()
 
@@ -196,10 +196,10 @@ class BookControllerTest {
 
         @Test
         fun `and an error occurs, should return an internal error`() {
-            val bookManager = mockk<BookManager>()
+            val bookCatalogManager = mockk<BookCatalogManager>()
 
-            every { bookManager.allBooks() } throws RuntimeException("Bumm")
-            val controller = BookController(bookManager)
+            every { bookCatalogManager.allBooks() } throws RuntimeException("Bumm")
+            val controller = BookCatalogController(bookCatalogManager)
 
             val response = controller.getAllBooks()
 

@@ -1,6 +1,6 @@
-package org.koenighotze.bodleian.book.dto
+package org.koenighotze.bodleian.bookcatalog.dto
 
-import org.koenighotze.bodleian.book.entity.AuthorsGroup
+import org.koenighotze.bodleian.bookcatalog.entity.AuthorsGroup
 
 data class AuthorsGroupDTO(val authors: Set<AuthorDTO>, val id: String? = null) {
     companion object {

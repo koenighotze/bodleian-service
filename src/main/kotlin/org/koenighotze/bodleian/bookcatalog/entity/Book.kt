@@ -1,4 +1,4 @@
-package org.koenighotze.bodleian.book.entity
+package org.koenighotze.bodleian.bookcatalog.entity
 
 import jakarta.persistence.*
 import jakarta.persistence.CascadeType.MERGE
@@ -24,7 +24,7 @@ class Book(
     @Column(nullable = true, length = 36)
     var isbn: ISBN? = null,
     @Column(nullable = false, length = 36, updatable = false)
-    @Id var id: BookId? = null
+    @Id var id: BookId? = null,
 ) {
     companion object {
         fun randomId() = randomUUID().toString()
