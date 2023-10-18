@@ -41,7 +41,8 @@ library related resources.
 * [ ] Transactions
 * [ ] Rest assured
 * [ ] Cosign
-* [ ] Distroless base image
+* [x] Distroless base image
+* [ ] Use Webclient
 
 ### Reading
 

@@ -117,6 +117,7 @@ tasks.register("integrationTests", Test::class.java) {
         excludeTestsMatching("*Test.*")
     }
     testLogging.showStandardStreams = true
+    maxParallelForks = 1
 }
 
 tasks.named("check") {

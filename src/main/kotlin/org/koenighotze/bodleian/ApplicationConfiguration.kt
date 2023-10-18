@@ -17,7 +17,7 @@ class ApplicationConfiguration {
     fun resilientOpenLibraryRestTemplate(builder: RestTemplateBuilder): RestTemplate =
         builder
             .rootUri(openLibraryBookApiBaseUrl)
-            .setConnectTimeout(ofSeconds(3))
-            .setReadTimeout(ofSeconds(3))
+            .setConnectTimeout(ofSeconds(10))
+            .setReadTimeout(ofSeconds(10))
             .build()
 }

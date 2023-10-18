@@ -1,4 +1,5 @@
 package org.koenighotze.bodleian.bookcatalog.openlibrary
 
-
-data class Classifications(val foo: String)
+data class OpenLibraryAuthor(
+    var name: String,
+)

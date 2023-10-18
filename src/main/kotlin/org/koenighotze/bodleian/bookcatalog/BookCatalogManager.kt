@@ -3,18 +3,17 @@ package org.koenighotze.bodleian.bookcatalog
 import org.koenighotze.bodleian.Manager
 import org.koenighotze.bodleian.bookcatalog.entity.Book
 import org.koenighotze.bodleian.bookcatalog.entity.ISBN
-import org.koenighotze.bodleian.bookcatalog.openlibrary.OpenLibraryBook
+import org.koenighotze.bodleian.bookcatalog.openlibrary.OpenLibraryService
 import org.slf4j.LoggerFactory
-import org.springframework.web.client.RestTemplate
 import java.util.*
 
 @Manager
 class BookCatalogManager(
     private val repository: BookRepository,
-    private val resilientOpenLibraryRestTemplate: RestTemplate,
+    private val openLibraryService: OpenLibraryService,
 ) {
     companion object {
-        val logger = LoggerFactory.getLogger(BookCatalogManager::class.java)
+        private val logger = LoggerFactory.getLogger(BookCatalogManager::class.java)
     }
 
     fun allBooks(): Collection<Book> = repository.findAll().toList()
@@ -24,17 +23,14 @@ class BookCatalogManager(
         return true
     }
 
-    fun addExternalBookToCatalog(isbn: ISBN): Book? {
-        val x = "9780140328721"
+    fun addExternalBookToCatalog(isbn: ISBN): Optional<Book> {
+        val existingBook: Optional<Book> = repository.findBookByIsbn(isbn)
+        if (existingBook.isPresent) {
+            logger.debug("Book with isbn {} is already in the collection", isbn)
+            return existingBook
+        }
 
-        logger.debug("Calling api on openlib")
-        val openLibraryBookResponse = resilientOpenLibraryRestTemplate.getForEntity(
-            "/isbn/${x}.json",
-            OpenLibraryBook::class.java
-        )
-
-        logger.debug("received: $openLibraryBookResponse")
-
-        return null
+        return openLibraryService.fetchBookDefinitionFromOpenBook(isbn)
+            .map { repository.save(it) }
     }
 }

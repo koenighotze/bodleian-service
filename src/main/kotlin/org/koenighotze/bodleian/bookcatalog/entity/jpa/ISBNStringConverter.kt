@@ -1,7 +1,8 @@
-package org.koenighotze.bodleian.bookcatalog.entity
+package org.koenighotze.bodleian.bookcatalog.entity.jpa
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
+import org.koenighotze.bodleian.bookcatalog.entity.ISBN
 
 @Converter
 class ISBNStringConverter : AttributeConverter<ISBN?, String?> {

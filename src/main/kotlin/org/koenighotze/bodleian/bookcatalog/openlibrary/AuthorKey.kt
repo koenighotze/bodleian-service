@@ -1,8 +1,5 @@
 package org.koenighotze.bodleian.bookcatalog.openlibrary
 
-
-data class Works(
-
+data class AuthorKey(
     var key: String? = null,
-
-    )
+)

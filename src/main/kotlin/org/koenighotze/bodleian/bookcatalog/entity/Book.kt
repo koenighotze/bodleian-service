@@ -4,6 +4,8 @@ import jakarta.persistence.*
 import jakarta.persistence.CascadeType.MERGE
 import jakarta.persistence.CascadeType.PERSIST
 import jakarta.persistence.FetchType.EAGER
+import org.koenighotze.bodleian.bookcatalog.entity.jpa.ISBNStringConverter
+import org.koenighotze.bodleian.bookcatalog.entity.jpa.OpenBookApiIdStringConverter
 import java.util.UUID.randomUUID
 
 typealias BookId = String
@@ -23,6 +25,10 @@ class Book(
     @Convert(converter = ISBNStringConverter::class)
     @Column(nullable = true, length = 36)
     var isbn: ISBN? = null,
+    @Column(nullable = true, length = 36)
+    @Basic
+    @Convert(converter = OpenBookApiIdStringConverter::class)
+    var openBookApiId: OpenBookApiId? = null,
     @Column(nullable = false, length = 36, updatable = false)
     @Id var id: BookId? = null,
 ) {
@@ -30,14 +36,14 @@ class Book(
         fun randomId() = randomUUID().toString()
     }
 
-    fun withAuthorsGroup(newAuthorsGroup: AuthorsGroup): Book {
-        newAuthorsGroup.withBook(this)
+    fun withAuthorsGroup(newAuthorsGroup: AuthorsGroup?): Book {
+        newAuthorsGroup?.withBook(this)
 
         return this
     }
 
     override fun toString(): String {
-        return "Book(title='$title', authorsGroup=$authorsGroup, isbn=$isbn, id=$id)"
+        return "Book(title='$title', authorsGroup=$authorsGroup, isbn=$isbn, openBookApiId=$openBookApiId id=$id)"
     }
 
 

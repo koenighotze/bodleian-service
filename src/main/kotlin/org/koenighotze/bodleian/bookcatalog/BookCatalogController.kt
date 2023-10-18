@@ -24,11 +24,11 @@ class BookCatalogController(private val bookCatalogManager: BookCatalogManager) 
         TODO()
     }
 
-    @GetMapping("/foo")
-    fun getBookByISBNTryout(): ResponseEntity<BookDTO> {
-        val book = bookCatalogManager.addExternalBookToCatalog(ISBN("foo"))
-        logger.info("$book")
-        return notFound().build()
+    @GetMapping("/foo/{isbn}") // e.g., 9780140328721
+    fun getBookByISBNTryout(@PathVariable isbn: ISBN): ResponseEntity<BookDTO> {
+        return bookCatalogManager.addExternalBookToCatalog(isbn)
+            .map { ok(BookDTO.fromBook(it)) }
+            .orElse(notFound().build())
     }
 
     @GetMapping

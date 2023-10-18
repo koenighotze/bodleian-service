@@ -10,10 +10,10 @@ typealias AuthorId = String
 class Author(
     @ManyToMany(mappedBy = "authors")
     var authorsGroup: MutableSet<AuthorsGroup> = mutableSetOf(),
-    @Column(nullable = false, length = 100)
-    var firstName: String,
-    @Column(nullable = false, length = 100)
-    var lastName: String,
+    @Column(nullable = true, length = 100)
+    var firstName: String?,
+    @Column(nullable = true, length = 100)
+    var lastName: String?,
     @Column(nullable = false, length = 36)
     @Id var id: AuthorId? = null,
 ) {

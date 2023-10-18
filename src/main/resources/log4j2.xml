@@ -44,6 +44,7 @@
 
         <Logger name="org.koenighotze" level="debug"/>
         <Logger name="org.springframework" level="info"/>
+        <Logger name="org.springframework.web.client" level="info"/>
         <Root level="warn">
             <AppenderRef ref="RollingName"/>
             <AppenderRef ref="Console"/>
