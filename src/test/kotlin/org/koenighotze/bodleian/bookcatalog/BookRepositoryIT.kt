@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koenighotze.bodleian.IntegrationTest
 import org.koenighotze.bodleian.bookcatalog.DomainTestDataHelper.randomBook
+import org.koenighotze.bodleian.bookcatalog.entity.Book
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection
 import org.testcontainers.containers.PostgreSQLContainer
@@ -12,7 +13,7 @@ import org.testcontainers.junit.jupiter.Container
 
 @IntegrationTest
 class BookRepositoryIT(@Autowired var repository: BookRepository) {
-    private val knownBook = randomBook()
+    private lateinit var knownBook: Book
 
     companion object {
         @Container
@@ -22,6 +23,7 @@ class BookRepositoryIT(@Autowired var repository: BookRepository) {
 
     @BeforeEach
     fun setupBooks() {
+        knownBook = randomBook()
         repository.save(knownBook)
     }
 
@@ -36,7 +38,7 @@ class BookRepositoryIT(@Autowired var repository: BookRepository) {
     fun `The repository returns the book, author group and the authors`() {
         val book = repository.findById(knownBook.id!!)
 
-        assertThat(book.get().authorsGroup!!.authors).isNotEmpty()
+        assertThat(book.get().authorsGroup.authors).isNotEmpty()
     }
 
     @Test

@@ -8,14 +8,17 @@ import java.util.*
 import java.util.UUID.randomUUID
 
 object DomainTestDataHelper {
-    fun randomBook() = Book(
-        isbn = ISBN(randomUUID().toString()),
-        title = "Random Title ${randomUUID()}",
-        authorsGroup = randomAuthorsGroup(),
-        id = Book.randomId()
-    )
+    fun randomBook(): Book {
+        return Book(
+            isbn = ISBN(randomUUID().toString()),
+            title = "Random Title ${randomUUID()}",
+            id = Book.randomId()
+        ).withAuthorsGroup(randomAuthorsGroup())
+    }
 
-    fun randomAuthorsGroup() = AuthorsGroup(id = AuthorsGroup.randomId(), authors = randomAuthors())
+    fun randomAuthorsGroup() = AuthorsGroup(id = AuthorsGroup.randomId()).withAuthors(
+        randomAuthors()
+    )
 
     fun randomAuthors() = 1.until(Random().nextInt(1, 4)).map { randomAuthor() }.toMutableSet()
 

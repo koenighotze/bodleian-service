@@ -20,7 +20,7 @@ class Book(
         cascade = [MERGE, PERSIST],
         fetch = EAGER,
         optional = false
-    ) var authorsGroup: AuthorsGroup? = null,
+    ) var authorsGroup: AuthorsGroup = AuthorsGroup(authors = mutableSetOf(), id = AuthorsGroupId()),
     @Basic
     @Convert(converter = ISBNStringConverter::class)
     @Column(nullable = true, length = 36)
@@ -36,8 +36,9 @@ class Book(
         fun randomId() = randomUUID().toString()
     }
 
-    fun withAuthorsGroup(newAuthorsGroup: AuthorsGroup?): Book {
-        newAuthorsGroup?.withBook(this)
+    fun withAuthorsGroup(newAuthorsGroup: AuthorsGroup): Book {
+        authorsGroup = newAuthorsGroup
+        authorsGroup.books.add(this)
 
         return this
     }

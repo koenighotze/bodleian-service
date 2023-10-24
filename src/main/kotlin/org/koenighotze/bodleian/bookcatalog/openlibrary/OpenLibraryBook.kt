@@ -28,7 +28,7 @@ data class OpenLibraryBook(
         } else
             null
 
-    fun toBook(authorsGroup: AuthorsGroup? = null) = Book(
+    fun toBook(authorsGroup: AuthorsGroup) = Book(
         id = randomId(),
         isbn = isbn,
         title = title ?: "unknown",

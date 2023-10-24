@@ -1,9 +1,6 @@
 package org.koenighotze.bodleian.bookcatalog.openlibrary
 
-import org.koenighotze.bodleian.bookcatalog.entity.Author
-import org.koenighotze.bodleian.bookcatalog.entity.AuthorsGroup
-import org.koenighotze.bodleian.bookcatalog.entity.Book
-import org.koenighotze.bodleian.bookcatalog.entity.ISBN
+import org.koenighotze.bodleian.bookcatalog.entity.*
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
@@ -40,7 +37,6 @@ class OpenLibraryService(private val resilientOpenLibraryRestTemplate: RestTempl
             OpenLibraryBook::class.java
         ) // TODO: handle exception
 
-
         if (null == openLibraryBookResponse.body) {
             return empty()
         }
@@ -53,9 +49,9 @@ class OpenLibraryService(private val resilientOpenLibraryRestTemplate: RestTempl
 
         val book =
             openLibraryBookResponse.body!!.toBook(
-                authorsGroup = if (null == authorKeys) null else AuthorsGroup(
+                authorsGroup = if (null == authorKeys) AuthorsGroup(id = AuthorsGroupId()) else AuthorsGroup(
                     authors = authorKeys,
-                    id = AuthorsGroup.randomId()
+                    id = AuthorsGroupId()
                 )
             )
         return of(book)

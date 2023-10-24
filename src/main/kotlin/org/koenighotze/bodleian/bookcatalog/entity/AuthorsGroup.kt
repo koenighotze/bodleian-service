@@ -22,7 +22,7 @@ class AuthorsGroup(
         cascade = [MERGE, PERSIST],
         fetch = EAGER
     )
-    var authors: MutableSet<Author>,
+    var authors: MutableSet<Author> = mutableSetOf(),
     @Id
     var id: AuthorsGroupId? = null,
 ) {
@@ -30,16 +30,16 @@ class AuthorsGroup(
         fun randomId() = randomUUID().toString()
     }
 
-    fun join(author: Author): AuthorsGroup {
-        author.authorsGroup.add(this)
-        authors.add(author)
+    fun withAuthors(authors: Set<Author>): AuthorsGroup {
+        this.authors.clear()
+        authors.forEach { author -> this.withAuthor(author) }
 
         return this
     }
 
-    fun withBook(book: Book): AuthorsGroup {
-        books.add(book)
-        book.authorsGroup = this
+    fun withAuthor(author: Author): AuthorsGroup {
+        author.authorsGroup.add(this)
+        authors.add(author)
 
         return this
     }
