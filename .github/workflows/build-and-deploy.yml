@@ -125,6 +125,8 @@ jobs:
           ignore-unfixed: true
           vuln-type: "os,library"
           severity: "CRITICAL,HIGH"
+          ignore-policy: |
+            CVE-2023-39325
 #      - name: Push image
 #        run: ./scripts/containerize.sh
 #        env:

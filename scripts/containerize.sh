@@ -39,7 +39,11 @@ echo "$DOCKER_BUILD_OPTIONS"
 OCI_REVISION="${GITHUB_SHA}" \
 OCI_SOURCE="$(git config --get remote.origin.url)" \
 OCI_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" \
-  ./gradlew bootBuildImage --imageName="$IMAGE_NAME"  --builder paketobuildpacks/builder:tiny # "$OUTPUT_MODE"
+  ./gradlew bootBuildImage \
+            --imageName="$IMAGE_NAME" \
+            # "$OUTPUT_MODE"
+            --no-publishImage \
+            --builder paketobuildpacks/builder:tiny
 
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
     # shellcheck disable=SC2086
