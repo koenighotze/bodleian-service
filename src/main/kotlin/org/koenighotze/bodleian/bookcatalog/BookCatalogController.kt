@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.*
 import org.springframework.web.bind.annotation.*
+import java.net.URI
 
 
 @RestController
@@ -19,15 +20,10 @@ class BookCatalogController(private val bookCatalogManager: BookCatalogManager) 
         val logger: Logger = LoggerFactory.getLogger(BookCatalogController::class.java)
     }
 
-    @PutMapping("/{isbn}")
-    fun addExternalBookToCatalog(@PathVariable isbn: ISBN) {
-        TODO()
-    }
-
-    @GetMapping("/foo/{isbn}") // e.g., 9780140328721
-    fun getBookByISBNTryout(@PathVariable isbn: ISBN): ResponseEntity<BookDTO> {
+    @PostMapping("/{isbn}") // e.g., 9780140328721
+    fun addExternalBookToCatalog(@PathVariable isbn: ISBN): ResponseEntity<BookDTO> {
         return bookCatalogManager.addExternalBookToCatalog(isbn)
-            .map { ok(BookDTO.fromBook(it)) }
+            .map { created(URI.create("/books/${it.id}")).body(BookDTO.fromBook(it)) }
             .orElse(notFound().build())
     }
 

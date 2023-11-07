@@ -60,8 +60,13 @@ dependencies {
 //    runtimeOnly("org.springframework.modulith:spring-modulith-actuator")
 //    runtimeOnly("org.springframework.modulith:spring-modulith-observability")
     testImplementation("io.rest-assured:rest-assured:5.3.2")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(module = "mockito-core")
+    }
+    testImplementation(group = "org.wiremock", name = "wiremock", version = "3.3.1")
+
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
+    testImplementation("com.ninja-squad:springmockk:4.0.0")
 //    testImplementation("io.projectreactor:reactor-test")
 //    testImplementation("org.springframework.modulith:spring-modulith-starter-test")
     testImplementation("org.testcontainers:junit-jupiter")

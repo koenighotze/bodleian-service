@@ -190,7 +190,7 @@ class BookCatalogControllerTest {
             with(response.body!!.books.first()) {
                 assertThat(title).isEqualTo(expectedBook.title)
                 assertThat(id).isEqualTo(expectedBook.id)
-                assertThat(authorsGroup.id).isEqualTo(expectedBook.authorsGroup!!.id)
+                assertThat(authorsGroup.id).isEqualTo(expectedBook.authorsGroup.id)
             }
         }
 

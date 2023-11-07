@@ -7,3 +7,8 @@ spring:
     properties:
       hibernate:
         generate_statistics: true
+
+bodleian:
+  externalServices:
+    openLibrary:
+      apiBaseUrl: http://localhost:8081
