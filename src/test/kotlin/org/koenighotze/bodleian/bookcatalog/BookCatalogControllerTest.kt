@@ -104,7 +104,15 @@ class BookCatalogControllerTest {
 
         @Test
         fun `and an error occurs, should return a internal error`() {
+            val expectedBook = randomBook()
+            val bookCatalogManager = mockk<BookCatalogManager>()
+            every { bookCatalogManager.getBookById(expectedBook.id!!) } returns Optional.of(expectedBook)
+            every { bookCatalogManager.deleteBook(expectedBook) } throws RuntimeException("Bumm")
+            val controller = BookCatalogController(bookCatalogManager)
 
+            val response = controller.deleteBook(expectedBook.id!!)
+
+            assertThat(response.statusCode).isEqualTo(INTERNAL_SERVER_ERROR)
         }
     }
 

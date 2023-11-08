@@ -5,35 +5,35 @@ import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.koenighotze.bodleian.bookcatalog.entity.Book
 import org.koenighotze.bodleian.bookcatalog.entity.ISBN
 import org.koenighotze.bodleian.bookcatalog.entity.OpenBookApiId
 import org.springframework.http.ResponseEntity
 import org.springframework.web.client.RestTemplate
-import java.util.*
+import java.util.UUID.randomUUID
 
 class OpenLibraryServiceTest {
-    private val isbn = UUID.randomUUID().toString()
+    private val isbn = randomUUID().toString()
     private val expectedOpenLibraryBook = OpenLibraryBook(
-        title = UUID.randomUUID().toString(),
+        title = randomUUID().toString(),
         isbn10 = arrayListOf(isbn),
-        key = "/books/${UUID.randomUUID()}"
+        key = "/books/${randomUUID()}",
+        authors = arrayListOf(AuthorKey(key = "/authors/${randomUUID()}"))
     )
-    private val expectedBook = Book(
-        title = expectedOpenLibraryBook.title!!,
-        isbn = expectedOpenLibraryBook.isbn,
-        openBookApiId = OpenBookApiId(expectedOpenLibraryBook.key!!)
-    )
+    private val expectedOpenLibraryAuthor = OpenLibraryAuthor(name = "Bratislav Metulski")
     private val mockTemplate = mockk<RestTemplate>()
     private val openLibraryService = OpenLibraryService(mockTemplate)
 
     @Test
     fun `and the book is found, should add the book to the catalog`() {
-        val response = ResponseEntity.ok(expectedOpenLibraryBook)
+        val expectedOpenLibraryBookResponse = ResponseEntity.ok(expectedOpenLibraryBook)
+        val expectedOpenLibraryAuthorResponse = ResponseEntity.ok(expectedOpenLibraryAuthor)
 
         every {
             mockTemplate.getForEntity(any<String>(), OpenLibraryBook::class.java)
-        } returns response
+        } returns expectedOpenLibraryBookResponse
+        every {
+            mockTemplate.getForEntity(any<String>(), OpenLibraryAuthor::class.java)
+        } returns expectedOpenLibraryAuthorResponse
 
         val book = openLibraryService.fetchBookDefinitionFromOpenBook(ISBN(isbn))
 
@@ -44,6 +44,28 @@ class OpenLibraryServiceTest {
             assertThat(openBookApiId).isEqualTo(
                 OpenBookApiId(expectedOpenLibraryBook.key!!)
             )
+            assertThat(this.authorsGroup.authors.first().firstName).isEqualTo("Bratislav")
+            assertThat(this.authorsGroup.authors.first().lastName).isEqualTo("Metulski")
+        }
+    }
+
+    @Test
+    fun `and the book is found but the authors are empty, should use an empty author group`() {
+        val expectedOpenLibraryBookResponse = ResponseEntity.ok(expectedOpenLibraryBook)
+        val expectedOpenLibraryAuthorResponse = ResponseEntity.notFound().build<OpenLibraryAuthor>()
+
+        every {
+            mockTemplate.getForEntity(any<String>(), OpenLibraryBook::class.java)
+        } returns expectedOpenLibraryBookResponse
+        every {
+            mockTemplate.getForEntity(any<String>(), OpenLibraryAuthor::class.java)
+        } returns expectedOpenLibraryAuthorResponse
+
+        val book = openLibraryService.fetchBookDefinitionFromOpenBook(ISBN(isbn))
+
+        assertThat(book).isNotEmpty
+        with(book.get()) {
+            assertThat(this.authorsGroup.authors).isEmpty()
         }
     }
 
