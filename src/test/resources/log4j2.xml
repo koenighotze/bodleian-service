@@ -2,25 +2,44 @@
 <Configuration>
     <Properties>
         <Property name="CONSOLE_PATTERN">
-            %style{%d{ISO8601}}{black} [%highlight{%-5level }] [%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %m%n%throwable
+            %style{%d{ISO8601}}{black} [%highlight{%-5level }] %style{%C{1.}}{bright,yellow}: %m%n%throwable
         </Property>
     </Properties>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="${CONSOLE_PATTERN}"/>
         </Console>
+        <File append="false" name="SqlLog" filename="logs/sql.log">
+            <PatternLayout>
+                <Pattern>%d{HH:mm:ss.SSS} %c{1.} %m%n</Pattern>
+            </PatternLayout>
+        </File>
     </Appenders>
     <Loggers>
         <Logger name="org.koenighotze" level="debug"/>
         <Logger name="org.springframework" level="info"/>
         <Logger name="org.springframework.boot.testcontainers" level="debug"/>
-        <Logger name="org.testcontainers" level="debug"/>
+        <Logger name="org.springframework.transaction" level="debug" additivity="false">
+            <AppenderRef ref="SqlLog"/>
+        </Logger>
+        <Logger name="org.springframework.orm.jpa" level="debug" additivity="false">
+            <AppenderRef ref="SqlLog"/>
+        </Logger>
+        <Logger name="org.testcontainers" level="warn"/>
 
-        <Logger name="org.hibernate.stat" level="debug"/>
-        <Logger name="org.hibernate.SQL" level="debug"/>
-        <Logger name="org.hibernate.type" level="warn"/>
+        <Logger name="org.hibernate.stat" level="debug" additivity="false">
+            <AppenderRef ref="SqlLog"/>
+        </Logger>
+        <Logger name="org.hibernate.SQL" level="debug" additivity="false">
+            <AppenderRef ref="SqlLog"/>
+        </Logger>
+        <Logger name="org.hibernate.type" level="warn" additivity="false">
+            <AppenderRef ref="SqlLog"/>
+        </Logger>
+
         <Root level="warn">
             <AppenderRef ref="Console"/>
+            <AppenderRef ref="SqlLog"/>
         </Root>
     </Loggers>
 </Configuration>

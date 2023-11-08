@@ -24,7 +24,7 @@ class BookRepositoryIT(@Autowired var repository: BookRepository) {
     @BeforeEach
     fun setupBooks() {
         knownBook = randomBook()
-        repository.save(knownBook)
+        repository.saveAndFlush(knownBook)
     }
 
     @Test

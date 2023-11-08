@@ -23,9 +23,9 @@ class Application {
 
     // TODO Bootstrap not with random data
     fun randomAuthorsGroup() = AuthorsGroup(
-        id = AuthorsGroup.randomId(),
-        books = mutableSetOf(),
-        authors = mutableSetOf(
+        id = AuthorsGroup.randomId()
+    ).withAuthors(
+        setOf(
             Author(
                 firstName = "Random first name ${randomUUID()}",
                 lastName = "Random last name ${randomUUID()}",
