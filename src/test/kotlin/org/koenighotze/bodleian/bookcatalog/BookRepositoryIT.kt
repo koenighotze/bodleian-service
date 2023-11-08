@@ -49,6 +49,13 @@ class BookRepositoryIT(@Autowired var repository: BookRepository) {
     }
 
     @Test
+    fun `the repository deletes a book by id`() {
+        repository.deleteById(knownBook.id!!)
+
+        assertThat(repository.findBookByIsbn(knownBook.isbn!!)).isEmpty()
+    }
+
+    @Test
     fun `a stored book is returned`() {
         assertThat(repository.findAll()).isNotEmpty
     }

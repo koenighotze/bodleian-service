@@ -21,11 +21,15 @@ class BookCatalogController(private val bookCatalogManager: BookCatalogManager) 
     }
 
     @PostMapping("/{isbn}") // e.g., 9780140328721
-    fun addExternalBookToCatalog(@PathVariable isbn: ISBN): ResponseEntity<BookDTO> {
-        return bookCatalogManager.addExternalBookToCatalog(isbn)
-            .map { created(URI.create("/books/${it.id}")).body(BookDTO.fromBook(it)) }
-            .orElse(notFound().build())
-    }
+    fun addExternalBookToCatalog(@PathVariable isbn: ISBN): ResponseEntity<BookDTO> =
+        try {
+            bookCatalogManager.addExternalBookToCatalog(isbn)
+                .map { created(URI.create("/books/${it.id}")).body(BookDTO.fromBook(it)) }
+                .orElse(notFound().build())
+        } catch (e: RuntimeException) {
+            logger.logException("Adding a books failed", e)
+            status(INTERNAL_SERVER_ERROR).build()
+        }
 
     @GetMapping
     fun getAllBooks() =

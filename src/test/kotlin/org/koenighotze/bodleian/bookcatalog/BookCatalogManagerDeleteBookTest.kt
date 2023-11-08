@@ -15,7 +15,6 @@ class BookCatalogManagerDeleteBookTest {
 
     @Test
     fun `and the book is found, should delete the book and return true`() {
-
         every { repo.delete(any()) } just Runs
 
         val result = manager.deleteBook(book)

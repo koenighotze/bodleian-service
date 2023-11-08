@@ -30,7 +30,6 @@ class BookCatalogManagerGettingAllBooksTest {
         val books = manager.allBooks()
 
         assertThat(books).isEqualTo(expectedBooks)
-
     }
 
     @Test

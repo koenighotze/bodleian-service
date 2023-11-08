@@ -17,7 +17,9 @@ class BookCatalogManager(
     }
 
     fun allBooks(): Collection<Book> = repository.findAll().toList()
+
     fun getBookById(bookId: String): Optional<Book> = repository.findById(bookId)
+
     fun deleteBook(book: Book): Boolean {
         repository.delete(book)
         return true

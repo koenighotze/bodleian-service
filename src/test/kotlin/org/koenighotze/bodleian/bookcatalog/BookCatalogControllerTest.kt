@@ -18,62 +18,55 @@ import java.util.*
 
 class BookCatalogControllerTest {
     @Nested
-    @DisplayName("when updating a single book")
-    @Ignore
-    inner class UpdateASingleBook {
-        @Test
-        fun `and the book is found, should update the book`() {
-
-        }
-
-        @Test
-        fun `and the book is found, should return the book`() {
-
-        }
-
-        @Test
-        fun `and the book is found, should return OK`() {
-
-        }
-
-        @Test
-        fun `and the book is not found, should return 404`() {
-
-        }
-
-        @Test
-        fun `and an error occurs, should return a internal error`() {
-
-        }
-    }
-
-    @Nested
     @DisplayName("when adding a single book")
     @Ignore
     inner class AddingASingleBook {
         @Test
-        fun `and the iban does not exist, should return the book`() {
+        fun `and the book is not in the collection yet, should return the book`() {
+            val expectedBook = randomBook()
+            val bookCatalogManager = mockk<BookCatalogManager>()
+            every { bookCatalogManager.addExternalBookToCatalog(any()) } returns Optional.of(expectedBook)
+            val controller = BookCatalogController(bookCatalogManager)
 
+            val response = controller.addExternalBookToCatalog(ISBN("0140328726"))
+
+            assertThat(response.body).isEqualTo(BookDTO.fromBook(expectedBook))
         }
 
         @Test
-        fun `and the iban does not exist, should add the book`() {
+        fun `and the book is not in the collection yet, should return CREATED`() {
+            val expectedBook = randomBook()
+            val bookCatalogManager = mockk<BookCatalogManager>()
+            every { bookCatalogManager.addExternalBookToCatalog(any()) } returns Optional.of(expectedBook)
+            val controller = BookCatalogController(bookCatalogManager)
 
+            val response = controller.addExternalBookToCatalog(ISBN("0140328726"))
+
+            assertThat(response.statusCode).isEqualTo(CREATED)
+            assertThat(response.headers.location).isNotNull()
         }
 
         @Test
-        fun `and the iban does not exist, should return CREATED`() {
+        fun `and the iban does not exist, should return NOT FOUND`() {
+            val expectedBook = randomBook()
+            val bookCatalogManager = mockk<BookCatalogManager>()
+            every { bookCatalogManager.addExternalBookToCatalog(any()) } returns Optional.empty()
+            val controller = BookCatalogController(bookCatalogManager)
 
-        }
+            val response = controller.addExternalBookToCatalog(ISBN("0140328726"))
 
-        @Test
-        fun `and the iban exist, should return CONFLICT`() {
-
+            assertThat(response.statusCode).isEqualTo(NOT_FOUND)
         }
 
         @Test
         fun `and an error occurs, should return a internal error`() {
+            val bookCatalogManager = mockk<BookCatalogManager>()
+            every { bookCatalogManager.addExternalBookToCatalog(any()) } throws RuntimeException("Bumm")
+            val controller = BookCatalogController(bookCatalogManager)
 
+            val response = controller.addExternalBookToCatalog(ISBN("0140328726"))
+
+            assertThat(response.statusCode).isEqualTo(INTERNAL_SERVER_ERROR)
         }
     }
 
