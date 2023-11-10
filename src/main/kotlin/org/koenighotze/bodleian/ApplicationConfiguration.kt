@@ -11,7 +11,7 @@ import java.time.Duration.ofSeconds
 class ApplicationConfiguration {
 
     @Value("\${bodleian.externalServices.openLibrary.apiBaseUrl}")
-    private val openLibraryBookApiBaseUrl: String? = null
+    var openLibraryBookApiBaseUrl: String? = null
 
     @Bean
     fun resilientOpenLibraryRestTemplate(builder: RestTemplateBuilder): RestTemplate =

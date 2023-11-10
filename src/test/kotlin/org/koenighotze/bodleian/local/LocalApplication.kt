@@ -43,7 +43,7 @@ internal class LocalApplicationConfiguration {
     }
 }
 
-fun main(args: Array<String>) {
+fun main() {
     SpringApplicationBuilder()
         .profiles("local")
         .sources(Application::class.java)

@@ -22,7 +22,7 @@ class Application {
     }
 
     // TODO Bootstrap not with random data
-    fun randomAuthorsGroup() = AuthorsGroup(
+    private fun randomAuthorsGroup() = AuthorsGroup(
         id = AuthorsGroup.randomId()
     ).withAuthors(
         setOf(

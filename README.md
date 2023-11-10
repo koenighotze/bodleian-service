@@ -43,6 +43,7 @@ library related resources.
 * [ ] Cosign
 * [x] Distroless base image
 * [ ] Use Webclient
+* [ ] Mutation testing with https://medium.com/seat-code/mutation-testing-in-kotlin-a8834771e85e
 
 ### Reading
 

@@ -129,9 +129,16 @@ tasks.named("check") {
     dependsOn("integrationTests")
 }
 
-jacoco {
-//    toolVersion = "0.8.9"
-//    reportsDirectory.set(layout.buildDirectory.dir("customJacocoReportDir"))
+tasks.jacocoTestCoverageVerification {
+    // check this by using ./gradlew --warning-mode all clean test jacocoTestCoverageVerification
+    // not sure if I want this in two places. In here and in Codacy. But I guess it's fine.
+    violationRules {
+        rule {
+            limit {
+                minimum = BigDecimal("0.8")
+            }
+        }
+    }
 }
 
 tasks.jacocoTestReport {

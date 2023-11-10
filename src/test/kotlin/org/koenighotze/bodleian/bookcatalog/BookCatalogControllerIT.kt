@@ -34,6 +34,7 @@ class BookCatalogControllerIT(
         @Container
         @ServiceConnection
         @Suppress("unused")
+        // TODO extract to support Rule or similar
         val postgreSQLContainer = PostgreSQLContainer("postgres:16.0-alpine3.18")
 
         @JvmStatic

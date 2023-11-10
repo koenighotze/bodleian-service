@@ -14,7 +14,7 @@ class ApplicationIT {
     }
 
     @Test
-    fun contextLoads() {
+    fun `the context should load`() {
         postgreSQLContainer.start()
     }
 }

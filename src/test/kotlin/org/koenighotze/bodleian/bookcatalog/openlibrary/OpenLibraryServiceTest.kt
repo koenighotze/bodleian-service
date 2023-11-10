@@ -7,7 +7,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.koenighotze.bodleian.bookcatalog.entity.ISBN
 import org.koenighotze.bodleian.bookcatalog.entity.OpenBookApiId
-import org.springframework.http.ResponseEntity
+import org.springframework.http.ResponseEntity.notFound
+import org.springframework.http.ResponseEntity.ok
 import org.springframework.web.client.RestTemplate
 import java.util.UUID.randomUUID
 
@@ -25,8 +26,8 @@ class OpenLibraryServiceTest {
 
     @Test
     fun `and the book is found, should add the book to the catalog`() {
-        val expectedOpenLibraryBookResponse = ResponseEntity.ok(expectedOpenLibraryBook)
-        val expectedOpenLibraryAuthorResponse = ResponseEntity.ok(expectedOpenLibraryAuthor)
+        val expectedOpenLibraryBookResponse = ok(expectedOpenLibraryBook)
+        val expectedOpenLibraryAuthorResponse = ok(expectedOpenLibraryAuthor)
 
         every {
             mockTemplate.getForEntity(any<String>(), OpenLibraryBook::class.java)
@@ -51,8 +52,8 @@ class OpenLibraryServiceTest {
 
     @Test
     fun `and the book is found but the authors are empty, should use an empty author group`() {
-        val expectedOpenLibraryBookResponse = ResponseEntity.ok(expectedOpenLibraryBook)
-        val expectedOpenLibraryAuthorResponse = ResponseEntity.notFound().build<OpenLibraryAuthor>()
+        val expectedOpenLibraryBookResponse = ok(expectedOpenLibraryBook)
+        val expectedOpenLibraryAuthorResponse = notFound().build<OpenLibraryAuthor>()
 
         every {
             mockTemplate.getForEntity(any<String>(), OpenLibraryBook::class.java)
@@ -73,7 +74,7 @@ class OpenLibraryServiceTest {
     fun `and the book is not found, should return empty`() {
         every {
             mockTemplate.getForEntity(any<String>(), OpenLibraryBook::class.java)
-        } returns ResponseEntity.notFound().build()
+        } returns notFound().build()
 
         val book = openLibraryService.fetchBookDefinitionFromOpenBook(ISBN(isbn))
 
