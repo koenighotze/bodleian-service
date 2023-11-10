@@ -39,7 +39,7 @@ library related resources.
 * [x] Sig check mit Gradle
 * [x] Signed commit
 * [ ] Transactions
-* [ ] Rest assured
+* [ ] Rest assured and Karate DSL
 * [ ] Cosign
 * [x] Distroless base image
 * [ ] Use Webclient
