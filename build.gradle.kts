@@ -66,7 +66,7 @@ dependencies {
     testImplementation(group = "org.wiremock", name = "wiremock", version = "3.3.1")
 
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
-    testImplementation("com.ninja-squad:springmockk:4.0.0")
+    testImplementation("com.ninja-squad:springmockk:4.0.2")
 //    testImplementation("io.projectreactor:reactor-test")
 //    testImplementation("org.springframework.modulith:spring-modulith-starter-test")
     testImplementation("org.testcontainers:junit-jupiter")
