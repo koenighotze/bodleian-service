@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.koenighotze.bodleian.bookcatalog.entity.Book
 import org.koenighotze.bodleian.bookshelf.entity.Bookshelf
+import org.koenighotze.bodleian.bookshelf.entity.BookshelfItem
 import java.util.Optional.empty
 import java.util.Optional.of
 
@@ -35,6 +36,19 @@ class BookshelfManagerTest {
         }
 
         @Test
+        fun `and the bookshelf is found and the book is already in the bookshelf, it should throw`() {
+            val ownerId = "user123"
+            val bookshelf = Bookshelf.forOwner(ownerId)
+            val expectedBookId = Book.randomId()
+            bookshelf.addBookshelfItem(BookshelfItem.of(referenceId = expectedBookId))
+            every { bookshelfRepository.findById(bookshelf.id) } returns of(bookshelf)
+
+            assertThrows<IllegalArgumentException> {
+                bookshelfManager.addBookToCollection(bookshelf.id, expectedBookId)
+            }
+        }
+
+        @Test
         fun `and the bookshelf is not found, it should throw`() {
             val ownerId = "user123"
             val bookshelf = Bookshelf.forOwner(ownerId)
@@ -49,7 +63,43 @@ class BookshelfManagerTest {
 
     @Nested
     @DisplayName("When removing a book from the bookshelf")
-    inner class RemoveBookFromBookshelf
+    inner class RemoveBookFromBookshelf {
+        @Test
+        fun `and the bookshelf is found and the book is in the bookshelf, it should remove the book from the bookshelf`() {
+            val ownerId = "user123"
+            val bookshelf = Bookshelf.forOwner(ownerId)
+            val expectedBookId = Book.randomId()
+            bookshelf.addBookshelfItem(BookshelfItem.of(referenceId = expectedBookId))
+            every { bookshelfRepository.findById(bookshelf.id) } returns of(bookshelf)
+
+            bookshelfManager.removeBookFromCollection(bookshelf.id, expectedBookId)
+
+            assertThat(bookshelf.bookshelfItems).isEmpty()
+        }
+
+        @Test
+        fun `and the bookshelf is found and the book is not in the bookshelf, it should not throw`() {
+            val ownerId = "user123"
+            val bookshelf = Bookshelf.forOwner(ownerId)
+            val expectedBookId = Book.randomId()
+            every { bookshelfRepository.findById(bookshelf.id) } returns of(bookshelf)
+
+            bookshelfManager.removeBookFromCollection(bookshelf.id, expectedBookId)
+
+            assertThat(bookshelf.bookshelfItems).isEmpty()
+        }
+
+        @Test
+        fun `and the bookshelf is not found, it should throw`() {
+            val ownerId = "user123"
+            val bookshelf = Bookshelf.forOwner(ownerId)
+            every { bookshelfRepository.findById(bookshelf.id) } returns empty()
+
+            assertThrows<IllegalArgumentException> {
+                bookshelfManager.removeBookFromCollection(bookshelf.id, Book.randomId())
+            }
+        }
+    }
 
     @Nested
     @DisplayName("When getting the bookshelf")

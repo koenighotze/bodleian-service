@@ -1,12 +1,15 @@
 package org.koenighotze.bodleian.bookshelf
 
+import org.koenighotze.bodleian.Manager
 import org.koenighotze.bodleian.bookcatalog.entity.BookId
 import org.koenighotze.bodleian.bookshelf.entity.Bookshelf
+import org.koenighotze.bodleian.bookshelf.entity.Bookshelf.Companion.forOwner
 import org.koenighotze.bodleian.bookshelf.entity.BookshelfId
 import org.koenighotze.bodleian.bookshelf.entity.BookshelfItem
 import org.koenighotze.bodleian.user.entity.UserId
 import java.util.*
 
+@Manager
 class BookshelfManager(private val bookshelfRepository: BookshelfRepository) {
     fun addBookToCollection(bookshelfId: BookshelfId, bookId: BookId) {
         val bookshelf = bookshelfRepository.findById(bookshelfId)
@@ -29,7 +32,7 @@ class BookshelfManager(private val bookshelfRepository: BookshelfRepository) {
     fun getBookshelfForOwner(ownerId: UserId): Optional<Bookshelf> {
         return bookshelfRepository.findByOwner(ownerId)
             .or {
-                Optional.of(bookshelfRepository.save(Bookshelf.forOwner(ownerId)))
+                Optional.of(bookshelfRepository.save(forOwner(ownerId)))
             }
     }
 }
