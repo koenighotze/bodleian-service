@@ -42,7 +42,7 @@ jobs:
           id_token_audience: ${{ secrets.CLOUD_RUN_BACKEND_URL }}
           id_token_include_email: true
       - name: Run API tests
-        uses: matt-ball/newman-action@v1.0.4
+        uses: matt-ball/newman-action@v2.0.0
         with:
           collection: Bodleian.postman_collection.json
           envVar: '[{ "key": "HOST", "value": "${{ secrets.CLOUD_RUN_BACKEND_URL }}" }, { "key": "TOKEN", "value": "${{ steps.auth.outputs.id_token }}" }]'
