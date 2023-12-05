@@ -49,6 +49,23 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation("org.springframework.retry:spring-retry")
 
+
+    implementation(platform("io.arrow-kt:arrow-stack:1.2.0"))
+    // no versions on libraries
+    implementation("io.arrow-kt:arrow-core")
+    implementation("io.arrow-kt:arrow-fx-coroutines")
+//    implementation("io.arrow-kt:arrow-syntax")
+//    implementation("io.arrow-kt:arrow-syntax-kotlin")
+//    implementation("io.arrow-kt:arrow-mtl")
+//    implementation("io.arrow-kt:arrow-mtl-kotlin")
+//    implementation("io.arrow-kt:arrow-optics")
+//    implementation("io.arrow-kt:arrow-optics-kotlin")
+//    implementation("io.arrow-kt:arrow-fx")
+//    implementation("io.arrow-kt:arrow-fx-kotlin")
+//    implementation("io.arrow-kt:arrow-fx-coroutines")
+//    implementation("io.arrow-kt:arrow-fx-coroutines-kotlin")
+
+
 // 	implementation("org.springframework.modulith:spring-modulith-starter-core")
 // 	implementation("org.springframework.modulith:spring-modulith-starter-jpa")
     developmentOnly("org.springframework.boot:spring-boot-devtools")

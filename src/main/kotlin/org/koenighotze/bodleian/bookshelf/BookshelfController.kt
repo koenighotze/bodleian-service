@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity.*
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/bookshelf")
+@RequestMapping("/bookshelfs")
 class BookshelfController(private val bookshelfManager: BookshelfManager) {
     companion object {
         val logger = getLogger(BookshelfController::class.java)
