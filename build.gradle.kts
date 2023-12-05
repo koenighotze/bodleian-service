@@ -12,7 +12,7 @@ plugins {
     kotlin("jvm") version "1.9.20"
     kotlin("plugin.spring") version "1.9.20"
     kotlin("plugin.jpa") version "1.9.20"
-    kotlin("plugin.allopen") version "1.9.20"
+    kotlin("plugin.allopen") version "1.9.21"
     jacoco
 
 }
