@@ -52,7 +52,7 @@ class BookshelfControllerTest {
         fun `and the book is in the bookshelf, should return OK`() {
             val bookshelfId = "bookshelf123"
             val bookId = "book123"
-            every { bookshelfManager.removeBookFromCollection(bookshelfId, bookId) } just Runs
+            every { bookshelfManager.removeBookFromCollection(bookshelfId, bookId) } returns true
 
             val response = controller.removeBookFromBookshelf(bookshelfId, bookId)
 
