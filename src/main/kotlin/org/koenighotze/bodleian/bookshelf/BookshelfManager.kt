@@ -7,7 +7,6 @@ import org.koenighotze.bodleian.bookshelf.entity.Bookshelf.Companion.forOwner
 import org.koenighotze.bodleian.bookshelf.entity.BookshelfId
 import org.koenighotze.bodleian.bookshelf.entity.BookshelfItem
 import org.koenighotze.bodleian.user.entity.UserId
-import java.util.*
 
 @Manager
 class BookshelfManager(private val bookshelfRepository: BookshelfRepository) {
@@ -29,10 +28,7 @@ class BookshelfManager(private val bookshelfRepository: BookshelfRepository) {
         bookshelf.removeBookshelfItem(BookshelfItem.of(referenceId = bookId))
     }
 
-    fun getBookshelfForOwner(ownerId: UserId): Optional<Bookshelf> {
-        return bookshelfRepository.findByOwner(ownerId)
-            .or {
-                Optional.of(bookshelfRepository.save(forOwner(ownerId)))
-            }
+    fun getBookshelfForOwner(ownerId: UserId): Bookshelf? {
+        return bookshelfRepository.findByOwner(ownerId) ?: bookshelfRepository.save(forOwner(ownerId))
     }
 }

@@ -41,7 +41,7 @@ class BookshelfControllerIT(
         val bookId = randomUUID().toString()
 
         val response =
-            testTemplate.postForEntity("/bookshelf/${knownBookshelf.id}/books/$bookId", null, Void::class.java)
+            testTemplate.postForEntity("/bookshelves/${knownBookshelf.id}/books/$bookId", null, Void::class.java)
 
         assertThat(response.statusCode).isEqualTo(OK)
         // TODO check body
@@ -55,14 +55,14 @@ class BookshelfControllerIT(
         bookshelfRepository.save(knownBookshelf)
 
         val response =
-            testTemplate.postForEntity("/bookshelf/${knownBookshelf.id}/books/$bookId", null, Void::class.java)
+            testTemplate.postForEntity("/bookshelves/${knownBookshelf.id}/books/$bookId", null, Void::class.java)
 
         assertThat(response.statusCode).isEqualTo(CONFLICT)
     }
 
     @Test
     fun `and the bookshelf is found, should return OK`() {
-        val response = testTemplate.getForEntity("/bookshelf/owner/${knownBookshelf.owner}", Bookshelf::class.java)
+        val response = testTemplate.getForEntity("/bookshelves/owner/${knownBookshelf.owner}", Bookshelf::class.java)
 
         assertThat(response.statusCode).isEqualTo(OK)
         with(response.body!!) {

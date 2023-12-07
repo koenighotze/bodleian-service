@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity.*
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/bookshelfs")
+@RequestMapping("/bookshelves")
 class BookshelfController(private val bookshelfManager: BookshelfManager) {
     companion object {
         val logger = getLogger(BookshelfController::class.java)
@@ -45,12 +45,10 @@ class BookshelfController(private val bookshelfManager: BookshelfManager) {
     @GetMapping("/owner/{ownerId}")
     fun getBookshelfForOwner(@PathVariable ownerId: UserId): ResponseEntity<Bookshelf> =
         try {
-            bookshelfManager.getBookshelfForOwner(ownerId)
-                .map {
-                    println(it)
+            bookshelfManager.getBookshelfForOwner(ownerId)?.let {
                     ok(it)
-                }
-                .orElse(notFound().build())
+            }
+            ?: notFound().build()
         } catch (e: RuntimeException) {
             logger.logException("Get bookshelf for owner $ownerId failed", e)
             status(INTERNAL_SERVER_ERROR).build()

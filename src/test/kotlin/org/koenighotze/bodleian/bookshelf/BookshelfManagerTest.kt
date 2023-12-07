@@ -108,11 +108,11 @@ class BookshelfManagerTest {
         fun `and the bookshelf is found, it should return the bookshelf`() {
             val ownerId = "user123"
             val expected = Bookshelf.forOwner(ownerId)
-            every { bookshelfRepository.findByOwner(ownerId) } returns of(expected)
+            every { bookshelfRepository.findByOwner(ownerId) } returns expected
 
             val result = bookshelfManager.getBookshelfForOwner(ownerId)
 
-            assertThat(result.get()).isEqualTo(expected)
+            assertThat(result).isEqualTo(expected)
         }
 
         @Test
@@ -122,12 +122,13 @@ class BookshelfManagerTest {
             val ownerBookshelf = Bookshelf(bookshelfId, ownerId)
             val expectedBookshelf = Bookshelf(bookshelfId, ownerId)
 
-            every { bookshelfRepository.findByOwner(ownerId) } returns empty()
+            every { bookshelfRepository.findByOwner(ownerId) } returns null
             every { bookshelfRepository.save(any()) } returns ownerBookshelf
 
             val result = bookshelfManager.getBookshelfForOwner(ownerId)
+            assertThat(result).isNotNull
 
-            with(result.get()) {
+            result?.run {
                 assertThat(ownerId).isEqualTo(expectedBookshelf.owner)
                 assertThat(id).isNotNull()
                 assertThat(bookshelfItems).isEmpty()

@@ -12,7 +12,6 @@ import org.koenighotze.bodleian.bookshelf.BookshelfManager
 import org.koenighotze.bodleian.bookshelf.entity.Bookshelf
 import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 import org.springframework.http.HttpStatus.OK
-import java.util.Optional.of
 
 @Nested
 @DisplayName("BookshelfController")
@@ -79,7 +78,7 @@ class BookshelfControllerTest {
         fun `and the bookshelf is found, should return OK`() {
             val ownerId = "user123"
             val bookshelf = Bookshelf.forOwner(ownerId)
-            every { bookshelfManager.getBookshelfForOwner(ownerId) } returns of(bookshelf)
+            every { bookshelfManager.getBookshelfForOwner(ownerId) } returns bookshelf
 
             val response = controller.getBookshelfForOwner(ownerId)
 

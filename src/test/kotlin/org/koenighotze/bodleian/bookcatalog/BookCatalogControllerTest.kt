@@ -48,7 +48,6 @@ class BookCatalogControllerTest {
 
         @Test
         fun `and the iban does not exist, should return NOT FOUND`() {
-            val expectedBook = randomBook()
             val bookCatalogManager = mockk<BookCatalogManager>()
             every { bookCatalogManager.addExternalBookToCatalog(any()) } returns Optional.empty()
             val controller = BookCatalogController(bookCatalogManager)

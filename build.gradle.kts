@@ -35,16 +35,12 @@ configurations.all {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-// 	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
-// 	implementation("org.springframework.boot:spring-boot-starter-data-rest")
-// 	implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-log4j2")
 
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
-// 	implementation("org.flywaydb:flyway-core")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation("org.springframework.retry:spring-retry")
@@ -54,42 +50,23 @@ dependencies {
     // no versions on libraries
     implementation("io.arrow-kt:arrow-core")
     implementation("io.arrow-kt:arrow-fx-coroutines")
-//    implementation("io.arrow-kt:arrow-syntax")
-//    implementation("io.arrow-kt:arrow-syntax-kotlin")
-//    implementation("io.arrow-kt:arrow-mtl")
-//    implementation("io.arrow-kt:arrow-mtl-kotlin")
-//    implementation("io.arrow-kt:arrow-optics")
-//    implementation("io.arrow-kt:arrow-optics-kotlin")
-//    implementation("io.arrow-kt:arrow-fx")
-//    implementation("io.arrow-kt:arrow-fx-kotlin")
-//    implementation("io.arrow-kt:arrow-fx-coroutines")
-//    implementation("io.arrow-kt:arrow-fx-coroutines-kotlin")
 
-
-// 	implementation("org.springframework.modulith:spring-modulith-starter-core")
-// 	implementation("org.springframework.modulith:spring-modulith-starter-jpa")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-//    runtimeOnly("com.h2database:h2:2.2.220")
+
     runtimeOnly("org.yaml:snakeyaml:2.2")
-// 	runtimeOnly("io.r2dbc:r2dbc-h2")
     runtimeOnly("org.postgresql:postgresql")
-//    runtimeOnly("org.postgresql:r2dbc-postgresql")
-//    runtimeOnly("org.springframework.modulith:spring-modulith-actuator")
-//    runtimeOnly("org.springframework.modulith:spring-modulith-observability")
+
     testImplementation("io.rest-assured:rest-assured:5.3.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(module = "mockito-core")
     }
-    testImplementation(group = "org.wiremock", name = "wiremock", version = "3.3.1")
-
+    testImplementation(group = "org.wiremock", name = "wiremock-standalone", version = "3.3.1")
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
     testImplementation("com.ninja-squad:springmockk:4.0.2")
-//    testImplementation("io.projectreactor:reactor-test")
-//    testImplementation("org.springframework.modulith:spring-modulith-starter-test")
     testImplementation("org.testcontainers:junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.testcontainers:postgresql")
     testImplementation("io.mockk:mockk:1.13.8")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
 //    testImplementation("org.testcontainers:r2dbc")
 }
