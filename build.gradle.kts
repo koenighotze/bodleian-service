@@ -46,7 +46,7 @@ dependencies {
     implementation("org.springframework.retry:spring-retry")
 
 
-    implementation(platform("io.arrow-kt:arrow-stack:1.2.0"))
+    implementation(platform("io.arrow-kt:arrow-stack:1.2.1"))
     // no versions on libraries
     implementation("io.arrow-kt:arrow-core")
     implementation("io.arrow-kt:arrow-fx-coroutines")
