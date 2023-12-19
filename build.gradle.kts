@@ -56,7 +56,7 @@ dependencies {
     runtimeOnly("org.yaml:snakeyaml:2.2")
     runtimeOnly("org.postgresql:postgresql")
 
-    testImplementation("io.rest-assured:rest-assured:5.3.2")
+    testImplementation("io.rest-assured:rest-assured:5.4.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(module = "mockito-core")
     }
