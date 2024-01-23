@@ -59,6 +59,7 @@ dependencies {
     testImplementation("io.rest-assured:rest-assured:5.4.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(module = "mockito-core")
+        exclude(module = "json-path", group = "com.jayway.jsonpath")
     }
     testImplementation(group = "org.wiremock", name = "wiremock-standalone", version = "3.3.1")
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
