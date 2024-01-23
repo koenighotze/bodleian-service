@@ -73,7 +73,7 @@ dependencies {
 
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.modulith:spring-modulith-bom:1.1.1")
+        mavenBom("org.springframework.modulith:spring-modulith-bom:1.1.2")
     }
 }
 
