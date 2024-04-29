@@ -61,7 +61,7 @@ dependencies {
         exclude(module = "mockito-core")
         exclude(module = "json-path", group = "com.jayway.jsonpath")
     }
-    testImplementation(group = "org.wiremock", name = "wiremock-standalone", version = "3.4.2")
+    testImplementation(group = "org.wiremock", name = "wiremock-standalone", version = "3.5.4")
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
     testImplementation("com.ninja-squad:springmockk:4.0.2")
     testImplementation("org.testcontainers:junit-jupiter")
