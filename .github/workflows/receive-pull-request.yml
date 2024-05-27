@@ -14,7 +14,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Run vulnerability scanner in repo mode
-        uses: aquasecurity/trivy-action@0.18.0
+        uses: aquasecurity/trivy-action@0.21.0
         with:
           scan-type: "fs"
           ignore-unfixed: false
